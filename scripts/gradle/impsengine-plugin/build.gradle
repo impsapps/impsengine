@@ -1,0 +1,298 @@
+apply plugin: ImpsEnginePlugin
+
+import org.gradle.api.Task
+
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+
+impsengine.projectNameForLogging = name
+
+class ImpsEnginePlugin implements Plugin<Project> {
+    void apply(Project project) {
+        project.extensions.create("impsengine", ImpsEngineExtension)
+
+        def buildModulesTask = project.task('buildModules') << {
+            project.impsengine.buildModules()
+        }
+        def printAllIncludeDirsTask = project.task('printAllIncludeDirs') << {
+            for (String string : project.impsengine.getAllIncludeDirs())
+                println string
+        }
+        def printAllCSrcDirsTask = project.task('printAllCSrcDirs') << {
+            for (String string : project.impsengine.getAllSrcs())
+                println string
+        }
+        def printAllJavaSrcDirsTask = project.task('printAllJavaSrcDirs') << {
+            for (String string : project.impsengine.getAllJavaSrcDirs())
+                println string
+        }
+
+        def impsengineStr = 'impsengine'
+        buildModulesTask.group = impsengineStr
+        printAllIncludeDirsTask.group = impsengineStr
+        printAllCSrcDirsTask.group = impsengineStr
+        printAllJavaSrcDirsTask.group = impsengineStr
+    }
+}
+
+class ImpsEngineExtension {
+
+    //advanced-math
+    final String randomNumberGenerator = "random-number-generator"
+    final String randomNumberGeneratorSfmt = "random-number-generator-sfmt"
+
+    //business
+    final String ads = "ads"
+    final String adsVungle = "ads-vungle"
+
+    //common
+    final String androidlib = "androidlib"
+    final String clib = "clib"
+    final String concurrentlib = "concurrentlib"
+    final String expat = "expat"
+    final String inputOutput = "input-output"
+    final String mathlib = "mathlib"
+    final String multiTouch = "multi-touch"
+    final String opengl = "opengl"
+    final String openglRenderer = "opengl-renderer"
+
+    //media
+    final String musicAndSound = "music+sound"
+
+    //social
+    final String googlePlay = "google-play"
+    final String socialActivity = "social-activity"
+
+    //utilities
+    final String date = "date"
+    final String url = "url"
+
+    String absolutePathToImpsEngineRoot = "."
+    List<String> modules = new LinkedList<String>()
+
+    String projectNameForLogging = ""
+
+
+    List<String> getAdvancedMathModules(){
+        return [randomNumberGenerator, randomNumberGeneratorSfmt]
+    }
+
+    List<String> getBusinessModules(){
+        return [ads, adsVungle]
+    }
+
+    List<String> getCommonModules(){
+        return [androidlib, clib, concurrentlib, inputOutput, expat, mathlib, multiTouch, opengl, openglRenderer]
+    }
+
+    List<String> getMediaModules(){
+        return [musicAndSound]
+    }
+
+    List<String> getSocialModules(){
+        return [googlePlay, socialActivity]
+    }
+
+    List<String> getUtilitiesModules(){
+        return [date, url]
+    }
+
+    String executeCommandArrayAndGetStandardOutput(String[] commandArray, File workingDir){
+        ProcessBuilder builder = new ProcessBuilder(commandArray)
+        assert workingDir.isDirectory() && "variable \"absolutePathToImpsEngineRoot\" is not set or incorrect!"
+        builder.directory(workingDir)
+
+        String result = "", error = ""
+        Process process
+        int processReturnValue
+        try {
+            process = builder.start()
+            InputStream inputStream = process.getInputStream()
+            InputStream errorStream = process.getErrorStream()
+            processReturnValue = process.waitFor()
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))
+            String line
+            while ((line = bufferedReader.readLine()) != null) {
+                result += line + "\n"
+            }
+            bufferedReader = new BufferedReader(new InputStreamReader(errorStream))
+            while ((line = bufferedReader.readLine()) != null) {
+                error += line + "\n"
+            }
+        } catch (Exception e) {
+            logError("Localized message: " + e.localizedMessage + "\nCommand array: " + commandArray + "\nWorking dir: " + workingDir)
+        }
+        if(error.length() > 0){
+            logError("Error: " + error + "\nCommand array: " + commandArray + "\nWorking dir: " + workingDir)
+        }
+        assert(processReturnValue == 0 && "Error: Process ended not gracefully!")
+        return result.trim()
+    }
+
+    void executeGenerateGenerics(String moduleGroup, String moduleName, String srcDir, String[] additionalIncludeDirs){
+        List<String> command = ["perl", absolutePathToImpsEngineRoot + "/scripts/perl/generate-generics/GenerateGenericsMain.pl", moduleGroup, moduleName]
+
+        File file = new File(absolutePathToImpsEngineRoot + '/' + srcDir)
+
+        if (file.isDirectory() == false){
+            logError("srcDir \"" + srcDir + "\" in \"executeGenerateGenerics\" is not a directory! Absolute path: \"" + file.absolutePath + "\"")
+            assert(0 && "Error: srcDir is not a directory!")
+        }else{
+            command.add(file.absolutePath)
+        }
+
+        for(String additionalIncludeDir : additionalIncludeDirs){
+            file = new File(absolutePathToImpsEngineRoot + '/' + additionalIncludeDir)
+            if (file.isDirectory() == false){
+                logError("additionalIncludeDir \"" + additionalIncludeDir + "\" in \"executeGenerateGenerics\" is not a directory! Absolute path: \"" + file.absolutePath + "\"")
+                assert(0 && "Error: srcDir is not a directory!")
+            }else{
+                command.add(file.absolutePath)
+            }
+        }
+
+        String[] commandArray = command.toArray()
+        File workingDir = new File(".");
+
+        executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
+    }
+
+    void buildModules(){
+        List<String> command = ["perl", "BuildAndroidModule.pl"]
+        for(String module : modules)
+            command.add(module)
+        String[] commandArray = command.toArray()
+        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
+
+        executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
+    }
+
+    String[] getAllSrcs(){
+        String[] srcDirs = getAllSrcDirs()
+
+        List<String> result = new ArrayList<String>()
+        for (String srcDir : srcDirs){
+            String[] allSrcsForDir = getAllSrcsForDir(srcDir)
+            for (String src : allSrcsForDir){
+                result.add(src)
+            }
+        }
+        return result.toArray()
+    }
+
+    String[] getAllSrcsForDir(String dir){
+        List<String> result = new ArrayList<String>()
+        String[] excludes = getAllSrcDirsExludes()
+        File fh = new File(dir)
+        File[] filesList = fh.listFiles();
+        for (File file : filesList) {
+            if (file.isFile()) {
+                if (file.getName().endsWith(".c")){
+                    String src = fh.absolutePath + "/" + file.getName()
+                    boolean shouldExclude = false
+                    for (String exclude : excludes){
+                        if (src.contains(exclude)){
+                            shouldExclude = true
+                            break
+                        }
+                    }
+                    if (shouldExclude == false){
+                        result.add(src)
+                    }
+                }
+            }else if(file.isDirectory()){
+                if (file.getName().startsWith(".") == false){
+                    result.addAll(getAllSrcsForDir(dir + "/" + file.getName()))
+                }
+            }
+        }
+        return result.toArray()
+    }
+
+    private String[] getAllSrcDirs(){
+        List<String> command = ["perl", "GetAllCSrcDirs.pl"]
+        for(String module : modules)
+            command.add(module)
+        String[] commandArray = command.toArray()
+        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
+
+        String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
+        String[] dependencies = getAllDirsOfDependencies()
+        for (String dependency : dependencies){
+            output += " " + dependency
+        }
+        String[] srcDirs = output.split(" ")
+        return srcDirs
+    }
+
+    private String[] getAllSrcDirsExludes(){
+        String[] allExcludes = ["/ios/", "/windows/", "/SFMT-src-1.5.1/test.c"]
+        return allExcludes
+    }
+
+    private String[] getAllDirsOfDependencies(){
+        List<String> dependencies = new ArrayList<String>()
+        if(modules.contains(expat)){
+            dependencies.add(absolutePathToImpsEngineRoot + "/dependencies/expat-2.2.1/lib")
+        }
+        if(modules.contains(randomNumberGeneratorSfmt)){
+            dependencies.add(absolutePathToImpsEngineRoot + "/dependencies/SFMT-src-1.5.1")
+        }
+        return dependencies.toArray()
+    }
+
+    String[] getAllJavaSrcDirs(){
+        List<String> command = ["perl", "GetAllJavaSrcDirs.pl"]
+        for(String module : modules)
+            command.add(module)
+        String[] commandArray = command.toArray()
+        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
+
+        String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
+        String[] result = output.split(" ")
+        return result
+    }
+
+    String[] getAllIncludeDirs(){
+        List<String> command = ["perl", "GetAllIncludeDirsForAndroid.pl"]
+        for(String module : modules)
+            command.add(module)
+        String[] commandArray = command.toArray()
+        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
+        String[] dependencies = getAllDirsOfDependencies()
+        String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
+        for (String dependency : dependencies){
+            output += " " + dependency
+        }
+        return output.split(" ")
+    }
+
+    String[] getAllIncludeDirsForDir(String dirName){
+        List<String> includeDirs = new ArrayList<String>()
+        File dir = new File(dirName)
+        includeDirs.add(dir.absolutePath)
+        for (File f : dir.listFiles()){
+            if (f.isDirectory()){
+                for (String str : getAllIncludeDirsForDir(f.absolutePath)){
+                    includeDirs.add(str)
+                }
+            }
+        }
+        String[] str = new String[includeDirs.size()]
+        return includeDirs.toArray(str)
+    }
+
+    private void logError(String error){
+        File workingDir = new File(absolutePathToImpsEngineRoot + "/logs/gradle-error-log.txt")
+        FileOutputStream fileOutputStream = new FileOutputStream(workingDir, true)
+        PrintWriter writer = new PrintWriter(fileOutputStream, true)
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss")
+        Date date = new Date()
+        writer.write(dateFormat.format(date) + " Error when building project named \"" + projectNameForLogging + "\":\n")
+        writer.write(error + "\n")
+        writer.close()
+    }
+}
