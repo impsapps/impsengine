@@ -7,7 +7,6 @@ import android.os.Bundle;
 
 import com.impsapps.impsengine.common.androidlib.AppState;
 import com.impsapps.impsengine.common.androidlib.ImpsEngine;
-import com.impsapps.impsengine.common.clib.Library;
 import com.impsapps.impsengine.common.multitouch.TouchListener;
 
 public class BaseActivity extends Activity implements AppState{
@@ -56,9 +55,6 @@ public class BaseActivity extends Activity implements AppState{
             nativeSaveGamestate();
         }
         nativeSwitchToPausescreen();
-        if(Library.shouldLogMemoryLeaks()){
-            nativeDestroyResources();
-        }
         ImpsEngine.notifyOnStop();
     }
 

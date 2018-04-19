@@ -24,10 +24,6 @@ JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_clib_Library_onMemory
 }
 
 JNIEXPORT jboolean JNICALL Java_com_impsapps_impsengine_common_clib_Library_isDebugMode(JNIEnv* env, jclass nativeClass){
-    return DEBUG;
-}
-
-JNIEXPORT jboolean JNICALL Java_com_impsapps_impsengine_common_clib_Library_shouldLogMemoryLeaks(JNIEnv* env, jclass nativeClass){
-    return LOG_MEMORY_LEAKS;
+    return IALibrary_isDebugMode();
 }
 

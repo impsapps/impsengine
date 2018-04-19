@@ -25,9 +25,7 @@ const char * IALocalisation_getLocaleId(){
 		jmethodID getLocaleId = (*env)->GetStaticMethodID(env, jLocalisationClass, "getLocaleId", "()Ljava/lang/String;");
 		jstring jLocaleId = (*env)->CallStaticObjectMethod(env, jLocalisationClass, getLocaleId);
 		const char * utf8Chars = JNIEnv_createUTFChars(env, jLocaleId);
-		IA_disableAllocationTracking();
 		localeId = IAString_new(utf8Chars);
-		IA_enableAllocationTracking();
 		JNIEnv_destroyUTFChars(env, jLocaleId, utf8Chars);
 		(*env)->DeleteLocalRef(env, jLocaleId);
 		(*env)->DeleteLocalRef(env, jLocalisationClass);
