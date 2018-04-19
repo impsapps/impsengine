@@ -22,9 +22,7 @@ static void IABitmapManagerSingleton_onMemoryWarningFunction(void * object){
 
 IABitmapManager * IABitmapManagerSingleton_getDefaultBitmapManager(){
     if (defaultBitmapManager == NULL) {
-        IA_disableAllocationTracking();
         defaultBitmapManager = IABitmapManager_new();
-        IA_enableAllocationTracking();
         notificationDelegate = (IANotificationDelegate){
             .notify = (void (*)(void *)) IABitmapManagerSingleton_onMemoryWarningFunction
         };

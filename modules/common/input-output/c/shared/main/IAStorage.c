@@ -16,13 +16,11 @@ static IAString * privateDataDir = NULL;
 
 const char * IAStorage_getPrivateDataDir(){
     if (privateDataDir == NULL){
-        IA_disableAllocationTracking();
         privateDataDir = IAString_new("");
         IAStorage_nativeGetPrivateDataDir(privateDataDir);
         if (IAString_lastChar(privateDataDir) != '/') {
             IAString_concat(privateDataDir, "/");
         }
-        IA_enableAllocationTracking();
     }
     return IAString_toCharArray(privateDataDir);
 }
