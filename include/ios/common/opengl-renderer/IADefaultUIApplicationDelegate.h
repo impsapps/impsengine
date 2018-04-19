@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl-renderer/c/ios/IADefaultUIApplicationDelegate.h
+../../../../modules/common/opengl-renderer/c/ios/IADefaultUIApplicationDelegate.h

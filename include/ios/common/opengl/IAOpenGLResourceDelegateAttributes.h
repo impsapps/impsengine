@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl/c/shared/main/IAOpenGLResourceDelegateAttributes.h
+../../../../modules/common/opengl/c/shared/main/IAOpenGLResourceDelegateAttributes.h

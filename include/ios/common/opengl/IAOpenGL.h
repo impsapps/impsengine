@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl/c/shared/IAOpenGL.h
+../../../../modules/common/opengl/c/shared/IAOpenGL.h

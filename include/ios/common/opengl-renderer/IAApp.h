@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl-renderer/c/shared/main/IAApp.h
+../../../../modules/common/opengl-renderer/c/shared/main/IAApp.h

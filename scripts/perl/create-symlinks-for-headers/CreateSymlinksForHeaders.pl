@@ -11,6 +11,7 @@ package Main;
 
 use File::Compare;
 use File::Copy qw(copy);
+use File::Spec;
 
 use strict;
 use warnings;
@@ -124,7 +125,9 @@ foreach my $header (@headers){
     
     if(not -f $filePathTo){
         if ($useSymlinks){
-            my $symlink_exists = eval { symlink($filePathFrom,$filePathTo); 1 };
+            my $filePathFromRelative = File::Spec->abs2rel( $dir, $dirTo ) ;
+            $filePathFromRelative .= '/' . $name;
+            my $symlink_exists = eval { symlink($filePathFromRelative,$filePathTo); 1 };
             $symlink_exists or die "symlink not available on platform which was requested!";
         }else{
             copy($filePathFrom, $filePathTo);

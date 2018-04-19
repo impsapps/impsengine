@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl/c/shared/graphics/buffer/IAArrayBuffer.h
+../../../../modules/common/opengl/c/shared/graphics/buffer/IAArrayBuffer.h

@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/input-output/c/shared/main/IA_XML_Atlas.h
+../../../../modules/common/input-output/c/shared/main/IA_XML_Atlas.h

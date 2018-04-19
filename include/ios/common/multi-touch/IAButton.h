@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/multi-touch/c/shared/IAButton.h
+../../../../modules/common/multi-touch/c/shared/IAButton.h

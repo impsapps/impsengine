@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/input-output/c/shared/main/IAAtlasAssetsAttributes.h
+../../../../modules/common/input-output/c/shared/main/IAAtlasAssetsAttributes.h

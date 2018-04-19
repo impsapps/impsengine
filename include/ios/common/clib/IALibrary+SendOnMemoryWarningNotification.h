@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/clib/c/shared/IALibrary+SendOnMemoryWarningNotification.h
+../../../../modules/common/clib/c/shared/IALibrary+SendOnMemoryWarningNotification.h

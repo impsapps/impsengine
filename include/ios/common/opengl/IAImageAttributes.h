@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl/c/shared/graphics/IAImageAttributes.h
+../../../../modules/common/opengl/c/shared/graphics/IAImageAttributes.h

@@ -1,1 +1,1 @@
-/Users/konstantin/Desktop/impsengine/modules/common/opengl/c/shared/graphics/animation/IAFrameAnimation.h
+../../../../modules/common/opengl/c/shared/graphics/animation/IAFrameAnimation.h
