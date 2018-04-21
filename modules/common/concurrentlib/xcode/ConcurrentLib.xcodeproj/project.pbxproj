@@ -7,40 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B52A8DB61D8DA1FD00381D3E /* IAConcurrentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B52A8DB51D8DA1FD00381D3E /* IAConcurrentTests.m */; };
-		B55444731E58B5BD00FE2FBF /* IAImpsEngineTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B55444721E58B5BD00FE2FBF /* IAImpsEngineTests.m */; };
-		B56CE1FE1DECD33900FD05C4 /* libConcurrentLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B5390F641D8D649F009CF3DA /* libConcurrentLib.a */; };
 		B59F56B220865B2000E33C5A /* IAAsyncThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56A920865B2000E33C5A /* IAAsyncThreadPool.c */; };
-		B59F56B320865B2000E33C5A /* IAAsyncThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56A920865B2000E33C5A /* IAAsyncThreadPool.c */; };
 		B59F56B420865B2000E33C5A /* IAThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AD20865B2000E33C5A /* IAThreadPool.c */; };
-		B59F56B520865B2000E33C5A /* IAThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AD20865B2000E33C5A /* IAThreadPool.c */; };
 		B59F56B620865B2000E33C5A /* IAAsyncTask.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AF20865B2000E33C5A /* IAAsyncTask.c */; };
-		B59F56B720865B2000E33C5A /* IAAsyncTask.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AF20865B2000E33C5A /* IAAsyncTask.c */; };
 		B59F56B820865B2000E33C5A /* IAParallelThread.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56B120865B2000E33C5A /* IAParallelThread.c */; };
-		B59F56B920865B2000E33C5A /* IAParallelThread.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56B120865B2000E33C5A /* IAParallelThread.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		B5390F711D8D649F009CF3DA /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B5390F5C1D8D649F009CF3DA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = B5390F631D8D649F009CF3DA;
-			remoteInfo = ConcurrentLib;
-		};
 		B59F569C20865B0300E33C5A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B59F569720865B0300E33C5A /* CLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B55DE6BC1D882E9300F5B3E0;
 			remoteInfo = CLib;
-		};
-		B59F569E20865B0300E33C5A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B59F569720865B0300E33C5A /* CLib.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B55DE6C71D882E9300F5B3E0;
-			remoteInfo = CLibTests;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -57,12 +36,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B52A8DB51D8DA1FD00381D3E /* IAConcurrentTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IAConcurrentTests.m; sourceTree = "<group>"; };
 		B5390F641D8D649F009CF3DA /* libConcurrentLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConcurrentLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5390F6F1D8D649F009CF3DA /* ConcurrentLibTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConcurrentLibTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B55444711E58B5BD00FE2FBF /* IAImpsEngineTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = IAImpsEngineTests.h; path = "../../../../../../../supporting-files/imps-engine-tests/IAImpsEngineTests.h"; sourceTree = "<group>"; };
-		B55444721E58B5BD00FE2FBF /* IAImpsEngineTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = IAImpsEngineTests.m; path = "../../../../../../../supporting-files/imps-engine-tests/IAImpsEngineTests.m"; sourceTree = "<group>"; };
-		B57983121D8DA1BD008C9D6A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B59F569720865B0300E33C5A /* CLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CLib.xcodeproj; path = ../../clib/xcode/CLib.xcodeproj; sourceTree = "<group>"; };
 		B59F56A320865B2000E33C5A /* IAAsyncTask+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAAsyncTask+Generated.h"; sourceTree = "<group>"; };
 		B59F56A420865B2000E33C5A /* concurrentlib+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "concurrentlib+Generated.h"; sourceTree = "<group>"; };
@@ -89,14 +63,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B5390F6C1D8D649F009CF3DA /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B56CE1FE1DECD33900FD05C4 /* libConcurrentLib.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -113,7 +79,6 @@
 			children = (
 				B59F569720865B0300E33C5A /* CLib.xcodeproj */,
 				B51AB2BD1E0C4297002F5B75 /* ConcurrentLib */,
-				B579830B1D8DA184008C9D6A /* ConcurrentLibTests */,
 				B5390F651D8D649F009CF3DA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -122,43 +87,14 @@
 			isa = PBXGroup;
 			children = (
 				B5390F641D8D649F009CF3DA /* libConcurrentLib.a */,
-				B5390F6F1D8D649F009CF3DA /* ConcurrentLibTests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B579830B1D8DA184008C9D6A /* ConcurrentLibTests */ = {
-			isa = PBXGroup;
-			children = (
-				B579830F1D8DA1BD008C9D6A /* SupportingFiles */,
-				B57983131D8DA1BD008C9D6A /* Tests */,
-			);
-			path = ConcurrentLibTests;
-			sourceTree = "<group>";
-		};
-		B579830F1D8DA1BD008C9D6A /* SupportingFiles */ = {
-			isa = PBXGroup;
-			children = (
-				B55444711E58B5BD00FE2FBF /* IAImpsEngineTests.h */,
-				B55444721E58B5BD00FE2FBF /* IAImpsEngineTests.m */,
-				B57983121D8DA1BD008C9D6A /* Info.plist */,
-			);
-			path = SupportingFiles;
-			sourceTree = "<group>";
-		};
-		B57983131D8DA1BD008C9D6A /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				B52A8DB51D8DA1FD00381D3E /* IAConcurrentTests.m */,
-			);
-			path = Tests;
 			sourceTree = "<group>";
 		};
 		B59F569820865B0300E33C5A /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				B59F569D20865B0300E33C5A /* libCLib.a */,
-				B59F569F20865B0300E33C5A /* CLibTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -223,24 +159,6 @@
 			productReference = B5390F641D8D649F009CF3DA /* libConcurrentLib.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		B5390F6E1D8D649F009CF3DA /* ConcurrentLibTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = B5390F7B1D8D649F009CF3DA /* Build configuration list for PBXNativeTarget "ConcurrentLibTests" */;
-			buildPhases = (
-				B5390F6B1D8D649F009CF3DA /* Sources */,
-				B5390F6C1D8D649F009CF3DA /* Frameworks */,
-				B5390F6D1D8D649F009CF3DA /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				B5390F721D8D649F009CF3DA /* PBXTargetDependency */,
-			);
-			name = ConcurrentLibTests;
-			productName = ConcurrentLibTests;
-			productReference = B5390F6F1D8D649F009CF3DA /* ConcurrentLibTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -251,9 +169,6 @@
 				ORGANIZATIONNAME = "Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps)";
 				TargetAttributes = {
 					B5390F631D8D649F009CF3DA = {
-						CreatedOnToolsVersion = 6.4;
-					};
-					B5390F6E1D8D649F009CF3DA = {
 						CreatedOnToolsVersion = 6.4;
 					};
 				};
@@ -277,7 +192,6 @@
 			projectRoot = "";
 			targets = (
 				B5390F631D8D649F009CF3DA /* ConcurrentLib */,
-				B5390F6E1D8D649F009CF3DA /* ConcurrentLibTests */,
 			);
 		};
 /* End PBXProject section */
@@ -290,24 +204,7 @@
 			remoteRef = B59F569C20865B0300E33C5A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B59F569F20865B0300E33C5A /* CLibTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = CLibTests.xctest;
-			remoteRef = B59F569E20865B0300E33C5A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
-
-/* Begin PBXResourcesBuildPhase section */
-		B5390F6D1D8D649F009CF3DA /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		B5390F9A1D8D6790009CF3DA /* Run Script */ = {
@@ -338,28 +235,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B5390F6B1D8D649F009CF3DA /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B52A8DB61D8DA1FD00381D3E /* IAConcurrentTests.m in Sources */,
-				B59F56B320865B2000E33C5A /* IAAsyncThreadPool.c in Sources */,
-				B55444731E58B5BD00FE2FBF /* IAImpsEngineTests.m in Sources */,
-				B59F56B720865B2000E33C5A /* IAAsyncTask.c in Sources */,
-				B59F56B920865B2000E33C5A /* IAParallelThread.c in Sources */,
-				B59F56B520865B2000E33C5A /* IAThreadPool.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		B5390F721D8D649F009CF3DA /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = B5390F631D8D649F009CF3DA /* ConcurrentLib */;
-			targetProxy = B5390F711D8D649F009CF3DA /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B5390F761D8D649F009CF3DA /* Debug */ = {
@@ -465,34 +341,6 @@
 			};
 			name = Release;
 		};
-		B5390F7C1D8D649F009CF3DA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = ConcurrentLibTests/SupportingFiles/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.impsapps.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		B5390F7D1D8D649F009CF3DA /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = ConcurrentLibTests/SupportingFiles/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.impsapps.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -510,15 +358,6 @@
 			buildConfigurations = (
 				B5390F791D8D649F009CF3DA /* Debug */,
 				B5390F7A1D8D649F009CF3DA /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		B5390F7B1D8D649F009CF3DA /* Build configuration list for PBXNativeTarget "ConcurrentLibTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				B5390F7C1D8D649F009CF3DA /* Debug */,
-				B5390F7D1D8D649F009CF3DA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
