@@ -38,13 +38,17 @@ void IAAllocationTracker_commence(void){
     shouldAnalyse = true;
 }
 
-static IAAutoExpandingHashMap * IAAllocationTracker_getCurrentAllocationCounts(void){
-    int index = currentTrackingContext - IA_TRACKING_CONTEXT_0;
-    return allocationCounts[index];
+int IAAllocationTracker_getContext(void){
+    return currentTrackingContext;
 }
 
 void IAAllocationTracker_setContext(int trackingContext){
     currentTrackingContext = trackingContext;
+}
+
+static IAAutoExpandingHashMap * IAAllocationTracker_getCurrentAllocationCounts(void){
+    int index = currentTrackingContext - IA_TRACKING_CONTEXT_0;
+    return allocationCounts[index];
 }
 
 void IAAllocationTracker_objectAllocated(const char * className){
