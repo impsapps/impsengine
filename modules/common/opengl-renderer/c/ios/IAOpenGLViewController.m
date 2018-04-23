@@ -108,6 +108,15 @@
     glAssert();
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    //This code fixes delayed touches began on left and right side of screen on iPad.
+    UIGestureRecognizer* gr0 = self.view.window.gestureRecognizers[0];
+    UIGestureRecognizer* gr1 = self.view.window.gestureRecognizers[1];
+    gr0.delaysTouchesBegan = false;
+    gr1.delaysTouchesBegan = false;
+}
 
 -(void) onStart{
     
@@ -206,16 +215,6 @@
     [self addCorrespondingTouchHandlersToArray: touches :touchHandlers];
     
     IATouchManager_onTouchEnded(lengthOfTouchHandlers, touchHandlers);
-    
-    [self destroyTouchHandlersInArray:lengthOfTouchHandlers :touchHandlers];
-}
-
--(void) touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
-    size_t lengthOfTouchHandlers = touches.count;
-    IATouchHandler * touchHandlers[lengthOfTouchHandlers];
-    [self addCorrespondingTouchHandlersToArray: touches :touchHandlers];
-    
-    IATouchManager_onTouchCanceled();
     
     [self destroyTouchHandlersInArray:lengthOfTouchHandlers :touchHandlers];
 }
