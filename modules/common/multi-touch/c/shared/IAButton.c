@@ -24,7 +24,6 @@ IARect IAButton_addRectExtensionTouchMovedOutsideToRect(IAButton * this, IARect 
 void IAButton_onTouchBegan(IAButton * this, IAArrayList * list);
 void IAButton_onTouchMoved(IAButton * this, IAArrayList * list);
 void IAButton_onTouchEnded(IAButton * this, IAArrayList * list);
-void IAButton_onTouchCanceled(IAButton * this, IAArrayList * list);
 
 void IAButton_exeOnClick(IAButton * this);
 void IAButton_exeOnIsTouchedChanged(IAButton * this, bool isTouched);
@@ -55,7 +54,6 @@ void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
     IATouchDelegateAttributes_setOnTouchBeganFunction(&attr, (void(*)(void *, IAArrayList *)) IAButton_onTouchBegan);
     IATouchDelegateAttributes_setOnTouchMovedFunction(&attr, (void(*)(void *, IAArrayList *)) IAButton_onTouchMoved);
     IATouchDelegateAttributes_setOnTouchEndedFunction(&attr, (void(*)(void *, IAArrayList *)) IAButton_onTouchEnded);
-    IATouchDelegateAttributes_setOnTouchCanceledFunction(&attr, (void(*)(void *)) IAButton_onTouchCanceled);
     IATouchDelegateAttributes_setZOrder(&attr, IAButtonAttributes_getZOrder(attributes));
     IATouchDelegate_init(&this->touchDelegate, &attr);
     
@@ -164,11 +162,6 @@ void IAButton_onTouchEnded(IAButton * this, IAArrayList * list){
             IAButton_exeOnClick(this);
         }
     }
-}
-
-void IAButton_onTouchCanceled(IAButton * this, IAArrayList * list){
-    IAArrayList_clear(&this->validTouchIds);
-    this->touchCount = 0;
 }
 
 void IAButton_exeOnClick(IAButton * this){

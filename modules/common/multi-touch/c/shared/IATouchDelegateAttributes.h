@@ -26,8 +26,6 @@ typedef struct{
     void (*onTouchMoved)(void * correspondingObject, IAArrayList * touches);
     //@set+get
     void (*onTouchEnded)(void * correspondingObject, IAArrayList * touches);
-    //@set+get
-    void (*onTouchCanceled)(void * correspondingObject);
     
     //@set+get
     int zOrder;

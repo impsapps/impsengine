@@ -20,7 +20,6 @@ void IATouchDelegate_init(IATouchDelegate * this, const IATouchDelegateAttribute
         .touchBegan = IATouchDelegateAttributes_getOnTouchBeganFunction(attr),
         .touchMoved = IATouchDelegateAttributes_getOnTouchMovedFunction(attr),
         .touchEnded = IATouchDelegateAttributes_getOnTouchEndedFunction(attr),
-        .touchCanceled = IATouchDelegateAttributes_getOnTouchCanceledFunction(attr),
         .zOrder = IATouchDelegateAttributes_getZOrder(attr)
     };
     IAArrayList_init(&this->touchesForTouchEvent, 10);
@@ -58,12 +57,6 @@ void IATouchDelegate_touchMoved(IATouchDelegate * this){
 void IATouchDelegate_touchEnded(IATouchDelegate * this){
     if (this->touchEnded != NULL) {
         this->touchEnded(this->correspondingObject, &this->touchesForTouchEvent);
-    }
-}
-
-void IATouchDelegate_touchCanceled(IATouchDelegate * this){
-    if (this->touchCanceled != NULL) {
-        this->touchCanceled(this->correspondingObject);
     }
 }
 
