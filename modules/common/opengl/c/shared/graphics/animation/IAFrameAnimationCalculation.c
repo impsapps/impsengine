@@ -34,8 +34,15 @@ size_t IAFrameAnimationCalculation_calculateFrameWithOptions(size_t numberOfFram
                                                              bool shouldShowLastFrameForever,
                                                              bool shouldRepeatAnimation,
                                                              bool shouldReverseAnimation){
-    assert(currentTime >= startTime && "currentTime cannot be smaller then startTime");
     assert(numberOfFrames > 0);
+
+    if (currentTime < startTime) {
+        if (shouldReverseAnimation) {
+            return numberOfFrames - 1;
+        }else{
+            return 0;
+        }
+    }
     
     uint64_t timeDifference = currentTime - startTime;
     size_t frame = timeDifference / (((float) duration) / ((float) numberOfFrames));

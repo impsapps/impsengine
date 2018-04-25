@@ -99,26 +99,12 @@
 			remoteGlobalIDString = B58E92521D8F0C0600FD45DE;
 			remoteInfo = InputOutput;
 		};
-		B58B0B56208568EE00146A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B58B0B4D208568EE00146A34 /* InputOutput.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B58E925D1D8F0C0600FD45DE;
-			remoteInfo = InputOutputTests;
-		};
 		B58B0B5D2085690400146A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B58B0B582085690400146A34 /* MathLib.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = B59503221D87943F00216F0D;
 			remoteInfo = MathLib;
-		};
-		B58B0B5F2085690400146A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B58B0B582085690400146A34 /* MathLib.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B595032D1D87943F00216F0D;
-			remoteInfo = MathLibTests;
 		};
 		B58B0D2020856B9400146A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -436,7 +422,6 @@
 			isa = PBXGroup;
 			children = (
 				B58B0B55208568EE00146A34 /* libInputOutput.a */,
-				B58B0B57208568EE00146A34 /* InputOutputTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -445,7 +430,6 @@
 			isa = PBXGroup;
 			children = (
 				B58B0B5E2085690400146A34 /* libMathLib.a */,
-				B58B0B602085690400146A34 /* MathLibTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -619,28 +603,28 @@
 		B58B0BC32085691A00146A34 /* graphics */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0BC42085691A00146A34 /* IADrawable.c */,
-				B58B0BC52085691A00146A34 /* IAImageAttributes.c */,
-				B58B0BC62085691A00146A34 /* IABackgroundColor.c */,
-				B58B0BC72085691A00146A34 /* IAColorRect.c */,
-				B58B0BC82085691A00146A34 /* IAImageContext.c */,
-				B58B0BC92085691A00146A34 /* IAGraphicRect.c */,
-				B58B0BCA2085691A00146A34 /* IADrawableRect.h */,
 				B58B0BCB2085691A00146A34 /* animation */,
-				B58B0BE42085691A00146A34 /* IATrimmedRect.h */,
-				B58B0BE52085691A00146A34 /* IAImage.c */,
-				B58B0BE62085691A00146A34 /* IAColorRect.h */,
-				B58B0BE72085691A00146A34 /* IABackgroundColor.h */,
-				B58B0BE82085691A00146A34 /* IAImageAttributes.h */,
-				B58B0BE92085691A00146A34 /* IADrawable.h */,
-				B58B0BEA2085691A00146A34 /* IAGraphicRect.h */,
-				B58B0BEB2085691A00146A34 /* IAImageContext.h */,
-				B58B0BEC2085691A00146A34 /* texture */,
-				B58B0BFE2085691A00146A34 /* text */,
-				B58B0C0E2085691A00146A34 /* IADrawableRect.c */,
-				B58B0C0F2085691A00146A34 /* IAImage.h */,
-				B58B0C102085691A00146A34 /* IATrimmedRect.c */,
 				B58B0C112085691A00146A34 /* buffer */,
+				B58B0BC62085691A00146A34 /* IABackgroundColor.c */,
+				B58B0BE72085691A00146A34 /* IABackgroundColor.h */,
+				B58B0BC72085691A00146A34 /* IAColorRect.c */,
+				B58B0BE62085691A00146A34 /* IAColorRect.h */,
+				B58B0BC42085691A00146A34 /* IADrawable.c */,
+				B58B0BE92085691A00146A34 /* IADrawable.h */,
+				B58B0C0E2085691A00146A34 /* IADrawableRect.c */,
+				B58B0BCA2085691A00146A34 /* IADrawableRect.h */,
+				B58B0BC92085691A00146A34 /* IAGraphicRect.c */,
+				B58B0BEA2085691A00146A34 /* IAGraphicRect.h */,
+				B58B0BE52085691A00146A34 /* IAImage.c */,
+				B58B0C0F2085691A00146A34 /* IAImage.h */,
+				B58B0BC52085691A00146A34 /* IAImageAttributes.c */,
+				B58B0BE82085691A00146A34 /* IAImageAttributes.h */,
+				B58B0BC82085691A00146A34 /* IAImageContext.c */,
+				B58B0BEB2085691A00146A34 /* IAImageContext.h */,
+				B58B0C102085691A00146A34 /* IATrimmedRect.c */,
+				B58B0BE42085691A00146A34 /* IATrimmedRect.h */,
+				B58B0BFE2085691A00146A34 /* text */,
+				B58B0BEC2085691A00146A34 /* texture */,
 			);
 			path = graphics;
 			sourceTree = "<group>";
@@ -648,30 +632,30 @@
 		B58B0BCB2085691A00146A34 /* animation */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0BCC2085691A00146A34 /* IAAccelerationAnimationAttributes.h */,
-				B58B0BCD2085691A00146A34 /* IACompositedAnimationDelegateAttributes.h */,
-				B58B0BCE2085691A00146A34 /* IACompositedAnimation.c */,
-				B58B0BCF2085691A00146A34 /* IAAccelerationAnimation.c */,
-				B58B0BD02085691A00146A34 /* IAFrameAnimationCalculation.c */,
-				B58B0BD12085691A00146A34 /* IAFrameAnimationGroupAttributes.c */,
-				B58B0BD22085691A00146A34 /* IAFrameAnimationAttributes.c */,
-				B58B0BD32085691A00146A34 /* IAFrameAnimation.c */,
-				B58B0BD42085691A00146A34 /* IACompositedAnimationDelegate.h */,
-				B58B0BD52085691A00146A34 /* IAPauseAnimation.h */,
-				B58B0BD62085691A00146A34 /* IAAcceleration.h */,
-				B58B0BD72085691A00146A34 /* IAFrameAnimationGroup.h */,
-				B58B0BD82085691A00146A34 /* IAAccelerationAnimationAttributes.c */,
-				B58B0BD92085691A00146A34 /* IACompositedAnimation.h */,
-				B58B0BDA2085691A00146A34 /* IACompositedAnimationDelegateAttributes.c */,
-				B58B0BDB2085691A00146A34 /* IAFrameAnimationGroupAttributes.h */,
-				B58B0BDC2085691A00146A34 /* IAFrameAnimationCalculation.h */,
-				B58B0BDD2085691A00146A34 /* IAAccelerationAnimation.h */,
-				B58B0BDE2085691A00146A34 /* IAFrameAnimation.h */,
-				B58B0BDF2085691A00146A34 /* IAFrameAnimationAttributes.h */,
-				B58B0BE02085691A00146A34 /* IAFrameAnimationGroup.c */,
-				B58B0BE12085691A00146A34 /* IAPauseAnimation.c */,
 				B58B0BE22085691A00146A34 /* IAAcceleration.c */,
+				B58B0BD62085691A00146A34 /* IAAcceleration.h */,
+				B58B0BCF2085691A00146A34 /* IAAccelerationAnimation.c */,
+				B58B0BDD2085691A00146A34 /* IAAccelerationAnimation.h */,
+				B58B0BD82085691A00146A34 /* IAAccelerationAnimationAttributes.c */,
+				B58B0BCC2085691A00146A34 /* IAAccelerationAnimationAttributes.h */,
+				B58B0BCE2085691A00146A34 /* IACompositedAnimation.c */,
+				B58B0BD92085691A00146A34 /* IACompositedAnimation.h */,
 				B58B0BE32085691A00146A34 /* IACompositedAnimationDelegate.c */,
+				B58B0BD42085691A00146A34 /* IACompositedAnimationDelegate.h */,
+				B58B0BDA2085691A00146A34 /* IACompositedAnimationDelegateAttributes.c */,
+				B58B0BCD2085691A00146A34 /* IACompositedAnimationDelegateAttributes.h */,
+				B58B0BD32085691A00146A34 /* IAFrameAnimation.c */,
+				B58B0BDE2085691A00146A34 /* IAFrameAnimation.h */,
+				B58B0BD22085691A00146A34 /* IAFrameAnimationAttributes.c */,
+				B58B0BDF2085691A00146A34 /* IAFrameAnimationAttributes.h */,
+				B58B0BD02085691A00146A34 /* IAFrameAnimationCalculation.c */,
+				B58B0BDC2085691A00146A34 /* IAFrameAnimationCalculation.h */,
+				B58B0BE02085691A00146A34 /* IAFrameAnimationGroup.c */,
+				B58B0BD72085691A00146A34 /* IAFrameAnimationGroup.h */,
+				B58B0BD12085691A00146A34 /* IAFrameAnimationGroupAttributes.c */,
+				B58B0BDB2085691A00146A34 /* IAFrameAnimationGroupAttributes.h */,
+				B58B0BE12085691A00146A34 /* IAPauseAnimation.c */,
+				B58B0BD52085691A00146A34 /* IAPauseAnimation.h */,
 			);
 			path = animation;
 			sourceTree = "<group>";
@@ -884,25 +868,11 @@
 			remoteRef = B58B0B54208568EE00146A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		B58B0B57208568EE00146A34 /* InputOutputTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = InputOutputTests.xctest;
-			remoteRef = B58B0B56208568EE00146A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		B58B0B5E2085690400146A34 /* libMathLib.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libMathLib.a;
 			remoteRef = B58B0B5D2085690400146A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B58B0B602085690400146A34 /* MathLibTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = MathLibTests.xctest;
-			remoteRef = B58B0B5F2085690400146A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
