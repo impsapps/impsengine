@@ -7,11 +7,12 @@ use warnings;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getModuleWithName getHashMapReferenceToAllModules getAllModulesToBuildInAValidOrderForModuleNames buildModuleForIOS buildModuleForAndroid buildModuleForWindows);
+our @EXPORT = qw(getAbsolutePathToRootDir getPathRelativeToRootDir getModuleWithName getHashMapReferenceToAllModules getAllModulesToBuildInAValidOrderForModuleNames buildModuleForIOS buildModuleForAndroid buildModuleForWindows);
 
 
 use Cwd;
 use Module;
+use File::Spec;
 
 my $cwd = getcwd();
 
@@ -106,6 +107,16 @@ sub setupModulesRecursively{
 }
 
 setupModulesRecursively($engineStructure, "");
+
+sub getAbsolutePathToRootDir{
+    return $absolutePathToRootDir;
+}
+
+sub getPathRelativeToRootDir{
+    my $absPath = shift;
+    my $relPath = File::Spec->abs2rel( $absPath, $absolutePathToRootDir );
+    return $relPath;
+}
 
 sub getModuleWithName{
     my $moduleName = shift;
