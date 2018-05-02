@@ -15,14 +15,6 @@ class ImpsEnginePlugin implements Plugin<Project> {
         def buildModulesTask = project.task('buildModules') << {
             project.impsengine.buildModules()
         }
-        def printAllIncludeDirsTask = project.task('printAllIncludeDirs') << {
-            for (String string : project.impsengine.getAllIncludeDirs())
-                println string
-        }
-        def printAllCSrcDirsTask = project.task('printAllCSrcDirs') << {
-            for (String string : project.impsengine.getAllSrcs())
-                println string
-        }
         def printAllJavaSrcDirsTask = project.task('printAllJavaSrcDirs') << {
             for (String string : project.impsengine.getAllJavaSrcDirs())
                 println string
@@ -30,8 +22,6 @@ class ImpsEnginePlugin implements Plugin<Project> {
 
         def impsengineStr = 'impsengine'
         buildModulesTask.group = impsengineStr
-        printAllIncludeDirsTask.group = impsengineStr
-        printAllCSrcDirsTask.group = impsengineStr
         printAllJavaSrcDirsTask.group = impsengineStr
     }
 }
@@ -169,19 +159,6 @@ class ImpsEngineExtension {
         executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
     }
 
-    String[] getAllSrcs(){
-        String[] srcDirs = getAllSrcDirs()
-
-        List<String> result = new ArrayList<String>()
-        for (String srcDir : srcDirs){
-            String[] allSrcsForDir = getAllSrcsForDir(srcDir)
-            for (String src : allSrcsForDir){
-                result.add(src)
-            }
-        }
-        return result.toArray()
-    }
-
     String[] getAllSrcsForDir(String dir){
         List<String> result = new ArrayList<String>()
         String[] excludes = getAllSrcDirsExludes()
@@ -211,36 +188,9 @@ class ImpsEngineExtension {
         return result.toArray()
     }
 
-    private String[] getAllSrcDirs(){
-        List<String> command = ["perl", "GetAllCSrcDirs.pl"]
-        for(String module : modules)
-            command.add(module)
-        String[] commandArray = command.toArray()
-        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
-
-        String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
-        String[] dependencies = getAllDirsOfDependencies()
-        for (String dependency : dependencies){
-            output += " " + dependency
-        }
-        String[] srcDirs = output.split(" ")
-        return srcDirs
-    }
-
     private String[] getAllSrcDirsExludes(){
         String[] allExcludes = ["/ios/", "/windows/", "/SFMT-src-1.5.1/test.c"]
         return allExcludes
-    }
-
-    private String[] getAllDirsOfDependencies(){
-        List<String> dependencies = new ArrayList<String>()
-        if(modules.contains(expat)){
-            dependencies.add(absolutePathToImpsEngineRoot + "/dependencies/expat-2.2.1/lib")
-        }
-        if(modules.contains(randomNumberGeneratorSfmt)){
-            dependencies.add(absolutePathToImpsEngineRoot + "/dependencies/SFMT-src-1.5.1")
-        }
-        return dependencies.toArray()
     }
 
     String[] getAllJavaSrcDirs(){
@@ -253,20 +203,6 @@ class ImpsEngineExtension {
         String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
         String[] result = output.split(" ")
         return result
-    }
-
-    String[] getAllIncludeDirs(){
-        List<String> command = ["perl", "GetAllIncludeDirsForAndroid.pl"]
-        for(String module : modules)
-            command.add(module)
-        String[] commandArray = command.toArray()
-        File workingDir = new File(absolutePathToImpsEngineRoot + "/scripts/perl/build-modules")
-        String[] dependencies = getAllDirsOfDependencies()
-        String output = executeCommandArrayAndGetStandardOutput(commandArray, workingDir)
-        for (String dependency : dependencies){
-            output += " " + dependency
-        }
-        return output.split(" ")
     }
 
     String[] getAllIncludeDirsForDir(String dirName){
