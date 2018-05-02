@@ -67,6 +67,9 @@ for my $expatFile (@expatFiles){
     push @srcDirs, "dependencies/expat-2.2.1/lib/" . $expatFile;
 }
 
+@includeDirs = sort @includeDirs;
+@srcDirs = sort @srcDirs;
+
 my $cmakeFile = getAbsolutePathToRootDir() . '/CMakeLists.txt';
 
 $, = " ";
@@ -78,7 +81,7 @@ print $fh "\n";
 print $fh "cmake_minimum_required(VERSION 3.4.1)\n";
 print $fh "\n";
 print $fh "add_definitions(-std=c99)\n";
-print $fh "add_definitions(-DLTC_MINIMAL -DLTC_MRSA -DLTC_SOURCE -DLTM_DESC -DHAVE_MEMMOVE)\n";
+print $fh "add_definitions(-DHAVE_MEMMOVE)\n";
 print $fh "\n";
 print $fh "add_library(ImpsEngine SHARED @srcDirs)\n";
 print $fh "\n";
