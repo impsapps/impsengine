@@ -37,13 +37,6 @@ public class TouchListener implements SurfaceView.OnTouchListener{
 			float y = event.getY(index);
 			onTouchEnded(pointerId, x, y);
 			destroyTouchHandler(pointerId);
-		}else if(action == MotionEvent.ACTION_CANCEL){
-			onTouchCanceled();
-			int numberOfPointers = event.getPointerCount();
-			for(int i = 0; i < numberOfPointers; i++){
-				long pointerId = event.getPointerId(i);
-				destroyTouchHandler(pointerId);
-			}
 		}
 		try{
 			Thread.sleep(10);
@@ -104,7 +97,6 @@ public class TouchListener implements SurfaceView.OnTouchListener{
 	public static native void addTouchMoved(long touchId, float pointX, float pointY);
 	public static native void executeOnTouchMoved();
 	public static native void onTouchEnded(long touchId, float pointX, float pointY);
-	public static native void onTouchCanceled();
 
 	public static native void destroyTouchHandler(long touchId);
 

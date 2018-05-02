@@ -24,7 +24,6 @@ typedef struct{
     void (*touchBegan)(void * correspondingObject, IAArrayList * touches);
     void (*touchMoved)(void * correspondingObject, IAArrayList * touches);
     void (*touchEnded)(void * correspondingObject, IAArrayList * touches);
-    void (*touchCanceled)(void * correspondingObject);
     IAArrayList touchesForTouchEvent;
     
     //@get
@@ -41,7 +40,6 @@ void IATouchDelegate_resetCurrentTouchEvent(IATouchDelegate *);
 void IATouchDelegate_touchBegan(IATouchDelegate *);
 void IATouchDelegate_touchMoved(IATouchDelegate *);
 void IATouchDelegate_touchEnded(IATouchDelegate *);
-void IATouchDelegate_touchCanceled(IATouchDelegate *);
 
 void IATouchDelegate_deinit(IATouchDelegate *);
 
