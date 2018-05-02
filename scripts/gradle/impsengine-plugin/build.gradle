@@ -23,6 +23,10 @@ class ImpsEnginePlugin implements Plugin<Project> {
         def impsengineStr = 'impsengine'
         buildModulesTask.group = impsengineStr
         printAllJavaSrcDirsTask.group = impsengineStr
+
+        /*def tasks = project.getTasksByName("preBuild", true)
+        def buildTask = tasks.toArray()[0]
+        buildTask.dependsOn(buildModulesTask)*/
     }
 }
 
@@ -31,10 +35,6 @@ class ImpsEngineExtension {
     //advanced-math
     final String randomNumberGenerator = "random-number-generator"
     final String randomNumberGeneratorSfmt = "random-number-generator-sfmt"
-
-    //business
-    final String ads = "ads"
-    final String adsVungle = "ads-vungle"
 
     //common
     final String androidlib = "androidlib"
@@ -46,13 +46,6 @@ class ImpsEngineExtension {
     final String multiTouch = "multi-touch"
     final String opengl = "opengl"
     final String openglRenderer = "opengl-renderer"
-
-    //media
-    final String musicAndSound = "music+sound"
-
-    //social
-    final String googlePlay = "google-play"
-    final String socialActivity = "social-activity"
 
     //utilities
     final String date = "date"
@@ -68,20 +61,8 @@ class ImpsEngineExtension {
         return [randomNumberGenerator, randomNumberGeneratorSfmt]
     }
 
-    List<String> getBusinessModules(){
-        return [ads, adsVungle]
-    }
-
     List<String> getCommonModules(){
         return [androidlib, clib, concurrentlib, inputOutput, expat, mathlib, multiTouch, opengl, openglRenderer]
-    }
-
-    List<String> getMediaModules(){
-        return [musicAndSound]
-    }
-
-    List<String> getSocialModules(){
-        return [googlePlay, socialActivity]
     }
 
     List<String> getUtilitiesModules(){
