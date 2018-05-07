@@ -69,6 +69,12 @@ my $engineStructure = {
             }
         },
         
+        "misc" => {
+            "#bundle-info" => {
+                "c" => []
+            }
+        },
+        
         "utilities" => {
             "#date" => {
                 "c" => ["shared"]

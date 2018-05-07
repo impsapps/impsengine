@@ -1,1 +1,0 @@
-/Users/konstantin/Desktop/HitVerto/impsengine/modules/business/ads-vungle/c/ios/IAVungleHandler.h

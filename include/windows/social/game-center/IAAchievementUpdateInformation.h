@@ -1,1 +1,0 @@
-/Users/konstantin/Desktop/HitVerto/impsengine/modules/social/game-center/c/impsengine/social/game-center/ios/IAAchievementUpdateInformation.h

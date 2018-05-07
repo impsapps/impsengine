@@ -14,3 +14,5 @@ my @modulesToBuild = getAllModulesToBuildInAValidOrderForModuleNames(@ARGV);
 foreach my $moduleToBuild (@modulesToBuild){
     buildModuleForAndroid($moduleToBuild);
 }
+
+system("perl CreateCMakeLists.pl");

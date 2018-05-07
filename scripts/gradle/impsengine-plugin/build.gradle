@@ -47,6 +47,9 @@ class ImpsEngineExtension {
     final String opengl = "opengl"
     final String openglRenderer = "opengl-renderer"
 
+    //misc
+    final String bundleInfo = "bundle-info"
+
     //utilities
     final String date = "date"
     final String url = "url"
@@ -63,6 +66,10 @@ class ImpsEngineExtension {
 
     List<String> getCommonModules(){
         return [androidlib, clib, concurrentlib, inputOutput, expat, mathlib, multiTouch, opengl, openglRenderer]
+    }
+
+    List<String> getMiscModules(){
+        return [bundleInfo]
     }
 
     List<String> getUtilitiesModules(){
