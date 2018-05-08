@@ -160,6 +160,10 @@ IARect IAImage_getTrimmedRect(IAImage * this) {
 	return trimmedRect;
 }
 
+void IAImage_deactivateTrimmedRect(IAImage * this) {
+	this->hasTrimmedRect = false;
+}
+
 void IAImage_transformRectToRender(const IAImage * this, IARect * rectToTransform){
     if (this->hasTrimmedRect) {
         *rectToTransform = IATrimmedRect_trimRect(&this->trimmedRect, *rectToTransform);
