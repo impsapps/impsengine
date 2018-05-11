@@ -101,6 +101,11 @@ void IATouchManager_onTouchEnded(size_t lengthOfTouchHandlers, IATouchHandler * 
     IATouchManager_executeTouchEventWithTouches(IATouchDelegate_touchEnded, lengthOfTouchHandlers, touchHandlers);
 }
 
+void IATouchManager_onTouchCanceled(){
+    IATouchManager_resetCurrentTouchEvents();
+    IATouchManager_executeTouchEvent(IATouchDelegate_touchCanceled);
+}
+
 void IATouchManager_executeTouchEventWithTouches(void (*executeMethod)(IATouchDelegate * touchHandler), size_t lengthOfTouchHandlers, IATouchHandler * touchHandlers[lengthOfTouchHandlers]){
     IATouchManager_resetCurrentTouchEvents();
     IATouchManager_prepareNewTouchEvent(lengthOfTouchHandlers, touchHandlers);
