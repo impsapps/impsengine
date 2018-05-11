@@ -39,13 +39,6 @@
 			remoteGlobalIDString = B50521011DECD737003A7ABF;
 			remoteInfo = OpenGL;
 		};
-		B58B0B39208568D000146A34 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = B58B0B2E208568CF00146A34 /* OpenGL.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B505210C1DECD737003A7ABF;
-			remoteInfo = OpenGLTests;
-		};
 		B58B0D1820856B8800146A34 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B58B0AE5208568A200146A34 /* CLib.xcodeproj */;
@@ -188,32 +181,32 @@
 			isa = PBXGroup;
 			children = (
 				B58B0AEF208568B400146A34 /* generics */,
-				B58B0AFC208568B400146A34 /* IAScrollingData.c */,
-				B58B0AFD208568B400146A34 /* IATouchDelegate.c */,
-				B58B0AFE208568B400146A34 /* IAScrollView.h */,
-				B58B0AFF208568B400146A34 /* IATouchManager.h */,
-				B58B0B00208568B400146A34 /* IATouch+Internal.h */,
-				B58B0B01208568B400146A34 /* IAScrollViewAttributes.h */,
-				B58B0B02208568B400146A34 /* IAButtonAttributes.h */,
-				B58B0B03208568B400146A34 /* IATouchHandler.c */,
-				B58B0B04208568B400146A34 /* IAOverscrollingHandler.h */,
-				B58B0B05208568B400146A34 /* IAMultiTouch.c */,
-				B58B0B06208568B400146A34 /* IATouch.h */,
-				B58B0B07208568B400146A34 /* IAButton.h */,
-				B58B0B08208568B400146A34 /* IATouchDelegateAttributes.h */,
-				B58B0B09208568B400146A34 /* IAOverscrollingBehavior.h */,
-				B58B0B0A208568B400146A34 /* IAScrollView.c */,
-				B58B0B0B208568B400146A34 /* IAScrollingData.h */,
-				B58B0B0C208568B400146A34 /* IATouchDelegate.h */,
-				B58B0B0D208568B400146A34 /* IATouchHandler.h */,
-				B58B0B0E208568B400146A34 /* IAButtonAttributes.c */,
-				B58B0B0F208568B400146A34 /* IAMultiTouch.h */,
-				B58B0B10208568B400146A34 /* IAOverscrollingHandler.c */,
-				B58B0B11208568B400146A34 /* IAScrollViewAttributes.c */,
-				B58B0B12208568B400146A34 /* IATouchManager.c */,
-				B58B0B13208568B400146A34 /* IATouch.c */,
 				B58B0B14208568B400146A34 /* IAButton.c */,
+				B58B0B07208568B400146A34 /* IAButton.h */,
+				B58B0B0E208568B400146A34 /* IAButtonAttributes.c */,
+				B58B0B02208568B400146A34 /* IAButtonAttributes.h */,
+				B58B0B05208568B400146A34 /* IAMultiTouch.c */,
+				B58B0B0F208568B400146A34 /* IAMultiTouch.h */,
+				B58B0B09208568B400146A34 /* IAOverscrollingBehavior.h */,
+				B58B0B10208568B400146A34 /* IAOverscrollingHandler.c */,
+				B58B0B04208568B400146A34 /* IAOverscrollingHandler.h */,
+				B58B0AFC208568B400146A34 /* IAScrollingData.c */,
+				B58B0B0B208568B400146A34 /* IAScrollingData.h */,
+				B58B0B0A208568B400146A34 /* IAScrollView.c */,
+				B58B0AFE208568B400146A34 /* IAScrollView.h */,
+				B58B0B11208568B400146A34 /* IAScrollViewAttributes.c */,
+				B58B0B01208568B400146A34 /* IAScrollViewAttributes.h */,
+				B58B0B13208568B400146A34 /* IATouch.c */,
+				B58B0B06208568B400146A34 /* IATouch.h */,
+				B58B0B00208568B400146A34 /* IATouch+Internal.h */,
+				B58B0AFD208568B400146A34 /* IATouchDelegate.c */,
+				B58B0B0C208568B400146A34 /* IATouchDelegate.h */,
 				B58B0B15208568B400146A34 /* IATouchDelegateAttributes.c */,
+				B58B0B08208568B400146A34 /* IATouchDelegateAttributes.h */,
+				B58B0B03208568B400146A34 /* IATouchHandler.c */,
+				B58B0B0D208568B400146A34 /* IATouchHandler.h */,
+				B58B0B12208568B400146A34 /* IATouchManager.c */,
+				B58B0AFF208568B400146A34 /* IATouchManager.h */,
 			);
 			name = shared;
 			path = ../c/shared;
@@ -249,7 +242,6 @@
 			isa = PBXGroup;
 			children = (
 				B58B0B38208568D000146A34 /* libOpenGL.a */,
-				B58B0B3A208568D000146A34 /* OpenGLTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -344,13 +336,6 @@
 			fileType = archive.ar;
 			path = libOpenGL.a;
 			remoteRef = B58B0B37208568D000146A34 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		B58B0B3A208568D000146A34 /* OpenGLTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = OpenGLTests.xctest;
-			remoteRef = B58B0B39208568D000146A34 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
