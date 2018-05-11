@@ -76,6 +76,12 @@ JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_multitouch_TouchListe
 	IAJni_dispenseApplicationEntrance();
 }
 
+JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_multitouch_TouchListener_onTouchCanceled(JNIEnv * env, jclass nativeClass){
+	IAJni_acquireApplicationEntrance(env);
+	IATouchManager_onTouchCanceled();
+	IAJni_dispenseApplicationEntrance();
+}
+
 JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_multitouch_TouchListener_destroyTouchHandler(JNIEnv * env, jclass nativeClass, jlong touchId){
 	IATouchHandler * touchHandler = IATouchManager_getTouchHandler((long) touchId);
 	IATouchManager_destroyTouchHandler(touchHandler);
