@@ -58,6 +58,13 @@ static void IAScrollView_onTouchEnded(IAScrollView * this, IAArrayList * touches
 	}
 }
 
+static void IAScrollView_onTouchCanceled(IAScrollView * this) {
+    if (IAScrollView_isScrolling(this)) {
+        IAScrollingData_removeAllOldTouchEvents(this->scrollingData, this->getTime());
+        IAScrollView_endCurrentScolling(this);
+    }
+}
+
 void IAScrollView_init(IAScrollView * this, const IAScrollViewAttributes * attr) {
 	IAOverscrollingBehavior behavior = IAScrollViewAttributes_getOverscrollingBehavior(attr);
 	float decelerationForScrollingInPixelPerTimeUnitSquared = IAScrollViewAttributes_getDecelerationForScrollingInPixelPerTimeUnitSquared(attr);
@@ -82,6 +89,7 @@ void IAScrollView_init(IAScrollView * this, const IAScrollViewAttributes * attr)
 	IATouchDelegateAttributes_setOnTouchBeganFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchBegan);
 	IATouchDelegateAttributes_setOnTouchMovedFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchMoved);
 	IATouchDelegateAttributes_setOnTouchEndedFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchEnded);
+    IATouchDelegateAttributes_setOnTouchCanceledFunction(&touchDelegateAttr, (void(*)(void *)) IAScrollView_onTouchCanceled);
 	IATouchDelegateAttributes_setZOrder(&touchDelegateAttr, IAScrollViewAttributes_getZOrder(attr));
 	this->touchDelegate = IATouchDelegate_new(&touchDelegateAttr);
 	IA_increaseAllocationCount();
