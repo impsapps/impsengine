@@ -13,7 +13,13 @@
 #include "IAOpenGLHeaders.h"
 #include <assert.h>
 
-#ifdef DEBUG
+#if defined(DEBUG) && ! defined(IA_OPENGL_ASSERT)
+
+#define IA_OPENGL_ASSERT
+
+#endif
+
+#ifdef IA_OPENGL_ASSERT
 
 #define glAssert()  { \
             GLenum glError = glGetError(); \

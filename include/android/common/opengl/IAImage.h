@@ -57,6 +57,7 @@ void IAImage_flipVertically(IAImage *);
 IASize IAImage_getOriginalSize(IAImage *);
 IATexture * IAImage_getTexture(IAImage *);
 IARect IAImage_getTrimmedRect(IAImage *);
+void IAImage_deactivateTrimmedRect(IAImage *);
 
 void IAImage_deinit(IAImage *);
 

@@ -11,7 +11,7 @@
 
 #include <assert.h>
 
-#if DEBUG_ASSERTS == true
+#ifdef DEBUG
 #define debugAssert(e) assert(e)
 #else
 #define debugAssert(e)
