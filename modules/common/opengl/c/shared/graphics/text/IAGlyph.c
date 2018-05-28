@@ -56,15 +56,17 @@ float IAGlyph_getWidthNeededInPixel(IAGlyph * this){
 }
 
 float IAGlyph_getSpaceBetweenGlyphesInPixel(IAGlyph * this, IAGlyph * nextGlyph, IAHashMap * kernings, float scaleForKernings){
-    char kerningKey[9];
-    int kerningKeyLength = IAGlyph_toUTF8(this, kerningKey);
-    kerningKeyLength += IAGlyph_toUTF8(nextGlyph, kerningKey + kerningKeyLength);
-    kerningKey[kerningKeyLength] = '\0';
-    float * kerningAmount = IAHashMap_get(kernings, kerningKey);
     float space = 0.0f;
-    if (kerningAmount != NULL) {
-        space -= *kerningAmount * scaleForKernings;
-    }
+	if (kernings) {
+		char kerningKey[9];
+		int kerningKeyLength = IAGlyph_toUTF8(this, kerningKey);
+		kerningKeyLength += IAGlyph_toUTF8(nextGlyph, kerningKey + kerningKeyLength);
+		kerningKey[kerningKeyLength] = '\0';
+		float * kerningAmount = IAHashMap_get(kernings, kerningKey);
+		if (kerningAmount != NULL) {
+			space -= *kerningAmount * scaleForKernings;
+		}
+	}
     space += this->customAdditionalAdvanceBetweenGlyphesInPixel;
     return space;
 }
