@@ -22,7 +22,7 @@ float IAAcceleration_calculateCurrentValue(float startValue, float endValue, flo
 
 static int IAAcceleration_calculateCurrentIntValue(int startValue, int endValue, float progress, float(*accelerationFunction)(float, float, float)) {
 	float f = IAAcceleration_calculateCurrentValue(startValue, endValue, progress, accelerationFunction);
-	return fround(f);
+	return (int)roundf(f);
 }
 
 IAPoint IAAcceleration_calculateCurrentPoint(IAPoint startPoint, IAPoint endPoint, float progress, float (*accelerationFunction)(float, float, float)){
