@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
 //
 
+#include <math.h>
 #include "IALibrary.h"
 #include "IAAcceleration.h"
 
@@ -19,10 +20,21 @@ float IAAcceleration_calculateCurrentValue(float startValue, float endValue, flo
     return accelerationFunction(startValue, endValue, progress);
 }
 
+static int IAAcceleration_calculateCurrentIntValue(int startValue, int endValue, float progress, float(*accelerationFunction)(float, float, float)) {
+	float f = IAAcceleration_calculateCurrentValue(startValue, endValue, progress, accelerationFunction);
+	return fround(f);
+}
+
 IAPoint IAAcceleration_calculateCurrentPoint(IAPoint startPoint, IAPoint endPoint, float progress, float (*accelerationFunction)(float, float, float)){
     float currentX = accelerationFunction(startPoint.x, endPoint.x, progress);
     float currentY = accelerationFunction(startPoint.y, endPoint.y, progress);
     return IAPoint_make(currentX, currentY);
+}
+
+IASize IAAcceleration_calculateCurrentSize(IASize startSize, IASize endSize, float progress, float(*accelerationFunction)(float, float, float)) {
+	float currentWidth = accelerationFunction(startSize.width, endSize.width, progress);
+	float currentHeight = accelerationFunction(startSize.height, endSize.height, progress);
+	return IASize_make(currentWidth, currentHeight);
 }
 
 IARect IAAcceleration_calculateCurrentRect(IARect startRect, IARect endRect, float progress, float (*accelerationFunction)(float, float, float)){
@@ -31,6 +43,16 @@ IARect IAAcceleration_calculateCurrentRect(IARect startRect, IARect endRect, flo
     float currentWidth = accelerationFunction(startRect.size.width, endRect.size.width, progress);
     float currentHeight = accelerationFunction(startRect.size.height, endRect.size.height, progress);
     return IARect_make(currentX, currentY, currentWidth, currentHeight);
+}
+
+IAColor IAAcceleration_calculateCurrentColor(IAColor startColor, IAColor endColor, float progress, float(*accelerationFunction)(float, float, float)) {
+	IAColor color = (IAColor) {
+		.red = IAAcceleration_calculateCurrentIntValue(startColor.red, endColor.red, progress, accelerationFunction),
+		.green = IAAcceleration_calculateCurrentIntValue(startColor.green, endColor.green, progress, accelerationFunction),
+		.blue = IAAcceleration_calculateCurrentIntValue(startColor.blue, endColor.blue, progress, accelerationFunction),
+		.alpha = IAAcceleration_calculateCurrentIntValue(startColor.alpha, endColor.alpha, progress, accelerationFunction)
+	};
+	return color;
 }
 
 float IAAcceleration_linearMovementFunction(float startValue, float endValue, float progress){
