@@ -19,7 +19,7 @@ static uint64_t startTime;
 static mach_timebase_info_data_t timebaseInfo;
 
 
-void IATime_commence(void){
+void IATime_commenceIfNeeded(void){
     if (initialized == false) {
         initialized = true;
         startTime = mach_absolute_time();

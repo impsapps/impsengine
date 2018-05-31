@@ -16,7 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    IALibrary_commence();
+    IALibrary_commenceIfNeeded();
     IAAppHandler_onAppStart();
     return YES;
 }

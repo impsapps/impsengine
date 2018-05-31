@@ -8,19 +8,19 @@
 
 #include "IALibrary.h"
 #include "IACondition.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 
 #define CLASSNAME "IACondition"
 
+
+#ifdef IA_POSIX_AVAILABLE
 
 void IACondition_init(IACondition * this){
     pthread_condattr_t condattr;
     pthread_condattr_init(&condattr);
     pthread_cond_init(&this->condition, &condattr);
     pthread_condattr_destroy(&condattr);
-#ifdef DEBUG
-    IAAllocationTracker_objectAllocated(CLASSNAME);
-#endif
+    IA_increaseAllocationCount();
 }
 
 void IACondition_wait(IACondition * this, IALock * lock){
@@ -38,8 +38,8 @@ void IACondition_broadcast(IACondition * this){
 
 void IACondition_deinit(IACondition * this){
     pthread_cond_destroy(&this->condition);
-#ifdef DEBUG
-    IAAllocationTracker_objectDeallocated(CLASSNAME);
-#endif
+    IA_decreaseAllocationCount();
 }
+
+#endif
 

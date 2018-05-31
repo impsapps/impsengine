@@ -36,4 +36,4 @@ Annotations are used to generate additional functions and structs. They stand be
 
 6. Annotations for events:
 - @event: This can only be used before a struct definition, ideally a delegate. It will create a new class using the same classname, trying to remove a “Delegate” suffix and and adding an “Event” suffix. The new class will implement basic event functionality, concretely it will provide functions for register- and unregistering delegates and calling function-pointers from all registered delegates that are marked with the annotation “@exe” and has the return type “void”.
-- @register: This annotation is only applicable to an event. Generates a register and an unregister function for the corresponding event.
+- @register: This annotation is only applicable to an attribute which is an event. Generates a register and an unregister function for the corresponding event.

@@ -272,10 +272,9 @@ void IAString_concat(IAString * this, const char * c){
 }
 
 void IAString_concatWithLength(IAString * this, const char * c, size_t length){
+    debugAssert(this->c != c && "Concatenation must be different");
     if (this->length + length <= this->arraySize){
-        for (size_t i = 0; i < length; i++){
-            this->c[i + this->length] = c[i];
-        }
+        memcpy(this->c + this->length, c, length);
         this->c[length + this->length] = '\0';
         this->length += length;
     }
@@ -326,8 +325,14 @@ void IAString_concatBool(IAString * this, bool b){
     IAString_concatWithLength(this, temp, length);
 }
 
-void IAString_concatString(IAString * this, IAString * stringExtension){
-    IAString_concatWithLength(this, stringExtension->c, stringExtension->length);
+void IAString_concatString(IAString * this, const IAString * stringExtension){
+    if (this == stringExtension) {
+        char concatenation[stringExtension->length];
+        memcpy(concatenation, stringExtension->c, stringExtension->length);
+        IAString_concatWithLength(this, concatenation, stringExtension->length);
+    }else{
+        IAString_concatWithLength(this, stringExtension->c, stringExtension->length);
+    }
 }
 
 void IAString_concatWithFormat(IAString * this, const char * format, ...){

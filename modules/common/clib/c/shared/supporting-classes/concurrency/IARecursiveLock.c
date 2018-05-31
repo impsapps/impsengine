@@ -8,10 +8,10 @@
 
 #include "IALibrary.h"
 #include "IARecursiveLock.h"
-#include <pthread.h>
 
 #define CLASSNAME "IARecursiveLock"
 
+#ifdef IA_POSIX_AVAILABLE
 
 void IARecursiveLock_init(IARecursiveLock * this){
     pthread_mutexattr_t attr;
@@ -19,9 +19,7 @@ void IARecursiveLock_init(IARecursiveLock * this){
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init((pthread_mutex_t *) this, &attr);
     pthread_mutexattr_destroy(&attr);
-#ifdef DEBUG
-    IAAllocationTracker_objectAllocated(CLASSNAME);
-#endif
+    IA_increaseAllocationCount();
 }
 
 bool IARecursiveLock_lock(IARecursiveLock * this){
@@ -41,8 +39,8 @@ bool IARecursiveLock_unlock(IARecursiveLock * this){
 
 void IARecursiveLock_deinit(IARecursiveLock * this){
     pthread_mutex_destroy((pthread_mutex_t *) this);
-#ifdef DEBUG
-    IAAllocationTracker_objectDeallocated(CLASSNAME);
-#endif
+    IA_decreaseAllocationCount();
 }
+
+#endif
 

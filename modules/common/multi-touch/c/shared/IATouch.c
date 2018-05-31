@@ -8,7 +8,7 @@
 
 #include "IALibrary.h"
 #include "IATouch+Internal.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 
 #define CLASSNAME "IATouch"
 

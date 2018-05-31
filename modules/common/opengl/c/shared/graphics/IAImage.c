@@ -12,7 +12,7 @@
 #include "IAImage.h"
 #include "IAImageProgramSingleton.h"
 #include "IAOpenGLAssert.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 
 #define CLASSNAME "IAImage"
 

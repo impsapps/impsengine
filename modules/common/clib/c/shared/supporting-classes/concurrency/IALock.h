@@ -9,6 +9,10 @@
 #ifndef ImpsEngineCLibrary_IALock_h
 #define ImpsEngineCLibrary_IALock_h
 
+#include "IAPosixAvailable.h"
+
+#ifdef IA_POSIX_AVAILABLE
+
 #include <pthread.h>
 #include <stdbool.h>
 
@@ -39,6 +43,7 @@ void IALock_deinit(IALock *);
     IALock_lock( tempLock ); \
     for(bool tempBoolean = false; tempBoolean == false || (IALock_unlock( tempLock ) && 1==2); tempBoolean = true)
 
+#endif
 
 #endif
 

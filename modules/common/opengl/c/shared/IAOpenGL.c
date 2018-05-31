@@ -30,7 +30,7 @@ void IAOpenGL_updateCurrentTime();
 
 
 void IAOpenGL_commence(){
-    IATime_commence();
+    IATime_commenceIfNeeded();
     IAOpenGL_updateCurrentTime();
     IAOpenGLConstants_commence();
     GLint maxCombinedTextureImageUnits = IAOpenGLConstants_getMaxCombinedTextureImageUnits();

@@ -21,9 +21,7 @@ void IACompositedAnimation_init(IACompositedAnimation * this){
     this->startTime = 0;
     this->currentTime = 0;
     IAArrayList_init(&this->delegates, 10);
-#ifdef DEBUG
-    IAAllocationTracker_objectAllocated(CLASSNAME);
-#endif
+    IA_increaseAllocationCount();
 }
 
 void IACompositedAnimation_addAccelerationAnimation(IACompositedAnimation * this, IAAccelerationAnimation * animation){
@@ -95,9 +93,7 @@ void IACompositedAnimation_releaseAllAddedAnimations(IACompositedAnimation * thi
 
 void IACompositedAnimation_deinit(IACompositedAnimation * this){
     IAArrayList_deinit(&this->delegates);
-#ifdef DEBUG
-    IAAllocationTracker_objectDeallocated(CLASSNAME);
-#endif
+    IA_decreaseAllocationCount();
 }
 
 

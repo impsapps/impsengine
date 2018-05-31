@@ -22,20 +22,22 @@
 #include "IAAssert.h"
 #include "IAOperatingSystem.h"
 
-void IALibrary_commence(void);
+void IALibrary_commenceIfNeeded(void);
 
 #ifdef DEBUG
 
 #define IA_malloc(size) IALibrary_malloc(size, CLASSNAME)
 #define IA_mallocWithClassName(size, className) IALibrary_malloc(size, className)
 #define IA_calloc(count, size) IALibrary_calloc(count, size, CLASSNAME)
-#define IA_callocWithClassName(count, className) IALibrary_calloc(count, size, className)
-#define IA_realloc(object, size) IALibrary_realloc(object, size)
+#define IA_callocWithClassName(count, size, className) IALibrary_calloc(count, size, className)
+#define IA_realloc(object, size) IALibrary_realloc(object, size, CLASSNAME)
+#define IA_reallocWithClassName(object, size, className) IALibrary_realloc(object, size, className)
 #define IA_free(object) IALibrary_free(object, CLASSNAME);
 #define IA_freeWithClassName(object, className) IALibrary_free(object, className);
 
 void * IALibrary_malloc(size_t size, const char * className);
 void * IALibrary_calloc(size_t count, size_t size, const char * className);
+void * IALibrary_realloc(void * object, size_t size, const char * className);
 void IALibrary_free(void* object, const char * className);
 
 #else
@@ -45,26 +47,24 @@ void IALibrary_free(void* object, const char * className);
 #define IA_calloc(count, size) IALibrary_calloc(count, size)
 #define IA_callocWithClassName(count, className) IALibrary_calloc(count, size)
 #define IA_realloc(object, size) IALibrary_realloc(object, size)
+#define IA_reallocWithClassName(object, size, className) IALibrary_realloc(object, size)
 #define IA_free(object) IALibrary_free(object);
 #define IA_freeWithClassName(object, className) IALibrary_free(object);
 
 void * IALibrary_malloc(size_t size);
 void * IALibrary_calloc(size_t count, size_t size);
+void * IALibrary_realloc(void * object, size_t size);
 void IALibrary_free(void* object);
 
 #endif
 
-void * IALibrary_realloc(void * object, size_t size);
-
 bool IALibrary_isDebugMode(void);
 
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 #include "IANotificationDelegate.h"
 
 void IALibrary_registerOnMemoryWarningNotification(IANotificationDelegate * delegate);
 void IALibrary_unregisterOnMemoryWarningNotification(IANotificationDelegate * delegate);
-
-void IALibrary_terminate(void);
 
 #ifdef DEBUG
 #define debugOnly(e) e

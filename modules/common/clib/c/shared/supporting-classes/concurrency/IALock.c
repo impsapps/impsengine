@@ -8,10 +8,10 @@
 
 #include "IALibrary.h"
 #include "IALock.h"
-#include "IAAllocationTracker.h"
 
 #define CLASSNAME "IALock"
 
+#ifdef IA_POSIX_AVAILABLE
 
 void IALock_init(IALock * this){
     pthread_mutexattr_t attr;
@@ -40,3 +40,5 @@ void IALock_deinit(IALock * this){
     pthread_mutex_destroy((pthread_mutex_t *) this);
     IA_decreaseAllocationCount();
 }
+
+#endif

@@ -12,7 +12,7 @@
 
 #include "IALibrary.h"
 #include "IALibrary+SendOnMemoryWarningNotification.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 #include "IAAppEntryPoint+Core.h"
 
 #include "IAOpenGLViewControllerHolder.h"

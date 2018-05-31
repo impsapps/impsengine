@@ -22,6 +22,25 @@ size_t IAHashMap_getFixedSizeForEstimatedNumberOfElements(size_t estimatedNumber
     return estimatedNumberOfElements * 4 / 3;
 }
 
+void IAHashMap_getKeyForObject(const void * object, char keyOut[IA_KEY_SIZE_FOR_OBJECT]){
+    char temp[sizeof(void *)];
+    memcpy(temp, &object, sizeof(void *));
+    int iKeyOut = 0;
+    for (int i = 0; i < sizeof(void *); i++) {
+        if (temp[i] == 0) {
+            keyOut[iKeyOut++] = 127;
+            keyOut[iKeyOut++] = 1;
+        }else if (temp[i] == 127){
+            keyOut[iKeyOut++] = 127;
+            keyOut[iKeyOut++] = 127;
+        }else{
+            keyOut[iKeyOut++] = temp[i];
+        }
+    }
+    keyOut[iKeyOut] = '\0';
+    debugAssert(iKeyOut < IA_KEY_SIZE_FOR_OBJECT);
+}
+
 void IAHashMap_init(IAHashMap * this, size_t estimatedNumberOfElements){
     size_t fixedSize = IAHashMap_getFixedSizeForEstimatedNumberOfElements(estimatedNumberOfElements);
     IAHashMap_initWithFixedSize(this, fixedSize);
@@ -61,7 +80,6 @@ void IAHashMap_add(IAHashMap * this, const char * key, void * object){
     
     size_t lengthOfKey = strlen(key);
     IAHashMapList * newListElement = IA_malloc(sizeof(IAHashMapList) + lengthOfKey + 1);
-    IA_decreaseAllocationCount();
     newListElement->next = NULL;
     newListElement->object = object;
     
@@ -112,7 +130,6 @@ void * IAHashMap_remove(IAHashMap * this, const char *  key){
     
     void * object = list->object;
     IA_free(list);
-    IA_increaseAllocationCount();
     return object;
 }
 
@@ -123,7 +140,6 @@ void IAHashMap_clear(IAHashMap * this){
         while(list != NULL){
             IAHashMapList * next = list->next;
             IA_free(list);
-            IA_increaseAllocationCount();
             list = next;
         }
         this->list[iArray] = NULL;
@@ -169,7 +185,6 @@ void IAHashMap_deinit(IAHashMap * this){
         while(list != NULL){
             IAHashMapList * next = list->next;
             IA_free(list);
-            IA_increaseAllocationCount();
             list = next;
         }
     }

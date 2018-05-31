@@ -8,7 +8,7 @@
 
 #include "IALibrary.h"
 #include "IAFrameAnimationAttributes.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 
 #define CLASSNAME "IAFrameAnimationAttributes"
 

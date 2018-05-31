@@ -21,10 +21,12 @@
 		B58B0AC12085604C00146A34 /* IACondition.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0A982085604C00146A34 /* IACondition.c */; };
 		B58B0AC32085604C00146A34 /* IARecursiveLock.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0A9B2085604C00146A34 /* IARecursiveLock.c */; };
 		B58B0AC52085604C00146A34 /* IALock.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0A9D2085604C00146A34 /* IALock.c */; };
-		B58B0AC72085604C00146A34 /* IAAllocationTracker.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0A9F2085604C00146A34 /* IAAllocationTracker.c */; };
 		B58B0AC92085604C00146A34 /* IAString.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0AA12085604C00146A34 /* IAString.c */; };
 		B58B0ACB2085604C00146A34 /* IAHashing.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0AA32085604C00146A34 /* IAHashing.c */; };
 		B58B0ACD2085604C00146A34 /* IATime.m in Sources */ = {isa = PBXBuildFile; fileRef = B58B0AAA2085604C00146A34 /* IATime.m */; };
+		B5FF98ED20BB44A800452BCC /* IAAllocationTracker.c in Sources */ = {isa = PBXBuildFile; fileRef = B5FF98E920BB44A800452BCC /* IAAllocationTracker.c */; };
+		B5FF98EE20BB44A800452BCC /* IAAllocationTracking.c in Sources */ = {isa = PBXBuildFile; fileRef = B5FF98EA20BB44A800452BCC /* IAAllocationTracking.c */; };
+		B5FF98F220BB466400452BCC /* IAAllocationTrackingElement.c in Sources */ = {isa = PBXBuildFile; fileRef = B5FF98F120BB466400452BCC /* IAAllocationTrackingElement.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -43,6 +45,7 @@
 /* Begin PBXFileReference section */
 		B55ABC0520876B68000858AD /* headers */ = {isa = PBXFileReference; lastKnownFileType = folder; path = headers; sourceTree = "<group>"; };
 		B55DE6BC1D882E9300F5B3E0 /* libCLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B57FF30220BFF1640076C41F /* IAPosixAvailable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IAPosixAvailable.h; sourceTree = "<group>"; };
 		B58B0A7B2085604C00146A34 /* IALibrary.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IALibrary.c; sourceTree = "<group>"; };
 		B58B0A7C2085604C00146A34 /* IAAssert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAssert.h; sourceTree = "<group>"; };
 		B58B0A7D2085604C00146A34 /* IALibrary+SendOnMemoryWarningNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IALibrary+SendOnMemoryWarningNotification.h"; sourceTree = "<group>"; };
@@ -64,7 +67,6 @@
 		B58B0A8E2085604C00146A34 /* IAHashMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAHashMap.h; sourceTree = "<group>"; };
 		B58B0A902085604C00146A34 /* IAStructMemoryHandler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAStructMemoryHandler.c; sourceTree = "<group>"; };
 		B58B0A912085604C00146A34 /* IACharArray.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IACharArray.c; sourceTree = "<group>"; };
-		B58B0A922085604C00146A34 /* IAAllocationTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAllocationTracker.h; sourceTree = "<group>"; };
 		B58B0A932085604C00146A34 /* IATime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IATime.h; sourceTree = "<group>"; };
 		B58B0A942085604C00146A34 /* IAString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAString.h; sourceTree = "<group>"; };
 		B58B0A952085604C00146A34 /* IAHashing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAHashing.h; sourceTree = "<group>"; };
@@ -76,7 +78,6 @@
 		B58B0A9C2085604C00146A34 /* IACondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IACondition.h; sourceTree = "<group>"; };
 		B58B0A9D2085604C00146A34 /* IALock.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IALock.c; sourceTree = "<group>"; };
 		B58B0A9E2085604C00146A34 /* IACharArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IACharArray.h; sourceTree = "<group>"; };
-		B58B0A9F2085604C00146A34 /* IAAllocationTracker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAAllocationTracker.c; sourceTree = "<group>"; };
 		B58B0AA02085604C00146A34 /* IAStructMemoryHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAStructMemoryHandler.h; sourceTree = "<group>"; };
 		B58B0AA12085604C00146A34 /* IAString.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAString.c; sourceTree = "<group>"; };
 		B58B0AA22085604C00146A34 /* IANotificationDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IANotificationDelegate.h; sourceTree = "<group>"; };
@@ -86,6 +87,14 @@
 		B58B0AA82085604C00146A34 /* IALogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IALogger.h; sourceTree = "<group>"; };
 		B58B0AA92085604C00146A34 /* IAOperatingSystem+Native.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAOperatingSystem+Native.h"; sourceTree = "<group>"; };
 		B58B0AAA2085604C00146A34 /* IATime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IATime.m; sourceTree = "<group>"; };
+		B5FF98E620BB44A800452BCC /* IAAllocationTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAllocationTracking.h; sourceTree = "<group>"; };
+		B5FF98E720BB44A800452BCC /* IAAllocationTracker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAllocationTracker.h; sourceTree = "<group>"; };
+		B5FF98E820BB44A800452BCC /* IAAllocationTrackingDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAllocationTrackingDelegate.h; sourceTree = "<group>"; };
+		B5FF98E920BB44A800452BCC /* IAAllocationTracker.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAAllocationTracker.c; sourceTree = "<group>"; };
+		B5FF98EA20BB44A800452BCC /* IAAllocationTracking.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAAllocationTracking.c; sourceTree = "<group>"; };
+		B5FF98EB20BB44A800452BCC /* IAAllocationTracking+Internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAAllocationTracking+Internal.h"; sourceTree = "<group>"; };
+		B5FF98F020BB466400452BCC /* IAAllocationTrackingElement.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IAAllocationTrackingElement.h; sourceTree = "<group>"; };
+		B5FF98F120BB466400452BCC /* IAAllocationTrackingElement.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IAAllocationTrackingElement.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,22 +159,22 @@
 		B58B0A7E2085604C00146A34 /* container */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0A7F2085604C00146A34 /* IAHashMapIterator.h */,
-				B58B0A802085604C00146A34 /* IAArrayIterator.c */,
 				B58B0A812085604C00146A34 /* IAArray.c */,
-				B58B0A822085604C00146A34 /* IAArrayList.h */,
-				B58B0A832085604C00146A34 /* IAAutoExpandingHashMapIterator.h */,
-				B58B0A842085604C00146A34 /* IAArrayListIterator.c */,
-				B58B0A852085604C00146A34 /* IAAutoExpandingHashMap.h */,
-				B58B0A862085604C00146A34 /* IAHashMap.c */,
-				B58B0A872085604C00146A34 /* IAArrayIterator.h */,
-				B58B0A882085604C00146A34 /* IAHashMapIterator.c */,
 				B58B0A892085604C00146A34 /* IAArray.h */,
-				B58B0A8A2085604C00146A34 /* IAArrayListIterator.h */,
+				B58B0A802085604C00146A34 /* IAArrayIterator.c */,
+				B58B0A872085604C00146A34 /* IAArrayIterator.h */,
 				B58B0A8B2085604C00146A34 /* IAArrayList.c */,
-				B58B0A8C2085604C00146A34 /* IAAutoExpandingHashMapIterator.c */,
+				B58B0A822085604C00146A34 /* IAArrayList.h */,
+				B58B0A842085604C00146A34 /* IAArrayListIterator.c */,
+				B58B0A8A2085604C00146A34 /* IAArrayListIterator.h */,
 				B58B0A8D2085604C00146A34 /* IAAutoExpandingHashMap.c */,
+				B58B0A852085604C00146A34 /* IAAutoExpandingHashMap.h */,
+				B58B0A8C2085604C00146A34 /* IAAutoExpandingHashMapIterator.c */,
+				B58B0A832085604C00146A34 /* IAAutoExpandingHashMapIterator.h */,
+				B58B0A862085604C00146A34 /* IAHashMap.c */,
 				B58B0A8E2085604C00146A34 /* IAHashMap.h */,
+				B58B0A882085604C00146A34 /* IAHashMapIterator.c */,
+				B58B0A7F2085604C00146A34 /* IAHashMapIterator.h */,
 			);
 			path = container;
 			sourceTree = "<group>";
@@ -173,9 +182,8 @@
 		B58B0A8F2085604C00146A34 /* supporting-classes */ = {
 			isa = PBXGroup;
 			children = (
+				B5FF98E520BB44A800452BCC /* allocation-tracking */,
 				B58B0A972085604C00146A34 /* concurrency */,
-				B58B0A9F2085604C00146A34 /* IAAllocationTracker.c */,
-				B58B0A922085604C00146A34 /* IAAllocationTracker.h */,
 				B58B0A912085604C00146A34 /* IACharArray.c */,
 				B58B0A9E2085604C00146A34 /* IACharArray.h */,
 				B58B0A962085604C00146A34 /* IACharArray+Internal.h */,
@@ -201,6 +209,7 @@
 				B58B0A9A2085604C00146A34 /* IALock.h */,
 				B58B0A9B2085604C00146A34 /* IARecursiveLock.c */,
 				B58B0A992085604C00146A34 /* IARecursiveLock.h */,
+				B57FF30220BFF1640076C41F /* IAPosixAvailable.h */,
 			);
 			path = concurrency;
 			sourceTree = "<group>";
@@ -214,6 +223,21 @@
 			);
 			name = ios;
 			path = ../c/ios;
+			sourceTree = "<group>";
+		};
+		B5FF98E520BB44A800452BCC /* allocation-tracking */ = {
+			isa = PBXGroup;
+			children = (
+				B5FF98EA20BB44A800452BCC /* IAAllocationTracking.c */,
+				B5FF98E620BB44A800452BCC /* IAAllocationTracking.h */,
+				B5FF98EB20BB44A800452BCC /* IAAllocationTracking+Internal.h */,
+				B5FF98F020BB466400452BCC /* IAAllocationTrackingElement.h */,
+				B5FF98F120BB466400452BCC /* IAAllocationTrackingElement.c */,
+				B5FF98E820BB44A800452BCC /* IAAllocationTrackingDelegate.h */,
+				B5FF98E920BB44A800452BCC /* IAAllocationTracker.c */,
+				B5FF98E720BB44A800452BCC /* IAAllocationTracker.h */,
+			);
+			path = "allocation-tracking";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -292,19 +316,21 @@
 			files = (
 				B58B0AC52085604C00146A34 /* IALock.c in Sources */,
 				B58B0AB72085604C00146A34 /* IAArrayList.c in Sources */,
-				B58B0AC72085604C00146A34 /* IAAllocationTracker.c in Sources */,
 				B58B0AAB2085604C00146A34 /* IALibrary.c in Sources */,
 				B58B0AB12085604C00146A34 /* IAArrayListIterator.c in Sources */,
 				B58B0AC12085604C00146A34 /* IACondition.c in Sources */,
 				B58B0ACB2085604C00146A34 /* IAHashing.c in Sources */,
 				B58B0AAF2085604C00146A34 /* IAArray.c in Sources */,
 				B58B0AB92085604C00146A34 /* IAAutoExpandingHashMapIterator.c in Sources */,
+				B5FF98ED20BB44A800452BCC /* IAAllocationTracker.c in Sources */,
+				B5FF98F220BB466400452BCC /* IAAllocationTrackingElement.c in Sources */,
 				B58B0ABF2085604C00146A34 /* IACharArray.c in Sources */,
 				B58B0ABB2085604C00146A34 /* IAAutoExpandingHashMap.c in Sources */,
 				B58B0AC32085604C00146A34 /* IARecursiveLock.c in Sources */,
 				B58B0ABD2085604C00146A34 /* IAStructMemoryHandler.c in Sources */,
 				B58B0AC92085604C00146A34 /* IAString.c in Sources */,
 				B58B0AB32085604C00146A34 /* IAHashMap.c in Sources */,
+				B5FF98EE20BB44A800452BCC /* IAAllocationTracking.c in Sources */,
 				B58B0AB52085604C00146A34 /* IAHashMapIterator.c in Sources */,
 				B58B0ACD2085604C00146A34 /* IATime.m in Sources */,
 				B58B0AAD2085604C00146A34 /* IAArrayIterator.c in Sources */,

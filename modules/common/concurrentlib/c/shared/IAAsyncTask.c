@@ -10,7 +10,7 @@
 #include "IAAsyncTask.h"
 #include "IAOperatingSystem.h"
 #include "IAProcess+AndroidNative.h"
-#include "IAAllocationTracker.h"
+#include "IAAllocationTracking.h"
 #include <assert.h>
 
 #define CLASSNAME "IAAsyncTask"
@@ -23,9 +23,7 @@ void IAAsyncTask_init(IAAsyncTask * this){
     this->thread = NULL;
     this->data = NULL;
     this->execute = NULL;
-#ifdef DEBUG
-    IAAllocationTracker_objectAllocated(CLASSNAME);
-#endif
+    IA_increaseAllocationCount();
 }
 
 void IAAsyncTask_execute(IAAsyncTask * this, void * data, void (*excecute)(void * data)){
@@ -57,9 +55,7 @@ void * IAAsyncTask_wait(IAAsyncTask * this){
 
 void IAAsyncTask_deinit(IAAsyncTask * this){
     assert(this->thread == NULL && "deinit: async task is still running! Cannot deinit resources!");
-#ifdef DEBUG
-    IAAllocationTracker_objectDeallocated(CLASSNAME);
-#endif
+    IA_decreaseAllocationCount();
 }
 
 
