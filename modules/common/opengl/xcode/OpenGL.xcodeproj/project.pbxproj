@@ -722,17 +722,17 @@
 		B58B0C182085691A00146A34 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0C192085691A00146A34 /* IACurrentFrame+Private.h */,
-				B58B0C1A2085691A00146A34 /* IACurrentFrame.h */,
-				B58B0C1B2085691A00146A34 /* IAOpenGLResourceDelegateAttributes.c */,
-				B58B0C1C2085691A00146A34 /* IAOpenGLResourceDelegate.c */,
-				B58B0C1D2085691A00146A34 /* IAOpenGLResourceManager.h */,
-				B58B0C1E2085691A00146A34 /* IAOpenGLConstants.c */,
 				B58B0C1F2085691A00146A34 /* IACurrentFrame.c */,
-				B58B0C202085691A00146A34 /* IAOpenGLResourceDelegateAttributes.h */,
+				B58B0C1A2085691A00146A34 /* IACurrentFrame.h */,
+				B58B0C192085691A00146A34 /* IACurrentFrame+Private.h */,
+				B58B0C1E2085691A00146A34 /* IAOpenGLConstants.c */,
 				B58B0C212085691A00146A34 /* IAOpenGLConstants.h */,
-				B58B0C222085691A00146A34 /* IAOpenGLResourceManager.c */,
+				B58B0C1C2085691A00146A34 /* IAOpenGLResourceDelegate.c */,
 				B58B0C232085691A00146A34 /* IAOpenGLResourceDelegate.h */,
+				B58B0C1B2085691A00146A34 /* IAOpenGLResourceDelegateAttributes.c */,
+				B58B0C202085691A00146A34 /* IAOpenGLResourceDelegateAttributes.h */,
+				B58B0C222085691A00146A34 /* IAOpenGLResourceManager.c */,
+				B58B0C1D2085691A00146A34 /* IAOpenGLResourceManager.h */,
 			);
 			path = main;
 			sourceTree = "<group>";
