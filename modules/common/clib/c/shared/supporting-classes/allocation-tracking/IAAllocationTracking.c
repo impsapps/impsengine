@@ -102,10 +102,8 @@ void IAAllocationTracking_objectReallocated(const void * object, size_t newSize)
         IAAllocationTrackingElement_setSize(info, newSize);
         isTrackingEnabled = true;
         
-        if (areCallbacksDisabled == false) {
-            areCallbacksDisabled = true;
+        if (IAAllocationTrackingElement_areCallbacksDisabled(info) == false) {
             IAAllocationTrackingEvent_onObjectReallocated(event, object, oldSize, newSize, className);
-            areCallbacksDisabled = false;
         }
     }
     IA_POSIX_ONLY(IARecursiveLock_unlock(lock));
