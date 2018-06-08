@@ -81,8 +81,12 @@ Functions</h2></td></tr>
 <tr class="separator:a40826a1ef640c8b1246233f8b69969d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a885005661e619b7ea35024d6d169d5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d9/def/struct_i_a_point.html">IAPoint</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#a8a885005661e619b7ea35024d6d169d5">IAAcceleration_calculateCurrentPoint</a> (<a class="el" href="../../d9/def/struct_i_a_point.html">IAPoint</a> startPoint, <a class="el" href="../../d9/def/struct_i_a_point.html">IAPoint</a> endPoint, float progress, float(*accelerationFunction)(float, float, float))</td></tr>
 <tr class="separator:a8a885005661e619b7ea35024d6d169d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab849779af089154ec919495f77694fed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#ab849779af089154ec919495f77694fed">IAAcceleration_calculateCurrentSize</a> (<a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a> startSize, <a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a> endSize, float progress, float(*accelerationFunction)(float, float, float))</td></tr>
+<tr class="separator:ab849779af089154ec919495f77694fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68f18c241d18d8ab5ac488b542f9f752"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d2/d47/struct_i_a_rect.html">IARect</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#a68f18c241d18d8ab5ac488b542f9f752">IAAcceleration_calculateCurrentRect</a> (<a class="el" href="../../d2/d47/struct_i_a_rect.html">IARect</a> startRect, <a class="el" href="../../d2/d47/struct_i_a_rect.html">IARect</a> endRect, float progress, float(*accelerationFunction)(float, float, float))</td></tr>
 <tr class="separator:a68f18c241d18d8ab5ac488b542f9f752"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a167d3e3d38a9bd4dd9b0abe8928432dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#a167d3e3d38a9bd4dd9b0abe8928432dd">IAAcceleration_calculateCurrentColor</a> (<a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a> startColor, <a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a> endColor, float progress, float(*accelerationFunction)(float, float, float))</td></tr>
+<tr class="separator:a167d3e3d38a9bd4dd9b0abe8928432dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef620b57e2c56906f2b708e914ec94a8"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#aef620b57e2c56906f2b708e914ec94a8">IAAcceleration_linearMovementFunction</a> (float startValue, float endValue, float progress)</td></tr>
 <tr class="separator:aef620b57e2c56906f2b708e914ec94a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d2956a3fcf643f07512c0809c6ef0ea"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d9b/_i_a_acceleration_8h.html#a3d2956a3fcf643f07512c0809c6ef0ea">IAAcceleration_uniformlyAccelerationFunction</a> (float startValue, float endValue, float progress)</td></tr>
@@ -211,6 +215,46 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="ab849779af089154ec919495f77694fed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab849779af089154ec919495f77694fed">&#9670;&nbsp;</a></span>IAAcceleration_calculateCurrentSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a> IAAcceleration_calculateCurrentSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a>&#160;</td>
+          <td class="paramname"><em>startSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/dfd/struct_i_a_size.html">IASize</a>&#160;</td>
+          <td class="paramname"><em>endSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>progress</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float(*)(float, float, float)&#160;</td>
+          <td class="paramname"><em>accelerationFunction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a68f18c241d18d8ab5ac488b542f9f752"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68f18c241d18d8ab5ac488b542f9f752">&#9670;&nbsp;</a></span>IAAcceleration_calculateCurrentRect()</h2>
 
@@ -228,6 +272,46 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype"><a class="el" href="../../d2/d47/struct_i_a_rect.html">IARect</a>&#160;</td>
           <td class="paramname"><em>endRect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>progress</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float(*)(float, float, float)&#160;</td>
+          <td class="paramname"><em>accelerationFunction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a167d3e3d38a9bd4dd9b0abe8928432dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a167d3e3d38a9bd4dd9b0abe8928432dd">&#9670;&nbsp;</a></span>IAAcceleration_calculateCurrentColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a> IAAcceleration_calculateCurrentColor </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a>&#160;</td>
+          <td class="paramname"><em>startColor</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d44/struct_i_a_color.html">IAColor</a>&#160;</td>
+          <td class="paramname"><em>endColor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>

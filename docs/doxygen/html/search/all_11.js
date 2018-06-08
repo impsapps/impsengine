@@ -33,7 +33,5 @@ var searchData=
   ['swap',['swap',['../dc/d98/_i_a_library_8h.html#a3ca5ecd34b04d6a243c054ac3a57f68d',1,'IALibrary.h']]],
   ['switchduration',['switchDuration',['../d3/d9b/struct_i_a_intent.html#add1e764994c3d9d57e37de1ae93dfcab',1,'IAIntent::switchDuration()'],['../de/de3/struct_i_a_view_holder.html#ab8bf77d84b97df478fed9d08373da1e2',1,'IAViewHolder::switchDuration()']]],
   ['switchstarttime',['switchStartTime',['../de/de3/struct_i_a_view_holder.html#ab0378cc3acf04315bd8c8d8e12e5fe7b',1,'IAViewHolder']]],
-  ['switchtopausescreen',['switchToPauseScreen',['../da/d9d/struct_i_a_app.html#a56b53782fa5247f5b998231b953f6d70',1,'IAApp::switchToPauseScreen()'],['../d6/d64/struct_i_a_app_attributes.html#ae88d9c8c03430962fb7c8d07c41d8083',1,'IAAppAttributes::switchToPauseScreen()']]],
-  ['synchronized',['synchronized',['../d1/d95/_i_a_lock_8h.html#acd92081b8297de1ffa97e7a8a366acac',1,'IALock.h']]],
-  ['synchronized_5fr',['synchronized_r',['../d0/d6a/_i_a_recursive_lock_8h.html#a59784e8c0c214d0c5d70449404b4de18',1,'IARecursiveLock.h']]]
+  ['switchtopausescreen',['switchToPauseScreen',['../da/d9d/struct_i_a_app.html#a56b53782fa5247f5b998231b953f6d70',1,'IAApp::switchToPauseScreen()'],['../d6/d64/struct_i_a_app_attributes.html#ae88d9c8c03430962fb7c8d07c41d8083',1,'IAAppAttributes::switchToPauseScreen()']]]
 ];
