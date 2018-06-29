@@ -80,7 +80,7 @@ void IAString_concatDouble(IAString *, double d);
  * \param b The boolean will be converted to '1' for true or '0' for false.
  */
 void IAString_concatBool(IAString *, bool b);
-void IAString_concatString(IAString *, IAString * stringExtension);
+void IAString_concatString(IAString *, const IAString * stringExtension);
 void IAString_concatWithFormat(IAString *, const char * format, ...);
 
 void IAString_substring(IAString *, size_t newLength);

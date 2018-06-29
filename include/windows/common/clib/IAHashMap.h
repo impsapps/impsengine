@@ -6,8 +6,8 @@
 //  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
 //
 
-#ifndef ImpsEngineCLibrary_IAHashMap_h
-#define ImpsEngineCLibrary_IAHashMap_h
+#ifndef IAHashMap_h
+#define IAHashMap_h
 
 #include "IAString.h"
 

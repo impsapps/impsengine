@@ -9,6 +9,10 @@
 #ifndef IARecursiveLock_h
 #define IARecursiveLock_h
 
+#include "IAPosixAvailable.h"
+
+#ifdef IA_POSIX_AVAILABLE
+
 #include <pthread.h>
 
 /// This class is basically a recursive pthread_mutex_t with an imps-engine-style interface.
@@ -37,5 +41,7 @@ void IARecursiveLock_deinit(IARecursiveLock *);
     IARecursiveLock * tempLock = recursiveLock; \
     IARecursiveLock_lock( tempLock ); \
     for(bool tempBoolean = false; tempBoolean == false || (IARecursiveLock_unlock( tempLock ) && 1==2); tempBoolean = true)
+
+#endif
 
 #endif

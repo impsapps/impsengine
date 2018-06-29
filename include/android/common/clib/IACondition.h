@@ -9,6 +9,10 @@
 #ifndef IACondition_h
 #define IACondition_h
 
+#include "IAPosixAvailable.h"
+
+#ifdef IA_POSIX_AVAILABLE
+
 #include "IALock.h"
 
 //This class is basically a pthread_cond_t with an imps-engine-style interface.
@@ -29,5 +33,7 @@ void IACondition_broadcast(IACondition *);
 void IACondition_deinit(IACondition *);
 
 #include "IACondition+Generated.h"
+
+#endif
 
 #endif

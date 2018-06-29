@@ -1,40 +1,38 @@
 //
 //  IAAllocationTracker.h
-//  ImpsEngineCLibrary
+//  CLib
 //
-//  Created by Konstantin Merker on 25.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
+//  Created by Konstantin Merker on 27.05.18.
+//Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
 //
 
 #ifndef IAAllocationTracker_h
 #define IAAllocationTracker_h
 
-#include <stdbool.h>
-
 #ifdef DEBUG
 
-#include <pthread.h>
-#include "IAAllocationTrackerDelegate.h"
+#include "IAAllocationTrackingDelegate.h"
+#include "IAAutoExpandingHashMap.h"
 
-void IAAllocationTracker_commence(void);
+typedef struct{
+    IAAutoExpandingHashMap * allocationSizePerClass;
+    //@getAsRef
+    IAAllocationTrackingDelegate trackingDelegate;
+} IAAllocationTracker;
 
-void IAAllocationTracker_register(IAAllocationTrackerDelegate * delegate);
-void IAAllocationTracker_unregister(IAAllocationTrackerDelegate * delegate);
 
-void IAAllocationTracker_terminate(void);
+void IAAllocationTracker_init(IAAllocationTracker * this);
 
-#define IA_increaseAllocationCount() do { IAAllocationTracker_increaseAllocationCount(CLASSNAME); } while(0)
-#define IA_increaseAllocationCountForClass(className) do { IAAllocationTracker_increaseAllocationCount(className); } while(0)
-#define IA_decreaseAllocationCount() do { IAAllocationTracker_decreaseAllocationCount(CLASSNAME); } while(0)
-#define IA_decreaseAllocationCountForClass(className) do { IAAllocationTracker_decreaseAllocationCount(className); } while(0)
+long IAAllocationTracker_getAllocationCountForClass(IAAllocationTracker * this, const char * className);
+size_t IAAllocationTracker_getAllocationSizeForClass(IAAllocationTracker * this, const char * className);
+bool IAAllocationTracker_isAnythingAllocated(IAAllocationTracker * this);
 
-#else
+void IAAllocationTracker_log(IAAllocationTracker * this);
+void IAAllocationTracker_assert(IAAllocationTracker * this);
 
-#define IA_increaseAllocationCount()
-#define IA_increaseAllocationCountForClass(className)
-#define IA_decreaseAllocationCount()
-#define IA_decreaseAllocationCountForClass(className)
+void IAAllocationTracker_deinit(IAAllocationTracker * this);
+
+#include "IAAllocationTracker+Generated.h"
 
 #endif
-
 #endif

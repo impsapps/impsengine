@@ -10,6 +10,7 @@
 #define ConcurrentLib_IAThreadPool_h
 
 #include "IAThreadPoolInstance.h"
+#include "IAArrayList.h"
 
 typedef struct{
     IAThreadPoolInstance * instances;

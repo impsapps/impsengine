@@ -1,15 +1,17 @@
 //
-//  IAAllocationTrackerDelegate.h
+//  IAAllocationTrackingDelegate.h
 //  CLib
 //
 //  Created by Konstantin Merker on 27.05.18.
 //Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
 //
 
-#ifndef IAAllocationTrackerDelegate_h
-#define IAAllocationTrackerDelegate_h
+#ifndef IAAllocationTrackingDelegate_h
+#define IAAllocationTrackingDelegate_h
 
 #ifdef DEBUG
+
+#include <stdint.h>
 
 //@event
 typedef struct{
@@ -20,9 +22,9 @@ typedef struct{
     void (*onObjectReallocated)(void * correspondingObject, const void * allocatedObject, size_t oldSize, size_t newSize, const char * className);
     //@exe
     void (*onObjectDeallocated)(void * correspondingObject, const void * deallocatedObject, size_t allocationSize, const char * className);
-} IAAllocationTrackerDelegate;
+} IAAllocationTrackingDelegate;
 
-#include "IAAllocationTrackerDelegate+Generated.h"
+#include "IAAllocationTrackingDelegate+Generated.h"
 
 #endif
 #endif
