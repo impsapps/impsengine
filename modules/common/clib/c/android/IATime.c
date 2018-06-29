@@ -21,7 +21,7 @@ static bool initialized = false;
 static struct timespec startTime;
 static uint64_t startTimeInNanoseconds;
 
-void IATime_commence(void){
+void IATime_commenceIfNeeded(void){
     if (initialized == false) {
         initialized = true;
         clock_gettime(CLOCK_MONOTONIC, &startTime);

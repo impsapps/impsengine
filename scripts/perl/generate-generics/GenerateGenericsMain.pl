@@ -691,6 +691,7 @@ foreach my $key (sort keys %sourceClasses){
 		print HEADER "#include \"IAArrayList.h\"\n";
 		print HEADER "#include \"IAArrayListIterator.h\"\n";
 		print HEADER "#include \"IALibrary.h\"\n";
+        print HEADER "#include \"$className.h\"\n";
 		print HEADER "\n";
 		print HEADER "typedef struct{\n";
 		print HEADER "\tIAArrayList $listName;\n";

@@ -10,6 +10,7 @@
 #include "IAArrayList.h"
 #include "IAArrayListIterator.h"
 #include "IALibrary.h"
+#include "IAOpenGLResourceDelegate.h"
 
 typedef struct{
 	IAArrayList delegates;

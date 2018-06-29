@@ -7,6 +7,9 @@
 //
 
 #include "IALibrary.h"
+
+#ifdef DEBUG
+
 #include "IAAllocationTracking.h"
 #include "IAAllocationTracking+Internal.h"
 #include "IAAllocationTrackingEvent.h"
@@ -14,14 +17,11 @@
 #include "IAAllocationTrackingElement.h"
 #include "IAOperatingSystem.h"
 #include "IACharArray.h"
-
-#define CLASSNAME "IAAllocationTracking"
-
-#ifdef DEBUG
-
 #include "IARecursiveLock.h"
 #include <stdlib.h>
 #include <stdint.h>
+
+#define CLASSNAME "IAAllocationTracking"
 
 static IAAutoExpandingHashMap * objectInformations;
 static IAAllocationTrackingEvent * event;

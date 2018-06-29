@@ -22,7 +22,7 @@
 
 
 JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_openglrenderer_BaseActivity_nativeOnCreate(JNIEnv * env, jclass nativeClass){
-	IALibrary_commence();
+	IALibrary_commenceIfNeeded();
 
 	IAJni_commence(env);
 
@@ -81,7 +81,5 @@ JNIEXPORT void JNICALL Java_com_impsapps_impsengine_common_openglrenderer_BaseAc
 #if DEBUG == true
 	IAAllocationTracker_log();
 #endif
-
-	IALibrary_terminate();
 }
 
