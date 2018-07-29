@@ -34,6 +34,8 @@ void IADate_nativeMakeWithCurrentUTCDate(IADate * this){
 
 void IADate_nativeMakeDateWithNSString(IADate * this, NSString * date){
     NSArray * array = [date componentsSeparatedByString:@"-"];
+    this->base = IAObject_make(this);
+    
     this->day = [[array objectAtIndex:2] intValue];
     this->month = [[array objectAtIndex:1] intValue];
     this->year = [[array objectAtIndex:0] intValue];

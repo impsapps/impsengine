@@ -24,6 +24,7 @@ typedef struct {
 
 
 void IAScrollingData_init(IAScrollingData * this, float decelerationForScrollingInPixelPerTimeUnitSquared) {
+    this->base = IAObject_make(this);
 	this->touch = NULL;
 	this->latestTouches = IAArrayList_new(10);
 	IAScrollingData_TouchEvent * latestTouchesData = IA_malloc(IAScrollingData_numberOfLatestTouches * sizeof(IAScrollingData_TouchEvent));

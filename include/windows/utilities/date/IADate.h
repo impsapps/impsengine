@@ -10,7 +10,11 @@
 #ifndef ImpsEngineCLibrary_IADate_h
 #define ImpsEngineCLibrary_IADate_h
 
+#include "IAObject.h"
+
 typedef struct IADate_s{
+    //@extend
+    IAObject base;
     //@get
     int day;
     //@get
@@ -32,7 +36,7 @@ void IADate_makeWithCurrentUTCDate(IADate * this);
 void IADate_makeWithDayMonthYear(IADate * this, int day, int month, int year);
 void IADate_makeWithDayMonthYearSecondMinuteHour(IADate * this, int day, int month, int year, int second, int minute, int hour);
 
-void IADate_makeCopy(IADate * this, IADate * dateToCopy);
+void IADate_makeCopy(IADate * this, const IADate * dateToCopy);
 
 int IADate_daysDifference(IADate * this, IADate * to);
 int IADate_isNextDay(IADate * this, IADate * next);

@@ -13,6 +13,8 @@
 #include "IAString.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     //@getAsCharArray
     IAString name;
     IAString namingTemplate;

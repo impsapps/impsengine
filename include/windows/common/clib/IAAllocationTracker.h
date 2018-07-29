@@ -15,13 +15,19 @@
 #include "IAAutoExpandingHashMap.h"
 
 typedef struct{
-    IAAutoExpandingHashMap * allocationSizePerClass;
-    //@getAsRef
+    //@extend
+    IAObject base;
+    IAAutoExpandingHashMap * allocatedObjectsPerClass;
+    IAAutoExpandingHashMap * allocatedDataPerClass;
+    IAAutoExpandingHashMap * initCountPerClass;
     IAAllocationTrackingDelegate trackingDelegate;
 } IAAllocationTracker;
 
 
 void IAAllocationTracker_init(IAAllocationTracker * this);
+
+void IAAllocationTracker_start(IAAllocationTracker * this);
+void IAAllocationTracker_stop(IAAllocationTracker * this);
 
 long IAAllocationTracker_getAllocationCountForClass(IAAllocationTracker * this, const char * className);
 size_t IAAllocationTracker_getAllocationSizeForClass(IAAllocationTracker * this, const char * className);

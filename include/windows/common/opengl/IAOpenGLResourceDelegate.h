@@ -22,7 +22,7 @@ typedef struct{
 } IAOpenGLResourceDelegate;
 
 
-void IAOpenGLResourceDelegate_make(IAOpenGLResourceDelegate *, const IAOpenGLResourceDelegateAttributes * arguments);
+void IAOpenGLResourceDelegate_make(IAOpenGLResourceDelegate *, const IAOpenGLResourceDelegateAttributes * attributes);
 
 #include "IAOpenGLResourceDelegate+Generated.h"
 

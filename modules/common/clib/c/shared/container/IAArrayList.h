@@ -11,21 +11,20 @@
 
 #include <stddef.h>
 #include <stdbool.h>
+#include "IAObject.h"
 
 typedef struct IAArrayList IAArrayList;
 
 struct IAArrayList{
+    //@extend
+    IAObject base;
     void ** objects;
     size_t offset;
     //@get
     size_t currentSize;
-    //@get
     size_t arraySize;
-    void (*changeArraySize)(IAArrayList * arrayList, size_t newArraySize);
 };
 
-
-void IAArrayList_makeWithMaxSizeAndBuffer(IAArrayList *, size_t maxArraySize, void * buffer[maxArraySize]);
 
 void IAArrayList_init(IAArrayList *, size_t initialArraySize);
 void IAArrayList_initWithObjects(IAArrayList *, size_t initialArraySize, int numberOfObjects, ...);

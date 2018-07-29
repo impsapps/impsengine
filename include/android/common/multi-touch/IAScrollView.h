@@ -20,11 +20,13 @@
 typedef struct IAScrollView IAScrollView;
 
 struct IAScrollView{
+    //@extend
+    IAObject base;
 	void * correspondingObject;
 	IARect viewPosition;
 	float scrollLength;
 
-	IATouchDelegate * touchDelegate;
+	IATouchDelegate touchDelegate;
 
 	uint64_t currentTime;
 

@@ -13,11 +13,13 @@
 
 
 void IADrawable_make(IADrawable * this, void (*drawFunction)(const IADrawable*)){
+    this->base = IAObject_make(this);
     this->drawFunction = drawFunction;
     this->isVisible = true;
 }
 
 void IADrawable_makeCopy(IADrawable * this, const IADrawable * drawableToCopy){
+    this->base = IAObject_make(this);
     this->drawFunction = drawableToCopy->drawFunction;
     this->isVisible = drawableToCopy->isVisible;
 }

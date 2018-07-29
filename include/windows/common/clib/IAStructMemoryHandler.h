@@ -12,6 +12,8 @@
 #include "IAArrayList.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     size_t sizeOfStruct;
     size_t numberOfStructsAllocatedAtOnce;
     size_t currentElementInStructArray;

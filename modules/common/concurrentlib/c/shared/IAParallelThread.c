@@ -12,7 +12,7 @@
 #define CLASSNAME "IAParallelThread"
 
 
-void IAParallelThread_executeAsyncFunction(IAParallelThread * this);
+static void IAParallelThread_asyncTaskCallback(IAParallelThread * this);
 
 void IAParallelThread_init(IAParallelThread * this, void * correspondingObject, void (*onExecutionFinished)(void * correspondingObject, IAParallelThread * thread)){
     IAAsyncTask_init(&this->asyncTask);
@@ -24,20 +24,21 @@ void IAParallelThread_init(IAParallelThread * this, void * correspondingObject, 
     IACondition_init(&this->condition);
     IALock_init(&this->lock);
     this->tag = 0;
-    IAAsyncTask_execute(&this->asyncTask, this, (void (*)(void *)) IAParallelThread_executeAsyncFunction);
+    IAAsyncTask_execute(&this->asyncTask, this, (void (*)(void *)) IAParallelThread_asyncTaskCallback);
+    IA_incrementInitCount();
 }
 
-void IAParallelThread_executeOnParallelThread(IAParallelThread * this, void * data, void (*execute)(void * data)){
+void IAParallelThread_execute(IAParallelThread * this, void * data, void (*execute)(void * data)){
     synchronized (&this->lock) {
-        assert(this->data == NULL && "executeOnParallelThread: Already running a task on parallel thread! Cannot execute multiple threads at the same time!");
-        assert(this->shouldTerminate == false && "executeOnParallelThread: parallel thread is terminated! Function \"deinit\" already called!");
+        assert(this->data == NULL && "Already running a task on parallel thread. Cannot execute multiple tasks at the same time.");
+        assert(this->shouldTerminate == false && "Parallel thread is already terminated. Function \"deinit\" has been already called.");
         this->data = data;
         this->execute = execute;
         IACondition_signal(&this->condition);
     }
 }
 
-void IAParallelThread_executeAsyncFunction(IAParallelThread * this){
+static void IAParallelThread_asyncTaskCallback(IAParallelThread * this){
     synchronized (&this->lock) {
         while (true) {
             while (this->data != NULL) {
@@ -70,6 +71,7 @@ void IAParallelThread_deinit(IAParallelThread * this){
     IAAsyncTask_deinit(&this->asyncTask);
     IACondition_deinit(&this->condition);
     IALock_deinit(&this->lock);
+    IA_decrementInitCount();
 }
 
 

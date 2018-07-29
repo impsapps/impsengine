@@ -36,7 +36,7 @@ struct IAParallelThread{
 
 void IAParallelThread_init(IAParallelThread *, void * correspondingObject, void (*onExecutionFinished)(void * correspondingObject, IAParallelThread * thread));
 
-void IAParallelThread_executeOnParallelThread(IAParallelThread *, void * data, void (*execute)(void * data));
+void IAParallelThread_execute(IAParallelThread *, void * data, void (*execute)(void * data));
 
 void IAParallelThread_deinit(IAParallelThread *);
 

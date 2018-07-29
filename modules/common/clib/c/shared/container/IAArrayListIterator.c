@@ -13,6 +13,7 @@
 
 
 void IAArrayListIterator_make(IAArrayListIterator * this, const IAArrayList * arrayList){
+    this->base = IAObject_make(this);
     this->arrayList = arrayList;
     this->numberOfElementsLeft = IAArrayList_getCurrentSize(arrayList);
     this->indexOfCurrentElement = arrayList->offset;
@@ -24,7 +25,7 @@ void * IAArrayListIterator_getNextObject(IAArrayListIterator * this){
     }
     void * object = this->arrayList->objects[this->indexOfCurrentElement];
     this->indexOfCurrentElement++;
-    if (this->indexOfCurrentElement == IAArrayList_getArraySize(this->arrayList)) {
+    if (this->indexOfCurrentElement == this->arrayList->arraySize) {
         this->indexOfCurrentElement = 0;
     }
     this->numberOfElementsLeft--;

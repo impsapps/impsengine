@@ -13,6 +13,8 @@
 #include "IAString.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     GLuint shaderId;
     GLenum type;
     const char * sourceCode;

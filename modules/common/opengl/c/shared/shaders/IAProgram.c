@@ -31,6 +31,7 @@ void IAProgram_onNewOpenGLContext(){
 
 void IAProgram_init(IAProgram * this, const char * vertexShaderCode, const char * fragmentShaderCode, void (*glBindAttributeLocations)(GLuint programId)){
     glAssert();
+    this->base = IAObject_make(this);
 	this->programId = 0;
 	this->vertexShader = IAShader_new(GL_VERTEX_SHADER, vertexShaderCode);
 	this->fragmentShader = IAShader_new(GL_FRAGMENT_SHADER, fragmentShaderCode);
@@ -46,6 +47,7 @@ void IAProgram_init(IAProgram * this, const char * vertexShaderCode, const char 
 	IAOpenGLResourceManager_registerOpenGLResourceDelegate(&this->delegate);
     glAssert();
     IANotificationEvent_init(&this->linkingComplete);
+    IA_incrementInitCount();
 }
 
 void IAProgram_createOpenGLResources(IAProgram * this){
@@ -130,6 +132,7 @@ void IAProgram_deinit(IAProgram * this){
     IAArrayList_callFunctionOnAllObjects(this->attributes, (void (*)(void *)) IAProgram_releaseAttribute);
     IAArrayList_release(this->attributes);
     IANotificationEvent_deinit(&this->linkingComplete);
+    IA_decrementInitCount();
 }
 
 void IAProgram_releaseAttribute(IAProgramAttribute * attribute){

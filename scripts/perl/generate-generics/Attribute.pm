@@ -36,15 +36,27 @@ sub new{
 	return $self;
 }
 
+sub isObjectPointer{
+	my $self = shift;
+	if ($self->{isFunctionPointer}) {
+		return 0;
+	}
+	if ($self->{type} =~ m/\*$/) {
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 sub privateGetSetterFunction{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-    
+
 	if($self->{isFunctionPointer} == 0){
 		return sprintf "void %s_set%s(%s * %s, %s %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name};
 	}else{
-        return sprintf "void %s_set%sFunction(%s * %s, %s(*%s)(%s))", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name}, $self->{params};
+    return sprintf "void %s_set%sFunction(%s * %s, %s(*%s)(%s))", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name}, $self->{params};
 	}
 }
 
@@ -59,7 +71,7 @@ sub getSetterImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $setter = $self->privateGetSetterFunction($className, $variableName) . "{\n";
     $setter = $setter . "\t$variableName" . "->" . $self->{name} . " = " . $self->{name} . ";\n}\n\n";
     return $setter;
@@ -78,7 +90,7 @@ sub privateGetSetterAsRefFunction{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     if($self->{isFunctionPointer} == 0){
         return sprintf "void %s_set%s(%s * %s, %s %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->privateGetReferenceOfTyp(), $self->{name};
     }else{
@@ -97,7 +109,7 @@ sub getSetterAsRefImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $setter = $self->privateGetSetterAsRefFunction($className, $variableName) . "{\n";
     $setter = $setter . "\t$variableName" . "->" . $self->{name} . " = *" . $self->{name} . ";\n}\n\n";
     return $setter;
@@ -121,7 +133,7 @@ sub getSetterAsCharArrayImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $setCharArrayCall = "";
     if($self->{type} =~ m/^IAString\s*\*$/){
         $setCharArrayCall = sprintf "IAString_set(%s->%s, %s)", $variableName, $self->{name}, $self->{name};
@@ -135,7 +147,7 @@ sub getSetterAsCharArrayImplPrintable{
 
 sub privateGetGetterFunctionName{
 	my $self = shift;
-	
+
 	if($self->{isFunctionPointer} == 0){
 		if($self->{name} =~ m/^(is|are|was|were|has|have|had|can|could|should|shall|may)[A-Z]/){
 			return $self->{name};
@@ -152,7 +164,7 @@ sub privateGetGetterFunction{
 	my $className = shift;
 	my $variableName = shift;
 	my $functionName = $self->privateGetGetterFunctionName();
-    
+
     if($self->{isFunctionPointer} == 0){
         return sprintf "%s %s_%s(const %s * %s)", $self->{type}, $className, $functionName, $className, $variableName;
     }else{
@@ -194,7 +206,7 @@ sub privateGetGetterAsRefFunction{
     my $variableName = shift;
     my $classNamePrefix = shift // "";
     my $functionName = $self->privateGetGetterFunctionName();
-    
+
     if($self->{isFunctionPointer} == 0){
         return sprintf "%s %s_%s(%s%s * %s)", $self->privateGetReferenceOfTyp(), $className, $functionName, $classNamePrefix, $className, $variableName;
     }else{
@@ -213,7 +225,7 @@ sub getGetterAsRefImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $dereferenceString = "&";
     if($self->{params} ne ""){
         $dereferenceString = "";
@@ -232,7 +244,7 @@ sub getGetterAsConstRefImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $dereferenceString = "&";
     if($self->{params} ne ""){
         $dereferenceString = "";
@@ -258,7 +270,7 @@ sub getGetterAsCharArrayImplPrintable{
     my $self = shift;
     my $className = shift;
     my $variableName = shift;
-    
+
     my $toCharArrayCall = "";
     if($self->{type} =~ m/^IAString\s*\*$/){
         $toCharArrayCall = sprintf "IAString_toCharArray(%s->%s)", $variableName, $self->{name};
@@ -347,7 +359,7 @@ sub getExeImplPrintable{
 	my $className = shift;
 	my $variableName = shift;
 	my $classesRef = shift;
-	
+
 	$self->{params} =~ m/^\s*$matchType\s*$matchName/;
 	my $correspondingObjectVariableName = $2;
 	my $correspondingObjectTemp = $correspondingObjectVariableName;
@@ -362,7 +374,7 @@ sub getExeImplPrintable{
 			last;
 		}
 	}
-	
+
 	my $correspondingObject = $variableName . "->" . $correspondingObjectTemp;
 	my $params = $self->privateGetParamsForExeFunction();
 	$params = normalizeParams($params);
@@ -412,7 +424,7 @@ sub getLockImplPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	
+
 	my $lockImpl = $self->privateGetLockFunction($className, $variableName) . "{\n";
 	$lockImpl = $lockImpl . "\tIALock_lock(" . "$variableName" . "->" . $self->{name} . ");\n}\n\n";
 	return $lockImpl;
@@ -422,7 +434,7 @@ sub getUnlockImplPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	
+
 	my $lockImpl = $self->privateGetUnlockFunction($className, $variableName) . "{\n";
 	$lockImpl = $lockImpl . "\tIALock_unlock(" . "$variableName" . "->" . $self->{name} . ");\n}\n\n";
 	return $lockImpl;
@@ -435,7 +447,7 @@ sub privateGetDelegateName(){
 	if(!($self->{type} =~ m/Event(\s*\*)?$/)){
 		die "Cannot generate register functions for event \"" . $self->{name} . "\" in class \"$className\" because the it is not an event!\n";
 	}
-	
+
 	my $delegateName1 = $self->{type};
 	$delegateName1 =~ s/Event(\s*\*)?$/Delegate/;
 	my $delegateName2 = $self->{type};
@@ -525,4 +537,3 @@ sub getUnregisterImplPrintable{
 }
 
 1;
-

@@ -10,8 +10,11 @@
 #define IAScrollingData_h
 
 #include <stdint.h>
+#include "IAObject.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
 	const IATouch * touch;
 	IAArrayList * latestTouches;
 	int numLatestTouchesSet;

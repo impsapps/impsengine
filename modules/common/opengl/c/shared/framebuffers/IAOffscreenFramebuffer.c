@@ -43,13 +43,13 @@ void IAOffscreenFramebuffer_initWithRGB565AndBind(IAOffscreenFramebuffer * this,
     }
 #endif
     glAssert();
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAOffscreenFramebuffer_deinit(IAOffscreenFramebuffer * this){
     glDeleteFramebuffers(1, &this->framebuffer);
     glDeleteRenderbuffers(1, &this->colorRenderbuffer);
     glDeleteRenderbuffers(1, &this->depthRenderbuffer);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 

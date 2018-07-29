@@ -70,6 +70,7 @@ void IAScrollView_init(IAScrollView * this, const IAScrollViewAttributes * attr)
 	float decelerationForScrollingInPixelPerTimeUnitSquared = IAScrollViewAttributes_getDecelerationForScrollingInPixelPerTimeUnitSquared(attr);
 
 	*this = (IAScrollView) {
+        .base = IAObject_make(this),
 		.correspondingObject = IAScrollViewAttributes_getCorrespondingObject(attr),
 		.viewPosition = IAScrollViewAttributes_getViewPosition(attr),
 		.scrollLength = IAScrollViewAttributes_getScrollLength(attr),
@@ -91,8 +92,8 @@ void IAScrollView_init(IAScrollView * this, const IAScrollViewAttributes * attr)
 	IATouchDelegateAttributes_setOnTouchEndedFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchEnded);
     IATouchDelegateAttributes_setOnTouchCanceledFunction(&touchDelegateAttr, (void(*)(void *)) IAScrollView_onTouchCanceled);
 	IATouchDelegateAttributes_setZOrder(&touchDelegateAttr, IAScrollViewAttributes_getZOrder(attr));
-	this->touchDelegate = IATouchDelegate_new(&touchDelegateAttr);
-	IA_increaseAllocationCount();
+    IATouchDelegate_init(&this->touchDelegate, &touchDelegateAttr);
+	IA_incrementInitCount();
 }
 
 bool IAScrollView_isScrolling(const IAScrollView * this) {
@@ -156,7 +157,7 @@ static void IAScrollView_endCurrentScolling(IAScrollView * this) {
 
 void IAScrollView_enableScrolling(IAScrollView * this, uint64_t currentTime) {
 	debugAssert(IAScrollView_isScrollable(this) == false);
-	IATouchManager_registerTouchDelegate(this->touchDelegate);
+	IATouchManager_registerTouchDelegate(&this->touchDelegate);
 	this->currentTime = currentTime;
 }
 
@@ -177,7 +178,7 @@ void IAScrollView_updateTime(IAScrollView * this, uint64_t currentTime) {
 void IAScrollView_disableScrolling(IAScrollView * this, uint64_t currentTime) {
 	debugAssert(IAScrollView_isScrollable(this) == true);
 	IAScrollView_updateTime(this, currentTime);
-	IATouchManager_unregisterTouchDelegate(this->touchDelegate);
+	IATouchManager_unregisterTouchDelegate(&this->touchDelegate);
 }
 
 float IAScrollView_getOverscrolling(IAScrollView * this) {
@@ -187,7 +188,7 @@ float IAScrollView_getOverscrolling(IAScrollView * this) {
 void IAScrollView_deinit(IAScrollView * this) {
 	IAScrollingData_release(this->scrollingData);
 	IAOverscrollingHandler_release(this->overscrollingHandler);
-	IATouchDelegate_release(this->touchDelegate);
-	IA_decreaseAllocationCount();
+	IATouchDelegate_deinit(&this->touchDelegate);
+	IA_decrementInitCount();
 }
 

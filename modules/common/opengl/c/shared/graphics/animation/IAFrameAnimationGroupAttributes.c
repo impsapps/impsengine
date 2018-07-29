@@ -24,7 +24,7 @@ void IAFrameAnimationGroupAttributes_init(IAFrameAnimationGroupAttributes * this
         .duration = duration
     };
     IAFrameAnimationGroupAttributes_createNamesArray(this, numberOfAnimations, names);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAFrameAnimationGroupAttributes_initWithDurationOfSingleFrame(IAFrameAnimationGroupAttributes * this, IAImageContext * imageContext, size_t numberOfAnimations, const char * names[numberOfAnimations], int numberOfFrames, uint64_t durationOfSingleFrame){
@@ -60,5 +60,5 @@ static void IAFrameAnimationGroupAttributes_destroyNamesArray(IAFrameAnimationGr
 
 void IAFrameAnimationGroupAttributes_deinit(IAFrameAnimationGroupAttributes * this){
     IAFrameAnimationGroupAttributes_destroyNamesArray(this);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }

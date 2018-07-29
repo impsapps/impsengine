@@ -16,12 +16,15 @@
 #include "IAOpenGLHeaders.h"
 #include "IAOpenGLResourceDelegate.h"
 #include "IANotificationEvent.h"
+#include "IAObject.h"
 
 typedef struct{
     GLint attributeLocation;
 } IAProgramAttribute;
 
 typedef struct{
+    //@extend
+    IAObject base;
     GLuint programId;
     IAShader * vertexShader;
     IAShader * fragmentShader;

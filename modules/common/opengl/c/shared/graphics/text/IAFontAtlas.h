@@ -17,6 +17,8 @@
 #include "IATextAlignment.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     IAHashMap * glyphs;
     int currentCountOfGlyphs;
     IAHashMap * kernings;

@@ -61,7 +61,7 @@ void IAFrameAnimation_init(IAFrameAnimation * this, const IAFrameAnimationAttrib
     IACompositedAnimationDelegateAttributes_setSetCurrentTimeFunction(&delegateAttributes, (void (*)(IADrawable *, uint64_t)) IAFrameAnimation_setCurrentTime);
     IACompositedAnimationDelegate_make(&this->animationDelegate, &delegateAttributes);
     
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAFrameAnimation_drawFunction(const IAFrameAnimation * this){
@@ -177,7 +177,7 @@ void IAFrameAnimation_deinit(IAFrameAnimation * this){
         IAArrayList_callFunctionOnAllObjects(this->images, (void (*)(void *)) IAImage_release);
     }
     IAArrayList_release(this->images);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

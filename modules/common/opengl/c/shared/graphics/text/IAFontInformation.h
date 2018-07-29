@@ -10,8 +10,11 @@
 #define Hit_Verto_IAFontInformation_h
 
 #include "IAFontInformationAttributes.h"
+#include "IAObject.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     //@get
     float fontSize;
     //@get

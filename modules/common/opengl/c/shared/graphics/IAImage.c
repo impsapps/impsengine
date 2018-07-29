@@ -31,6 +31,7 @@ void IAImage_init(IAImage * this, const IAImageAttributes * attributes){
     IAGraphicRect_make((IAGraphicRect *) this, (void (*)(const IAGraphicRect *, IARect *)) IAImage_transformRectToRender, (void (*)(const IAGraphicRect *, IARect)) IAImage_setupRendering);
     this->texture = IAImageAttributes_getTexture(attributes);
     assert(this->texture != NULL && "IAImage_init: No texture specified in IAImageAttributes! Please set a texture!");
+    IATexture_retain(this->texture);
 
     IATextureSelection textureSelection = IAImageAttributes_getTextureSelection(attributes);
     IATextureSelectionData textureSelectionData;
@@ -74,12 +75,13 @@ void IAImage_init(IAImage * this, const IAImageAttributes * attributes){
     
     IASize defaultSize = IAImage_getOriginalSize(this);
 	IAImage_setSize(this, defaultSize);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAImage_initCopy(IAImage * this, const IAImage * imageToCopy){
     IAGraphicRect_makeCopy((IAGraphicRect *) this, (const IAGraphicRect *) imageToCopy);
     this->texture = imageToCopy->texture;
+    IATexture_retain(this->texture);
     IAArrayBuffer_initCopy(&this->arrayBuffer, &imageToCopy->arrayBuffer);
     
     this->trimmedRect = imageToCopy->trimmedRect;
@@ -89,7 +91,7 @@ void IAImage_initCopy(IAImage * this, const IAImage * imageToCopy){
     this->overlayingColor = imageToCopy->overlayingColor;
     
     this->originalSize = imageToCopy->originalSize;
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAImage_setAlpha(IAImage * this, int alpha){
@@ -207,8 +209,9 @@ static IAImageProgram * IAImage_setupImageProgram(const IAImage * this){
 }
 
 void IAImage_deinit(IAImage * this){
+    IATexture_release(this->texture);
     IAArrayBuffer_deinit(&this->arrayBuffer);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

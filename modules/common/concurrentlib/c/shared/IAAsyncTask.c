@@ -20,10 +20,11 @@ void * IAAsyncTask_executeAsyncFunction(IAAsyncTask * this);
 
 
 void IAAsyncTask_init(IAAsyncTask * this){
+    this->base = IAObject_make(this);
     this->thread = NULL;
     this->data = NULL;
     this->execute = NULL;
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAAsyncTask_execute(IAAsyncTask * this, void * data, void (*excecute)(void * data)){
@@ -44,18 +45,17 @@ void * IAAsyncTask_executeAsyncFunction(IAAsyncTask * this){
     return NULL;
 }
 
-void * IAAsyncTask_wait(IAAsyncTask * this){
+void IAAsyncTask_wait(IAAsyncTask * this){
     void * result;
     pthread_join(this->thread, &result);
     this->thread = NULL;
     this->data = NULL;
     this->execute = NULL;
-    return result;
 }
 
 void IAAsyncTask_deinit(IAAsyncTask * this){
     assert(this->thread == NULL && "deinit: async task is still running! Cannot deinit resources!");
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

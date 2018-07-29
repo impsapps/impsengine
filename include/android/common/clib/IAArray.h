@@ -10,6 +10,7 @@
 #define Hit_Verto_IAArray_h
 
 #include <stddef.h>
+#include "IAObject.h"
 
 /**
  *  A simple array implementation.
@@ -19,19 +20,13 @@
  */
 
 typedef struct{
+    //@extend
+    IAObject base;
     void ** objects;
     //@get
     size_t size;
 } IAArray;
 
-
-/**
- * Instead of having the object to manage the array, it is possible to provide a buffer and do the memory handling by yourself.
- *
- * \param size The size of the array
- * \param buffer The buffer
- */
-void IAArray_makeWithSizeAndBuffer(IAArray *, size_t size, void * buffer[size]);
 
 /**
  * Initializes the array.
@@ -50,6 +45,12 @@ void IAArray_initWithObjects(IAArray *, size_t size, ...);
  * \param size The size of the array
  */
 IAArray * IAArray_newWithObjects(size_t size, ...);
+
+/**
+ * Initializes the array.
+ * \param size The size of the array
+ */
+IAArray * IAArray_withObjects(size_t size, ...);
 
 /**
  * Set an element at the specified index.

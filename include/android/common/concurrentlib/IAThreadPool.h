@@ -13,6 +13,8 @@
 #include "IAArrayList.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     IAThreadPoolInstance * instances;
     int numberOfThreads;
     IAArrayList waitingQueue;

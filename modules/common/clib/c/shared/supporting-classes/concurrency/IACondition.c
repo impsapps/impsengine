@@ -16,11 +16,12 @@
 #ifdef IA_POSIX_AVAILABLE
 
 void IACondition_init(IACondition * this){
+    this->base = IAObject_make(this);
     pthread_condattr_t condattr;
     pthread_condattr_init(&condattr);
     pthread_cond_init(&this->condition, &condattr);
     pthread_condattr_destroy(&condattr);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IACondition_wait(IACondition * this, IALock * lock){
@@ -38,7 +39,7 @@ void IACondition_broadcast(IACondition * this){
 
 void IACondition_deinit(IACondition * this){
     pthread_cond_destroy(&this->condition);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 #endif

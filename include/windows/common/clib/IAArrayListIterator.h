@@ -12,6 +12,8 @@
 #include "IAArrayList.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     const IAArrayList * arrayList;
     size_t numberOfElementsLeft;
     size_t indexOfCurrentElement;

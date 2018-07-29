@@ -32,6 +32,7 @@ void IADate_makeWithDayMonthYear(IADate * this, int day, int month, int year){
 }
 
 void IADate_makeWithDayMonthYearSecondMinuteHour(IADate * this, int day, int month, int year, int second, int minute, int hour){
+    this->base = IAObject_make(this);
     this->day = day;
     this->month = month;
     this->year = year;
@@ -40,8 +41,9 @@ void IADate_makeWithDayMonthYearSecondMinuteHour(IADate * this, int day, int mon
     this->hour = hour;
 }
 
-void IADate_makeCopy(IADate * this, IADate * dateToCopy){
+void IADate_makeCopy(IADate * this, const IADate * dateToCopy){
     *this = *dateToCopy;
+    this->base = IAObject_make(this);
 }
 
 int IADate_daysDifference(IADate * this, IADate * to){

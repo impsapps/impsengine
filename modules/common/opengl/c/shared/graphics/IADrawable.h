@@ -11,10 +11,13 @@
 #define ImpsEngineiOS_IADrawable_h
 
 #include <stdbool.h>
+#include "IAObject.h"
 
 typedef struct IADrawable IADrawable;
 
 struct IADrawable{
+    //@extend
+    IAObject base;
     void (*drawFunction)(const IADrawable *);
     //@set+get
     bool isVisible;

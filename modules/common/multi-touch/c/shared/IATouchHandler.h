@@ -18,6 +18,8 @@
 #include "IATouch.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     //@get
     long touchId;
     //@getAsRef

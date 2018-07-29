@@ -24,11 +24,12 @@ static void * IABitmap_createBitmapRefFromAsset(IABitmap * this){
 
 void IABitmap_initWithAsset(IABitmap * this, const char * assetName){
     *this = (IABitmap){
+        .base = IAObject_make(this),
         .assetName = IAString_new(assetName),
         .createRef = IABitmap_createBitmapRefFromAsset,
         .bitmapRef = NULL
     };
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IABitmap_initFromScreen(IABitmap * this, int x, int y, int width, int height){
@@ -38,11 +39,12 @@ void IABitmap_initFromScreen(IABitmap * this, int x, int y, int width, int heigh
 
 void IABitmap_initWithBitmapRefAndGivePermissionToRecycle(IABitmap * this, void * bitmapRef){
     *this = (IABitmap){
+        .base = IAObject_make(this),
         .assetName = NULL,
         .createRef = NULL,
         .bitmapRef = bitmapRef
     };
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 IASize IABitmap_getSize(IABitmap * this){
@@ -82,7 +84,7 @@ void IABitmap_deinit(IABitmap * this){
     if (this->assetName) {
         IAString_release(this->assetName);
     }
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

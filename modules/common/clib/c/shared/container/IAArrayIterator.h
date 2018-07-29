@@ -12,6 +12,8 @@
 #include "IAArray.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     const IAArray * array;
     size_t indexForNextObject;
 } IAArrayIterator;

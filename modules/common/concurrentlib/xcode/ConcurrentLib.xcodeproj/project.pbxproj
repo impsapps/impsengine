@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B59F56B220865B2000E33C5A /* IAAsyncThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56A920865B2000E33C5A /* IAAsyncThreadPool.c */; };
+		B53B02F72108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.c in Sources */ = {isa = PBXBuildFile; fileRef = B53B02F62108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.c */; };
 		B59F56B420865B2000E33C5A /* IAThreadPool.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AD20865B2000E33C5A /* IAThreadPool.c */; };
 		B59F56B620865B2000E33C5A /* IAAsyncTask.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56AF20865B2000E33C5A /* IAAsyncTask.c */; };
 		B59F56B820865B2000E33C5A /* IAParallelThread.c in Sources */ = {isa = PBXBuildFile; fileRef = B59F56B120865B2000E33C5A /* IAParallelThread.c */; };
@@ -37,21 +37,21 @@
 
 /* Begin PBXFileReference section */
 		B5390F641D8D649F009CF3DA /* libConcurrentLib.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libConcurrentLib.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		B53B02F52108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IAThreadPoolWaitingQueueItem.h; sourceTree = "<group>"; };
+		B53B02F62108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IAThreadPoolWaitingQueueItem.c; sourceTree = "<group>"; };
+		B5458A772109BF0900497A71 /* IAThreadPoolWaitingQueueItem+Generated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "IAThreadPoolWaitingQueueItem+Generated.h"; sourceTree = "<group>"; };
 		B59F569720865B0300E33C5A /* CLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CLib.xcodeproj; path = ../../clib/xcode/CLib.xcodeproj; sourceTree = "<group>"; };
 		B59F56A320865B2000E33C5A /* IAAsyncTask+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAAsyncTask+Generated.h"; sourceTree = "<group>"; };
 		B59F56A420865B2000E33C5A /* concurrentlib+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "concurrentlib+Generated.h"; sourceTree = "<group>"; };
-		B59F56A520865B2000E33C5A /* IAAsyncThreadPool+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAAsyncThreadPool+Generated.h"; sourceTree = "<group>"; };
 		B59F56A620865B2000E33C5A /* IAThreadPool+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAThreadPool+Generated.h"; sourceTree = "<group>"; };
 		B59F56A720865B2000E33C5A /* IAParallelThread+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAParallelThread+Generated.h"; sourceTree = "<group>"; };
 		B59F56A820865B2000E33C5A /* IAThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAThreadPool.h; sourceTree = "<group>"; };
-		B59F56A920865B2000E33C5A /* IAAsyncThreadPool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAAsyncThreadPool.c; sourceTree = "<group>"; };
 		B59F56AA20865B2000E33C5A /* IAProcess+AndroidNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAProcess+AndroidNative.h"; sourceTree = "<group>"; };
 		B59F56AB20865B2000E33C5A /* IAAsyncTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAsyncTask.h; sourceTree = "<group>"; };
 		B59F56AC20865B2000E33C5A /* IAParallelThread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAParallelThread.h; sourceTree = "<group>"; };
 		B59F56AD20865B2000E33C5A /* IAThreadPool.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAThreadPool.c; sourceTree = "<group>"; };
 		B59F56AE20865B2000E33C5A /* IAThreadPoolInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAThreadPoolInstance.h; sourceTree = "<group>"; };
 		B59F56AF20865B2000E33C5A /* IAAsyncTask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAAsyncTask.c; sourceTree = "<group>"; };
-		B59F56B020865B2000E33C5A /* IAAsyncThreadPool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAAsyncThreadPool.h; sourceTree = "<group>"; };
 		B59F56B120865B2000E33C5A /* IAParallelThread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAParallelThread.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -103,16 +103,16 @@
 			isa = PBXGroup;
 			children = (
 				B59F56A120865B2000E33C5A /* generics */,
-				B59F56A820865B2000E33C5A /* IAThreadPool.h */,
-				B59F56A920865B2000E33C5A /* IAAsyncThreadPool.c */,
-				B59F56AA20865B2000E33C5A /* IAProcess+AndroidNative.h */,
-				B59F56AB20865B2000E33C5A /* IAAsyncTask.h */,
-				B59F56AC20865B2000E33C5A /* IAParallelThread.h */,
-				B59F56AD20865B2000E33C5A /* IAThreadPool.c */,
-				B59F56AE20865B2000E33C5A /* IAThreadPoolInstance.h */,
 				B59F56AF20865B2000E33C5A /* IAAsyncTask.c */,
-				B59F56B020865B2000E33C5A /* IAAsyncThreadPool.h */,
+				B59F56AB20865B2000E33C5A /* IAAsyncTask.h */,
 				B59F56B120865B2000E33C5A /* IAParallelThread.c */,
+				B59F56AC20865B2000E33C5A /* IAParallelThread.h */,
+				B59F56AA20865B2000E33C5A /* IAProcess+AndroidNative.h */,
+				B59F56AD20865B2000E33C5A /* IAThreadPool.c */,
+				B59F56A820865B2000E33C5A /* IAThreadPool.h */,
+				B59F56AE20865B2000E33C5A /* IAThreadPoolInstance.h */,
+				B53B02F52108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.h */,
+				B53B02F62108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.c */,
 			);
 			name = shared;
 			path = ../c/shared;
@@ -131,9 +131,9 @@
 			children = (
 				B59F56A320865B2000E33C5A /* IAAsyncTask+Generated.h */,
 				B59F56A420865B2000E33C5A /* concurrentlib+Generated.h */,
-				B59F56A520865B2000E33C5A /* IAAsyncThreadPool+Generated.h */,
 				B59F56A620865B2000E33C5A /* IAThreadPool+Generated.h */,
 				B59F56A720865B2000E33C5A /* IAParallelThread+Generated.h */,
+				B5458A772109BF0900497A71 /* IAThreadPoolWaitingQueueItem+Generated.h */,
 			);
 			path = headers;
 			sourceTree = "<group>";
@@ -228,8 +228,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B59F56B220865B2000E33C5A /* IAAsyncThreadPool.c in Sources */,
 				B59F56B620865B2000E33C5A /* IAAsyncTask.c in Sources */,
+				B53B02F72108B23300F3AB8D /* IAThreadPoolWaitingQueueItem.c in Sources */,
 				B59F56B820865B2000E33C5A /* IAParallelThread.c in Sources */,
 				B59F56B420865B2000E33C5A /* IAThreadPool.c in Sources */,
 			);

@@ -12,6 +12,8 @@
 #include "IAHashMap.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     //@get
     IAHashMap * currentHashMap;
     size_t currentNumberOfObjects;

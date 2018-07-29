@@ -15,6 +15,7 @@
 
 
 void IAShader_make(IAShader * this, const GLenum type, const char * sourceCode){
+    this->base = IAObject_make(this);
 	this->shaderId = 0;
 	this->type = type;
 	this->sourceCode = sourceCode;

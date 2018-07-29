@@ -82,7 +82,7 @@ void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
     this->tag = IAButtonAttributes_getTag(attributes);
     
     IAButton_setRect(this, IAButtonAttributes_getRect(attributes));
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 bool IAButton_wantToUseTouch(IAButton * this, IATouch * touch){
@@ -258,7 +258,7 @@ void IAButton_deinit(IAButton * this){
     }
     IATouchDelegate_deinit(&this->touchDelegate);
     IAArrayList_deinit(&this->validTouchIds);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

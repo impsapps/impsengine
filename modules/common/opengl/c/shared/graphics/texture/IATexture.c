@@ -46,6 +46,8 @@ void IATexture_onNewOpenGLContext(){
 }
 
 void IATexture_init(IATexture * this, IABitmap * bitmap){
+    IABitmap_retain(bitmap);
+    this->base = IAObject_make(this);
     this->bitmap = bitmap;
     this->glTextureId = 0;
     this->initializeId = initializeId;
@@ -57,9 +59,10 @@ void IATexture_init(IATexture * this, IABitmap * bitmap){
     IAOpenGLResourceDelegateAttributes_make(&arguments, this);
     IAOpenGLResourceDelegateAttributes_setCreateResourcesFunction(&arguments, (void(*)(void * correspondingObject)) IATexture_createOpenGLResources);
     IAOpenGLResourceDelegateAttributes_setDestroyResourcesFunction(&arguments, (void(*)(void * correspondingObject)) IATexture_destroyOpenGLResources);
-    this->openGLResourceDelegate = IAOpenGLResourceDelegate_new(&arguments);
-    IAOpenGLResourceManager_registerOpenGLResourceDelegate(this->openGLResourceDelegate);
+    IAOpenGLResourceDelegate_make(&this->openGLResourceDelegate, &arguments);
+    IAOpenGLResourceManager_registerOpenGLResourceDelegate(&this->openGLResourceDelegate);
     this->textureDelegate = NULL;
+    IA_incrementInitCount();
 }
 
 void IATexture_createOpenGLResources(IATexture * this){
@@ -125,8 +128,9 @@ void IATexture_destroyOpenGLResources(IATexture * this){
 }
 
 void IATexture_deinit(IATexture * this){
-	IAOpenGLResourceManager_unregisterOpenGLResourceDelegate(this->openGLResourceDelegate);
-	IAOpenGLResourceDelegate_release(this->openGLResourceDelegate);
+	IAOpenGLResourceManager_unregisterOpenGLResourceDelegate(&this->openGLResourceDelegate);
+    IABitmap_release(this->bitmap);
+    IA_decrementInitCount();
 }
 
 void IATexture_terminate(){

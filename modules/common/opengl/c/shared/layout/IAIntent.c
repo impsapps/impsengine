@@ -17,7 +17,7 @@ void IAIntent_init(IAIntent * this, IAView * view){
     *this = (IAIntent){
         .view = view
     };
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAIntent_setViewArgs(IAIntent * this, const void * viewArgs, size_t sizeOfViewArgs){
@@ -33,6 +33,6 @@ void IAIntent_deinit(IAIntent * this){
     if (this->viewArgs != NULL) {
         IA_free(this->viewArgs);
     }
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 

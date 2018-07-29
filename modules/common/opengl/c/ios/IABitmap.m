@@ -28,7 +28,6 @@ void * IABitmap_nativeCreateRefFromAsset(const char * assetName){
 
 static void IABitmap_releaseDataCallback(void *info, const void *data, size_t size){
     IA_free((void *) data);
-    IA_increaseAllocationCount();
 }
 
 void * IABitmap_nativeCreateRefFromScreen(int x, int y, int width, int height){
@@ -40,7 +39,7 @@ void * IABitmap_nativeCreateRefFromScreen(int x, int y, int width, int height){
     glAssert();
     
     GLubyte * buffer2 = (GLubyte *) IA_malloc(myDataLength);
-    IA_decreaseAllocationCount();
+    
     for(int i_y = 0; i_y < height; i_y++){
         for(int i_x = 0; i_x < width * 4; i_x++){
             buffer2[(height - 1 - i_y) * width * 4 + i_x] = buffer[i_y * 4 * width + i_x];

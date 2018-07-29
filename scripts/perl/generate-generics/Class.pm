@@ -16,6 +16,7 @@ sub new{
 	my $self = {
 		className => shift,
 		superClassName => "",
+		firstAttribute => undef,
 		setters => [],
 		settersAsRef => [],
 		settersAsCharArray => [],
@@ -31,8 +32,9 @@ sub new{
 		attributes => {},
 		hasInitFunction => 0,
 		functions => [],
-		isEvent => 0,
-		dontGenerateNewAndReleaseFunctions => 0
+		isObject => 0,
+		isDelegate => 0,
+		isEvent => 0
 	};
 	bless $self, $class;
 	return $self;
@@ -75,42 +77,22 @@ sub addExeFunctionsToList{
 	}
 }
 
-sub getInitFunction{
-	my $class = shift;
-	foreach my $function (@{$class->{functions}}){
-		if(index ($function->{name}, "init") == 0){
-			return $function;
-		}
-	}
-	return undef;
-}
-
-sub getMakeFunction{
-	my $class = shift;
-	foreach my $function (@{$class->{functions}}){
-		if(index ($function->{name}, "make") == 0){
-			return $function;
-		}
-	}
-	return undef;
-}
-
 sub getObjectVariableName{
 	my $self = shift;
-    foreach my $function (@{$self->{functions}}){
-        my $className = $self->{className};
-        my $objectVariableName = $function->{params};
-        if($objectVariableName =~ m/^\s*$className\s*\*\s*$matchName/){
-            return $1;
-        }elsif($objectVariableName =~ m/^\s*$className\s*\*/){
-            return "this";
-        }
-    }
-    if($self->hasAnnotations()){
-        return "this";
-    }else{
-        return "";
-    }
+	foreach my $function (@{$self->{functions}}){
+		my $className = $self->{className};
+		my $objectVariableName = $function->{params};
+		if($objectVariableName =~ m/^\s*$className\s*\*\s*$matchName/){
+			return $1;
+		}elsif($objectVariableName =~ m/^\s*$className\s*\*/){
+			return "this";
+		}
+	}
+	if($self->hasAnnotations()){
+		return "this";
+	}else{
+		return "";
+	}
 }
 
 sub hasAnnotations{

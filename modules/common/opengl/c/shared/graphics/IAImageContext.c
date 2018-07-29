@@ -44,7 +44,7 @@ void IAImageContext_init(IAImageContext * this, IABitmapManager * bitmapManager)
     this->bitmapManager = bitmapManager;
     IAArrayList_init(&this->bitmaps, 10);
     IAString_init(&this->assetNameTemp, "");
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAImageContext_addAtlas(IAImageContext * this, const char * assetName){
@@ -200,7 +200,7 @@ void IAImageContext_deinit(IAImageContext * this){
     IAArrayList_callFunctionOnAllObjects(&this->bitmaps, (void (*)(void *)) IABitmap_release);
     IAArrayList_deinit(&this->bitmaps);
     IAString_deinit(&this->assetNameTemp);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

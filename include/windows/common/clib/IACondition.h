@@ -18,6 +18,8 @@
 //This class is basically a pthread_cond_t with an imps-engine-style interface.
 
 typedef struct{
+    //@extend
+    IAObject base;
     //@getAsRef
     pthread_cond_t condition;
 } IACondition;

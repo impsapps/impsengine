@@ -12,8 +12,11 @@
 
 #include "IAOpenGLHeaders.h"
 #include "IAOpenGLResourceDelegate.h"
+#include "IAObject.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
 	GLuint bufferId;
 	GLenum target;
 	GLsizeiptr size;

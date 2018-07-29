@@ -18,13 +18,19 @@ typedef struct{
 
 IA_CONSTRUCTOR static inline void IANotificationEvent_init(IANotificationEvent * this){
 	IAArrayList_init(&this->delegates, 8);
-	IA_increaseAllocationCountForClass("IANotificationEvent");
+	IA_incrementInitCountForClass("IANotificationEvent");
 }
 
+static inline void IANotificationEvent_deinit(IANotificationEvent * this);
 IA_CONSTRUCTOR static inline IANotificationEvent * IANotificationEvent_new(){
-	IANotificationEvent * this = IA_mallocWithClassName(sizeof(IANotificationEvent), "IANotificationEvent");
+	IANotificationEvent * this = IA_newWithClassName(sizeof(IANotificationEvent), (void (*)(void *)) IANotificationEvent_deinit, "IANotificationEvent");
 	IANotificationEvent_init(this);
 	return this;
+}
+
+/// \memberof IANotificationDelegate
+static inline void IANotificationEvent_retain(IANotificationEvent * this){
+	IA_retain(this);
 }
 
 /// \memberof IANotificationDelegate
@@ -45,14 +51,13 @@ static inline void IANotificationEvent_notify(const IANotificationEvent * this){
 	}
 }
 
-IA_DESTRUCTOR static inline void IANotificationEvent_deinit(IANotificationEvent * this){
+static inline void IANotificationEvent_deinit(IANotificationEvent * this){
 	IAArrayList_deinit(&this->delegates);
-	IA_decreaseAllocationCountForClass("IANotificationEvent");
+	IA_decrementInitCountForClass("IANotificationEvent");
 }
 
-IA_DESTRUCTOR static inline void IANotificationEvent_release(IANotificationEvent * this){
-	IANotificationEvent_deinit(this);
-	IA_freeWithClassName(this, "IANotificationEvent");
+static inline void IANotificationEvent_release(IANotificationEvent * this){
+	IA_release(this);
 }
 
 

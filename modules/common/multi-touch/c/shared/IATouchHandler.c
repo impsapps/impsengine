@@ -15,10 +15,11 @@
 
 
 void IATouchHandler_init(IATouchHandler * this, long touchId, IAPoint location){
+    this->base = IAObject_make(this);
     this->touchId = touchId;
     IATouch_make(&this->touch, location);
     IAArrayList_init(&this->touchDelegates, 5);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IATouchHandler_reinit(IATouchHandler * this, long touchId, IAPoint location){
@@ -48,7 +49,7 @@ void IATouchHandler_unregisterTouchDelegate(IATouchHandler * this, IATouchDelega
 
 void IATouchHandler_deinit(IATouchHandler * this){
     IAArrayList_deinit(&this->touchDelegates);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

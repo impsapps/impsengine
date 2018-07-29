@@ -19,7 +19,7 @@ sub new{
 		name => shift // "",
 		returnType => shift // "",
 		params => shift // "",
-        comment => shift // ""
+		comment => shift // ""
 	};
 	bless $self, $class;
 	return $self;
@@ -29,27 +29,30 @@ sub initWithHeader{
 	my $self = shift;
 	my $className = shift;
 	my $header = shift;
-    my $comment = shift;
+	my $comment = shift;
 	my $returnCode = 0;
-	
+
 	if ($header =~ m/($matchType|$matchFunction)\s*$matchName\s*\($matchParams\)\s*;/){
 		my $returnType = $1;
 		my $params = $7;
 		my $functionName = $6;
-        #This if clause is needed because otherwise returns on statements in inline functions will be detected as functions. Please note, that inline functions are not officially supported yet. It is to prevent of throwing "invalid function name" errors because of generated inline function in event classes.
-        if(not $returnType eq "return"){
-            if($functionName =~ m/${className}_$matchName/){
-                $functionName = $1;
-                $returnCode = 1;
-            }else{
-                $returnCode = 2;
-            }
-        }
-		
+		#This if clause is needed because otherwise returns on statements in inline functions will be detected as functions. Please note, that inline functions are not officially supported yet. It is to prevent of throwing "invalid function name" errors because of generated inline function in event classes.
+		if(not $returnType eq "return"){
+			if($functionName =~ m/${className}_$matchName/){
+				$functionName = $1;
+				$returnCode = 1;
+				if ($functionName =~ m/^deinit.+/){
+					$returnCode = 3;
+				}
+			}else{
+				$returnCode = 2;
+			}
+		}
+
 		$self->{name} = $functionName;
 		$self->{returnType} = $returnType;
 		$self->{params} = $params;
-        $self->{comment} = $comment;
+		$self->{comment} = $comment;
 		return $returnCode;
 	}else{
 		return 0;
@@ -78,126 +81,129 @@ sub isStaticFunction{
 }
 
 sub isFirstArgumentConst{
-    my $params = shift;
-    if($params =~ m/^\s*const/){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $params = shift;
+	if($params =~ m/^\s*const/){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isInitFunction{
-    my $self = shift;
-    if(index($self->{name}, 'init') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'init') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isReinitFunction{
-    my $self = shift;
-    if(index($self->{name}, 'reinit') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'reinit') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isMakeFunction{
-    my $self = shift;
-    if(index($self->{name}, 'make') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'make') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isDeinitFunction{
-    my $self = shift;
-    if(index($self->{name}, 'deinit') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'deinit') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub privateIsNewFunction{
-    my $self = shift;
-    if(index($self->{name}, 'new') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'new') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+sub privateIsTempFunction{
+	my $self = shift;
+	if(index($self->{name}, 'temp') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub privateIsReleaseFunction{
-    my $self = shift;
-    if(index($self->{name}, 'release') == 0){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if(index($self->{name}, 'release') == 0){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isConstructorFunction{
-    my $self = shift;
-    if($self->isInitFunction() || $self->isReinitFunction() || $self->isMakeFunction() || $self->privateIsNewFunction()){
-        return 1;
-    }else{
-        return 0;
-    }
-}
-
-sub isDestructorFunction{
-    my $self = shift;
-    if($self->isDeinitFunction() || $self->privateIsReleaseFunction()){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if($self->privateIsNewFunction()){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub isSpecialFunction{
-    my $self = shift;
-    if($self->isConstructorFunction() || $self->isDestructorFunction()){
-        return 1;
-    }else{
-        return 0;
-    }
+	my $self = shift;
+	if($self->isInitFunction()
+			|| $self->isReinitFunction()
+			|| $self->isMakeFunction()
+			|| $self->privateIsNewFunction()
+			|| $self->privateIsTempFunction()
+			|| $self->isDeinitFunction()
+			|| $self->privateIsReleaseFunction()){
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
 sub getComment{
-    my $self = shift;
-    return $self->{comment};
+	my $self = shift;
+	return $self->{comment};
 }
 
 sub getPureFunction{
-    my $self = shift;
-    my $className = shift . "_" // "";
-    return $self->{returnType} . " " . $className . $self->{name} . "(" . $self->{params} . ")";
+	my $self = shift;
+	my $className = shift . "_" // "";
+	return $self->{returnType} . " " . $className . $self->{name} . "(" . $self->{params} . ")";
 }
 
 sub getDoxygenComment{
-    my $self = shift;
-    my $className = shift;
-    my $prefix = "";
-    if($self->isConstructorFunction()){
-        $prefix = $constructorPrefix;
-    }
-    if($self->isDestructorFunction){
-        $prefix = $destructorPrefix;
-    }
-    my $result = "";
-    if($self->isValidFunction($className)){
-        my $comment = $self->getComment();
-        $result .= "/**\n";
-        $result .= " * \\fn " . $prefix . $self->getPureFunction($className) . "\n";
-        $result .= " * \\memberof $className\n";
-        $result .= " " . $self->getComment();
-        $result .= "*/\n\n";
-    }
-    return $result;
+	my $self = shift;
+	my $className = shift;
+	my $prefix = "";
+	if($self->isConstructorFunction()){
+		$prefix = $constructorPrefix;
+	}
+	my $result = "";
+	if($self->isValidFunction($className)){
+		my $comment = $self->getComment();
+		$result .= "/**\n";
+		$result .= " * \\fn " . $prefix . $self->getPureFunction($className) . "\n";
+		$result .= " * \\memberof $className\n";
+		$result .= " " . $self->getComment();
+		$result .= "*/\n\n";
+	}
+	return $result;
 }
 
 sub privateGetFunction{
@@ -205,14 +211,14 @@ sub privateGetFunction{
 	my $className = shift;
 	my $variableName = shift;
 	my $params = shift;
-    my $isFirstArgumentConst = isFirstArgumentConst($params);
-    
+	my $isFirstArgumentConst = isFirstArgumentConst($params);
+
 	if(not ($params =~ s/^[^,]*,/$className * $variableName,/)){
 		$params = $className . " * " . $variableName;
 	}
-    if($isFirstArgumentConst){
-        $params = "const " . $params;
-    }
+	if($isFirstArgumentConst){
+		$params = "const " . $params;
+	}
 	return sprintf "%s %s_%s(%s)", $self->{returnType}, $className, $self->{name}, $params;
 }
 
@@ -220,8 +226,8 @@ sub privateGetFunctionForValueParams{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-    my $params = shift;
-    my $castPrefix = shift;
+	my $params = shift;
+	my $castPrefix = shift;
 	if(not ($params =~ s/$matchName\s*(,|$)/$variableName$2/)){
 		$params = $variableName;
 	}
@@ -241,19 +247,19 @@ sub getImplForChildClassPrintable{
 	my $className = shift;
 	my $variableName = shift;
 	my $superClass = shift;
-    my $params = $self->{params};
-    my $castPrefix = "";
-    if(isFirstArgumentConst($params)){
-        $castPrefix = "const ";
-    }
-    
+	my $params = $self->{params};
+	my $castPrefix = "";
+	if(isFirstArgumentConst($params)){
+		$castPrefix = "const ";
+	}
+
 	$params = normalizeParams($params);
 	my $function = $self->privateGetFunction($className, $variableName, $params) . "{\n\t";
 	$params = convertParamsToValues($params);
 	if(not ($self->{returnType} eq "void")){
 		$function = $function . "return ";
 	}
-	
+
 	$function = sprintf "%s%s;\n}\n\n", $function, $self->privateGetFunctionForValueParams($superClass, $variableName, $params, $castPrefix);
 	return $function;
 }
@@ -275,20 +281,20 @@ sub getExeEventImplementationPrintable{
 	my $variableName = shift;
 	my $functionName = $self->{name};
 	my $header = $self->privateGetFunction($eventName, $variableName, $self->{params});
-	
+
 	my $params = normalizeParams($self->{params});
 	$params = convertParamsToValues($params);
 	if(not ($params =~ s/^[^,]*,/delegate,/)){
 		$params = "delegate";
 	}
-	my $str = 
-		"${header}{\n" .
-   		"\t$delegateName * delegate;\n" .
-   		"\tforeach (delegate in arrayList(&${variableName}->$listName)) {\n" .
-        "\t\t${delegateName}_$functionName($params);\n" .
-    	"\t}\n" .
-    	"}\n\n";
-    return $str;
+	my $str =
+	"${header}{\n" .
+	"\t$delegateName * delegate;\n" .
+	"\tforeach (delegate in arrayList(&${variableName}->$listName)) {\n" .
+	"\t\t${delegateName}_$functionName($params);\n" .
+	"\t}\n" .
+	"}\n\n";
+	return $str;
 }
 
 1;

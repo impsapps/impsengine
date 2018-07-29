@@ -47,11 +47,13 @@ void IAHashMap_init(IAHashMap * this, size_t estimatedNumberOfElements){
 }
 
 void IAHashMap_initWithFixedSize(IAHashMap * this, size_t fixedSize){
+    this->base = IAObject_make(this);
     this->size = fixedSize;
     this->list = IA_malloc(sizeof(IAHashMapList*) * fixedSize);
     for (size_t i = 0; i < fixedSize; i++){
         this->list[i] = NULL;
     }
+    IA_incrementInitCount();
 }
 
 size_t IAHashMap_moduloHashFunction(size_t size, const char * key){
@@ -68,6 +70,7 @@ size_t IAHashMap_moduloHashFunction(size_t size, const char * key){
 
 
 void IAHashMap_add(IAHashMap * this, const char * key, void * object){
+    IA_retain(object);
     size_t index = IAHashMap_moduloHashFunction(this->size, key);
     
     IAHashMapList ** pointerToList = &(this->list[index]);
@@ -127,9 +130,9 @@ void * IAHashMap_remove(IAHashMap * this, const char *  key){
     }
     
     *pointerToList = list->next;
-    
     void * object = list->object;
     IA_free(list);
+    IA_autorelease(object);
     return object;
 }
 
@@ -139,6 +142,7 @@ void IAHashMap_clear(IAHashMap * this){
         IAHashMapList * list = this->list[iArray];
         while(list != NULL){
             IAHashMapList * next = list->next;
+            IA_release(list->object);
             IA_free(list);
             list = next;
         }
@@ -164,7 +168,8 @@ void IAHashMap_changeSizeWithFixedSize(IAHashMap * this, size_t fixedSize){
         IAHashMap_add(&hashMapTemp, key, object);
     }
     IAHashMap_deinit(this);
-    *this = hashMapTemp;
+    this->size = hashMapTemp.size;
+    this->list = hashMapTemp.list;
 }
 
 void IAHashMap_callFunctionOnAllObjects(const IAHashMap * this, void(*function)(void * object)){
@@ -184,11 +189,13 @@ void IAHashMap_deinit(IAHashMap * this){
         IAHashMapList * list = this->list[iArray];
         while(list != NULL){
             IAHashMapList * next = list->next;
+            IA_release(list->object);
             IA_free(list);
             list = next;
         }
     }
     IA_free(this->list);
+    IA_decrementInitCount();
 }
 
 

@@ -13,6 +13,8 @@
 #include "IAHashMap.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     const IAHashMap * hashMap;
     size_t listIndex;
     IAHashMapList * currentListElement;

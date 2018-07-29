@@ -18,13 +18,19 @@ typedef struct{
 
 IA_CONSTRUCTOR static inline void IAOpenGLResourceEvent_init(IAOpenGLResourceEvent * this){
 	IAArrayList_init(&this->delegates, 8);
-	IA_increaseAllocationCountForClass("IAOpenGLResourceEvent");
+	IA_incrementInitCountForClass("IAOpenGLResourceEvent");
 }
 
+static inline void IAOpenGLResourceEvent_deinit(IAOpenGLResourceEvent * this);
 IA_CONSTRUCTOR static inline IAOpenGLResourceEvent * IAOpenGLResourceEvent_new(){
-	IAOpenGLResourceEvent * this = IA_mallocWithClassName(sizeof(IAOpenGLResourceEvent), "IAOpenGLResourceEvent");
+	IAOpenGLResourceEvent * this = IA_internal_newWithClassName(sizeof(IAOpenGLResourceEvent), (void (*)(void *)) IAOpenGLResourceEvent_deinit, "IAOpenGLResourceEvent");
 	IAOpenGLResourceEvent_init(this);
 	return this;
+}
+
+/// \memberof IAOpenGLResourceDelegate
+static inline void IAOpenGLResourceEvent_retain(IAOpenGLResourceEvent * this){
+	IA_retain(this);
 }
 
 /// \memberof IAOpenGLResourceDelegate
@@ -53,14 +59,13 @@ static inline void IAOpenGLResourceEvent_destroyResources(const IAOpenGLResource
 	}
 }
 
-IA_DESTRUCTOR static inline void IAOpenGLResourceEvent_deinit(IAOpenGLResourceEvent * this){
+static inline void IAOpenGLResourceEvent_deinit(IAOpenGLResourceEvent * this){
 	IAArrayList_deinit(&this->delegates);
-	IA_decreaseAllocationCountForClass("IAOpenGLResourceEvent");
+	IA_decrementInitCountForClass("IAOpenGLResourceEvent");
 }
 
-IA_DESTRUCTOR static inline void IAOpenGLResourceEvent_release(IAOpenGLResourceEvent * this){
-	IAOpenGLResourceEvent_deinit(this);
-	IA_freeWithClassName(this, "IAOpenGLResourceEvent");
+static inline void IAOpenGLResourceEvent_release(IAOpenGLResourceEvent * this){
+	IA_release(this);
 }
 
 

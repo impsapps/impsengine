@@ -18,6 +18,7 @@
 
 void IAOverscrollingHandler_make(IAOverscrollingHandler * this, IAOverscrollingBehavior behavior) {
 	*this = (IAOverscrollingHandler) {
+        .base = IAObject_make(this),
 		.behavior = behavior
 	};
 	float totalWayInPixel = this->behavior.maximumOverscrollingInPixel;

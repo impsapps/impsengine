@@ -24,6 +24,8 @@
 typedef struct IAString IAString;
 
 struct IAString{
+    //@extend
+    IAObject base;
     char * c;
     //@get
     size_t length;
@@ -40,6 +42,7 @@ void IAString_initWithDouble(IAString *, double d);
 void IAString_initWithBool(IAString *, bool b);
 void IAString_initWithFormat(IAString *, const char * format, ...);
 IAString * IAString_newWithFormat(const char * format, ...);
+IAString * IAString_withFormat(const char * format, ...);
 
 void IAString_initCopy(IAString *, const IAString * stringToCopy);
 

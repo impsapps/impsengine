@@ -20,7 +20,7 @@ void IAFrameAnimationAttributes_init(IAFrameAnimationAttributes * this, IAImageC
         .duration = duration
     };
     IAString_init(&this->name, name);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAFrameAnimationAttributes_initWithDurationOfSingleFrame(IAFrameAnimationAttributes * this, IAImageContext * imageContext, const char * name, int numberOfFrames, uint64_t durationOfSingleFrame){
@@ -38,5 +38,5 @@ void IAFrameAnimationAttributes_setLastAsDefaultFrame(IAFrameAnimationAttributes
 
 void IAFrameAnimationAttributes_deinit(IAFrameAnimationAttributes * this){
     IAString_deinit(&this->name);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }

@@ -33,7 +33,7 @@ void IAColorRect_init(IAColorRect * this, IAColor color){
     bufferData[7] = 0.0f;
     IAArrayBuffer_init(&this->arrayBuffer, sizeof(GLfloat) * 8, bufferData, GL_STATIC_DRAW);
     IAColorRect_setColor(this, color);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAColorRect_setColor(IAColorRect * this, IAColor color){
@@ -81,7 +81,7 @@ void IAColorRect_setupRendering(const IAColorRect * this, IARect rectToRender){
 
 void IAColorRect_deinit(IAColorRect * this){
     IAArrayBuffer_deinit(&this->arrayBuffer);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

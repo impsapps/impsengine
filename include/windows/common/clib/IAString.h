@@ -24,6 +24,8 @@
 typedef struct IAString IAString;
 
 struct IAString{
+    //@extend
+    IAObject base;
     char * c;
     //@get
     size_t length;

@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
 //
 
+#include <string.h>
 #include "IALibrary.h"
 #include "IAPoint.h"
 
@@ -16,4 +17,11 @@ IAPoint IAPoint_make(float x, float y){
     return point;
 }
 
+bool IAPoint_isEqual(IAPoint p1, IAPoint p2){
+    if (memcmp(&p1, &p2, sizeof(IAPoint)) == 0) {
+        return true;
+    }else{
+        return false;
+    }
+}
 

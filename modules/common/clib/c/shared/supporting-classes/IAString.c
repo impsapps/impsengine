@@ -93,7 +93,7 @@ void IAString_initWithFormat(IAString * this, const char * format, ...){
 }
 
 IAString * IAString_newWithFormat(const char * format, ...){
-    IAString * this = IA_malloc(sizeof(IAString));
+    IAString * this = IA_new(sizeof(IAString), (void (*)(void *)) IAString_deinit);
     va_list args;
     va_start(args, format);
     size_t length = vsnprintf(NULL, 0, format, args);
@@ -106,13 +106,30 @@ IAString * IAString_newWithFormat(const char * format, ...){
     return this;
 }
 
+IAString * IAString_withFormat(const char * format, ...){
+    IAString * this = IA_new(sizeof(IAString), (void (*)(void *)) IAString_deinit);
+    va_list args;
+    va_start(args, format);
+    size_t length = vsnprintf(NULL, 0, format, args);
+    IAString_initCharArrayWithMinArraySize(this, length);
+    va_end (args);
+    va_start(args, format);
+    vsnprintf(this->c, length + 1, format, args);
+    va_end (args);
+    this->length = length;
+    IA_autorelease(this);
+    return this;
+}
+
 void IAString_initCopy(IAString * this, const IAString * stringToCopy){
     IAString_initWithLength(this, stringToCopy->c, stringToCopy->length);
 }
 
 void IAString_initCharArrayWithMinArraySize(IAString * this, size_t minArraySize){
+    this->base = IAObject_make(this);
     this->c = IA_malloc(sizeof(char) * (minArraySize * 2 + 1));
     this->arraySize = minArraySize * 2;
+    IA_incrementInitCount();
 }
 
 void IAString_applyMinArraySize(IAString * this, size_t minArraySize){
@@ -548,4 +565,5 @@ bool IAString_isEqualToCharArray(const IAString * this, const char * c){
 
 void IAString_deinit(IAString * this){
     IA_free(this->c);
+    IA_decrementInitCount();
 }

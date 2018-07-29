@@ -15,12 +15,14 @@
 
 
 void IAMatrix44_make(IAMatrix44 * this){
+    this->base = IAObject_make(this);
     for (int i = 0; i < 16; i++) {
         this->values[i] = 0.0f;
     }
 }
 
-void IAMatrix44_makeCopy(IAMatrix44 * this, IAMatrix44 * toCopy){
+void IAMatrix44_makeCopy(IAMatrix44 * this, const IAMatrix44 * toCopy){
+    this->base = IAObject_make(this);
     for (int i = 0; i < 16; i++) {
         this->values[i] = toCopy->values[i];
     }
@@ -39,6 +41,7 @@ void IAMatrix44_makeOrthographicProjection(IAMatrix44 * this, GLfloat near, GLfl
 }
 
 void IAMatrix44_makeWithMultiplikationResult(IAMatrix44 * this, IAMatrix44 * firstFactor, IAMatrix44 * secondFactor){
+    this->base = IAObject_make(this);
     for (int x = 0; x < 4; x++) {
         for (int y = 0; y < 4; y++) {
             this->values[x*4+y] = 0.0f;
@@ -110,10 +113,12 @@ void IAMatrix44_makeTrimmedRect(IAMatrix44 * this, IARect trimmedRect, IASize or
 }
 
 void IAMatrix44_makeTransformation(IAMatrix44 * this, IARect oldRect, IARect newRect){
+    this->base = IAObject_make(this);
     IAMatrix44_setTransformation(this, oldRect, newRect);
 }
 
 void IAMatrix44_makeAsIdentityMatrix(IAMatrix44 * this){
+    this->base = IAObject_make(this);
     IAMatrix44_setIdentityMatrix(this);
 }
 

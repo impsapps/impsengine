@@ -19,14 +19,15 @@
 #include "IATextureDelegate.h"
 
 typedef struct{
-    IABitmapManager * bitmapManager;
+    //@extend
+    IAObject base;
     //@get
     IABitmap * bitmap;
     GLuint glTextureId;
     size_t initializeId;
     unsigned int indexOfCurrentUnit;
     bool needToTransportToOpenGL;
-    IAOpenGLResourceDelegate * openGLResourceDelegate;
+    IAOpenGLResourceDelegate openGLResourceDelegate;
     //@set+get
     IATextureDelegate * textureDelegate;
 } IATexture;

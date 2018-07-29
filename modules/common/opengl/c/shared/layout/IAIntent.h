@@ -16,7 +16,7 @@ typedef struct{
     IAView * view;
     //@getAsConst
     void * viewArgs;
-    //@get+set
+    //@set+get
     uint64_t switchDuration;
 } IAIntent;
 

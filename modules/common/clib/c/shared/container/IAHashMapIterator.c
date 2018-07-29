@@ -17,6 +17,7 @@ void * IAHashMapIterator_returnKeys(IAHashMapList * list);
 
 
 void IAHashMapIterator_makeIteratorOverValues(IAHashMapIterator * this, const IAHashMap * hashMap){
+    this->base = IAObject_make(this);
     this->hashMap = hashMap;
     this->listIndex = 0;
     this->currentListElement = hashMap->list[0];
@@ -24,6 +25,7 @@ void IAHashMapIterator_makeIteratorOverValues(IAHashMapIterator * this, const IA
 }
 
 void IAHashMapIterator_makeIteratorOverKeys(IAHashMapIterator * this, const IAHashMap * hashMap){
+    this->base = IAObject_make(this);
     this->hashMap = hashMap;
     this->listIndex = 0;
     this->currentListElement = hashMap->list[0];

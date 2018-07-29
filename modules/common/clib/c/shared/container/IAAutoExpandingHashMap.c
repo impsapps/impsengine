@@ -15,13 +15,15 @@
 void IAAutoExpandingHashMap_expand(IAAutoExpandingHashMap * this);
 
 void IAAutoExpandingHashMap_init(IAAutoExpandingHashMap * this){
+    this->base = IAObject_make(this);
     this->currentHashMap = IAHashMap_newWithFixedSize(16);
     this->currentNumberOfObjects = 0;
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IAAutoExpandingHashMap_add(IAAutoExpandingHashMap * this, const char * key, void * object){
-    if (this->currentNumberOfObjects / 3 >= IAHashMap_getSize(this->currentHashMap) / 4) {
+    debugAssert(this->currentNumberOfObjects / 3 <= IAHashMap_getSize(this->currentHashMap) / 4);
+    if (this->currentNumberOfObjects / 3 == IAHashMap_getSize(this->currentHashMap) / 4) {
         IAAutoExpandingHashMap_expand(this);
     }
     IAHashMap_add(this->currentHashMap, key, object);
@@ -56,7 +58,9 @@ size_t IAAutoExpandingHashMap_getCurrentNumberOfObjects(const IAAutoExpandingHas
 
 void * IAAutoExpandingHashMap_remove(IAAutoExpandingHashMap * this, const char *  key){
     void * removedObject = IAHashMap_remove(this->currentHashMap, key);
-    this->currentNumberOfObjects--;
+    if (removedObject) {
+        this->currentNumberOfObjects--;
+    }
     return removedObject;
 }
 
@@ -71,7 +75,7 @@ void IAAutoExpandingHashMap_callFunctionOnAllObjects(const IAAutoExpandingHashMa
 
 void IAAutoExpandingHashMap_deinit(IAAutoExpandingHashMap * this){
     IAHashMap_release(this->currentHashMap);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

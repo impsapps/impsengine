@@ -11,14 +11,17 @@
 
 #include "IAOpenGLHeaders.h"
 #include "IARect.h"
+#include "IAObject.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     GLfloat values[16];
 }IAMatrix44;
 
 
 void IAMatrix44_make(IAMatrix44 *);
-void IAMatrix44_makeCopy(IAMatrix44 *, IAMatrix44 * toCopy);
+void IAMatrix44_makeCopy(IAMatrix44 *, const IAMatrix44 * toCopy);
 void IAMatrix44_makeOrthographicProjection(IAMatrix44 *, GLfloat near, GLfloat far, GLfloat left, GLfloat right, GLfloat top, GLfloat bottom);
 
 void IAMatrix44_makeWithMultiplikationResult(IAMatrix44 *, IAMatrix44 * firstFactor, IAMatrix44 * secondFactor);

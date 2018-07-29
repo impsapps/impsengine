@@ -19,25 +19,16 @@
 void IAArrayList_addObjectsWithVaribleArguments(IAArrayList * this, int numberOfObjects, va_list args);
 void * IAArrayList_returnObject(void * object);
 
-void IAArrayList_changeArraySizeUsingMallocAndFree(IAArrayList * this, size_t newArraySize);
-void IAArrayList_throwAssertCannotChangeArraySize(IAArrayList * this, size_t newArraySize);
+void IAArrayList_changeArraySize(IAArrayList * this, size_t newArraySize);
 
-
-void IAArrayList_makeWithMaxSizeAndBuffer(IAArrayList * this, size_t maxArraySize, void * buffer[maxArraySize]){
-    this->objects = buffer;
-    memset(buffer, 0, sizeof(void *) * maxArraySize);
-    this->offset = 0;
-    this->currentSize = 0;
-    this->arraySize = maxArraySize;
-    this->changeArraySize = IAArrayList_throwAssertCannotChangeArraySize;
-}
 
 void IAArrayList_init(IAArrayList * this, size_t initialArraySize){
+    this->base = IAObject_make(this);
     this->objects = IA_calloc(initialArraySize, sizeof(void *));
     this->offset = 0;
     this->currentSize = 0;
     this->arraySize = initialArraySize;
-    this->changeArraySize = IAArrayList_changeArraySizeUsingMallocAndFree;
+    IA_incrementInitCount();
 }
 
 void IAArrayList_initWithObjects(IAArrayList * this, size_t initialArraySize, int numberOfObjects, ...){
@@ -73,20 +64,23 @@ void * IAArrayList_returnObject(void * object){
 }
 
 void IAArrayList_initDeepCopy(IAArrayList * this, const IAArrayList * arrayListToCopy, void * (*copyObject)(void * object)){
+    this->base = IAObject_make(this);
     this->objects = IA_calloc(arrayListToCopy->arraySize, sizeof(void *));
     this->offset = 0;
     this->currentSize = 0;
     this->arraySize = arrayListToCopy->arraySize;
     for (size_t i = 0; i < arrayListToCopy->currentSize; i++) {
         void * object = IAArrayList_get(arrayListToCopy, i);
-        IAArrayList_add(this, copyObject(object));
+        object = copyObject(object);
+        IAArrayList_add(this, object);
     }
-    this->changeArraySize = IAArrayList_changeArraySizeUsingMallocAndFree;
+    IA_incrementInitCount();
 }
 
 void IAArrayList_add(IAArrayList * this, void * object){
+    IA_retain(object);
     if (this->currentSize == this->arraySize){
-        this->changeArraySize(this, this->currentSize * 2);
+        IAArrayList_changeArraySize(this, this->currentSize * 2);
     }
     size_t index = (this->offset + this->currentSize) % this->arraySize;
     this->objects[index] = object;
@@ -102,8 +96,9 @@ void IAArrayList_addAllFromArrayList(IAArrayList * this, const IAArrayList * arr
 
 void IAArrayList_insertAtIndex(IAArrayList * this, size_t index, void * object){
     debugAssert(index <= this->currentSize && "IAArrayList_insertAtIndex: index out of bounds");
+    IA_retain(object);
     if (this->currentSize == this->arraySize){
-        this->changeArraySize(this, this->currentSize * 2);
+        IAArrayList_changeArraySize(this, this->currentSize * 2);
     }
     
     size_t currentIndex;
@@ -147,7 +142,7 @@ void IAArrayList_insertAtIndex(IAArrayList * this, size_t index, void * object){
     this->currentSize++;
 }
 
-void IAArrayList_changeArraySizeUsingMallocAndFree(IAArrayList * this, size_t newArraySize){
+void IAArrayList_changeArraySize(IAArrayList * this, size_t newArraySize){
     void ** objects = IA_calloc(newArraySize, sizeof(void *));
     void * object;
     size_t i = 0;
@@ -159,10 +154,6 @@ void IAArrayList_changeArraySizeUsingMallocAndFree(IAArrayList * this, size_t ne
     this->objects = objects;
     this->offset = 0;
     this->arraySize = newArraySize;
-}
-
-void IAArrayList_throwAssertCannotChangeArraySize(IAArrayList * this, size_t newArraySize){
-    assert(0 && "Cannot change array size. Did you initialize the array list with a max size?");
 }
 
 void * IAArrayList_get(const IAArrayList * this, size_t index){
@@ -235,6 +226,7 @@ void * IAArrayList_removeAtIndex(IAArrayList * this, size_t index){
     }
     
     this->currentSize--;
+    IA_autorelease(result);
     return result;
 }
 
@@ -265,6 +257,10 @@ void * IAArrayList_removeLast(IAArrayList * this){
 }
 
 void IAArrayList_clear(IAArrayList * this){
+    void * object;
+    foreach (object in arrayList(this)){
+        IA_release(object);
+    }
     this->offset = 0;
     this->currentSize = 0;
 }
@@ -281,7 +277,12 @@ void IAArrayList_callFunctionOnAllObjects(const IAArrayList * this, void(*functi
 }
 
 void IAArrayList_deinit(IAArrayList * this){
+    void * object;
+    foreach (object in arrayList(this)){
+        IA_release(object);
+    }
     IA_free(this->objects);
+    IA_decrementInitCount();
 }
 
 

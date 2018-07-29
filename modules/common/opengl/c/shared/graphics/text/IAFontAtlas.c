@@ -40,6 +40,7 @@ void IAFontAtlas_releaseObject(void * object);
 
 
 void IAFontAtlas_init(IAFontAtlas * this, IABitmapManager * bitmapManager){
+    this->base = IAObject_make(this);
     this->glyphs = NULL;
     this->currentCountOfGlyphs = 0;
     this->kernings = NULL;
@@ -58,6 +59,7 @@ void IAFontAtlas_init(IAFontAtlas * this, IABitmapManager * bitmapManager){
     this->preDrawGlyph = NULL;
     this->bitmapManager = bitmapManager;
     IAArrayList_init(&this->bitmaps, 10);
+    IA_incrementInitCount();
 }
 
 void IAFontAtlas_initWithDefaultBitmapManager(IAFontAtlas * this){
@@ -452,6 +454,7 @@ void IAFontAtlas_deinit(IAFontAtlas * this){
     }
     IAArrayList_callFunctionOnAllObjects(&this->bitmaps, (void (*)(void *)) IABitmap_release);
     IAArrayList_deinit(&this->bitmaps);
+    IA_decrementInitCount();
 }
 
 

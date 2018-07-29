@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B58B0CF8208569E400146A34 /* IAKeyValueDelegate.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CDE208569E400146A34 /* IAKeyValueDelegate.c */; };
-		B58B0CFA208569E400146A34 /* IAKeyValueDelegateAttributes.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CDF208569E400146A34 /* IAKeyValueDelegateAttributes.c */; };
-		B58B0CFC208569E400146A34 /* IAKeyValueDelegateOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CE0208569E400146A34 /* IAKeyValueDelegateOperations.c */; };
-		B58B0CFE208569E400146A34 /* IAKeyValueContainer.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CE1208569E400146A34 /* IAKeyValueContainer.c */; };
+		B58B0CF8208569E400146A34 /* IAKeyValueElement.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CDE208569E400146A34 /* IAKeyValueElement.c */; };
+		B58B0CFA208569E400146A34 /* IAKeyValueElementAttributes.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CDF208569E400146A34 /* IAKeyValueElementAttributes.c */; };
+		B58B0CFC208569E400146A34 /* IAKeyValueElementOperations.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CE0208569E400146A34 /* IAKeyValueElementOperations.c */; };
+		B58B0CFE208569E400146A34 /* IAKeyValueHashMap.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CE1208569E400146A34 /* IAKeyValueHashMap.c */; };
 		B58B0D00208569E400146A34 /* IAAtlasAssets.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CEB208569E400146A34 /* IAAtlasAssets.c */; };
 		B58B0D02208569E400146A34 /* IA_XML_Atlas.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CEC208569E400146A34 /* IA_XML_Atlas.c */; };
 		B58B0D04208569E400146A34 /* IAString+Assets.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0CED208569E400146A34 /* IAString+Assets.c */; };
@@ -74,14 +74,14 @@
 		B58B0CD9208569E400146A34 /* IA_XML_Strings+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IA_XML_Strings+Generated.h"; sourceTree = "<group>"; };
 		B58B0CDA208569E400146A34 /* input-output+Generated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "input-output+Generated.h"; sourceTree = "<group>"; };
 		B58B0CDC208569E400146A34 /* IALocalisation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IALocalisation.h; sourceTree = "<group>"; };
-		B58B0CDE208569E400146A34 /* IAKeyValueDelegate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueDelegate.c; sourceTree = "<group>"; };
-		B58B0CDF208569E400146A34 /* IAKeyValueDelegateAttributes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueDelegateAttributes.c; sourceTree = "<group>"; };
-		B58B0CE0208569E400146A34 /* IAKeyValueDelegateOperations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueDelegateOperations.c; sourceTree = "<group>"; };
-		B58B0CE1208569E400146A34 /* IAKeyValueContainer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueContainer.c; sourceTree = "<group>"; };
-		B58B0CE2208569E400146A34 /* IAKeyValueDelegateAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueDelegateAttributes.h; sourceTree = "<group>"; };
-		B58B0CE3208569E400146A34 /* IAKeyValueDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueDelegate.h; sourceTree = "<group>"; };
-		B58B0CE4208569E400146A34 /* IAKeyValueContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueContainer.h; sourceTree = "<group>"; };
-		B58B0CE5208569E400146A34 /* IAKeyValueDelegateOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueDelegateOperations.h; sourceTree = "<group>"; };
+		B58B0CDE208569E400146A34 /* IAKeyValueElement.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueElement.c; sourceTree = "<group>"; };
+		B58B0CDF208569E400146A34 /* IAKeyValueElementAttributes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueElementAttributes.c; sourceTree = "<group>"; };
+		B58B0CE0208569E400146A34 /* IAKeyValueElementOperations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueElementOperations.c; sourceTree = "<group>"; };
+		B58B0CE1208569E400146A34 /* IAKeyValueHashMap.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = IAKeyValueHashMap.c; sourceTree = "<group>"; };
+		B58B0CE2208569E400146A34 /* IAKeyValueElementAttributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueElementAttributes.h; sourceTree = "<group>"; };
+		B58B0CE3208569E400146A34 /* IAKeyValueElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueElement.h; sourceTree = "<group>"; };
+		B58B0CE4208569E400146A34 /* IAKeyValueHashMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueHashMap.h; sourceTree = "<group>"; };
+		B58B0CE5208569E400146A34 /* IAKeyValueElementOperations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAKeyValueElementOperations.h; sourceTree = "<group>"; };
 		B58B0CE7208569E400146A34 /* IAStorage+Native.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAStorage+Native.h"; sourceTree = "<group>"; };
 		B58B0CE8208569E400146A34 /* IAString+Assets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IAString+Assets.h"; sourceTree = "<group>"; };
 		B58B0CE9208569E400146A34 /* IAStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAStorage.h; sourceTree = "<group>"; };
@@ -181,14 +181,14 @@
 		B58B0CDD208569E400146A34 /* key-value-countainer */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0CDE208569E400146A34 /* IAKeyValueDelegate.c */,
-				B58B0CDF208569E400146A34 /* IAKeyValueDelegateAttributes.c */,
-				B58B0CE0208569E400146A34 /* IAKeyValueDelegateOperations.c */,
-				B58B0CE1208569E400146A34 /* IAKeyValueContainer.c */,
-				B58B0CE2208569E400146A34 /* IAKeyValueDelegateAttributes.h */,
-				B58B0CE3208569E400146A34 /* IAKeyValueDelegate.h */,
-				B58B0CE4208569E400146A34 /* IAKeyValueContainer.h */,
-				B58B0CE5208569E400146A34 /* IAKeyValueDelegateOperations.h */,
+				B58B0CE1208569E400146A34 /* IAKeyValueHashMap.c */,
+				B58B0CE4208569E400146A34 /* IAKeyValueHashMap.h */,
+				B58B0CDE208569E400146A34 /* IAKeyValueElement.c */,
+				B58B0CE3208569E400146A34 /* IAKeyValueElement.h */,
+				B58B0CDF208569E400146A34 /* IAKeyValueElementAttributes.c */,
+				B58B0CE2208569E400146A34 /* IAKeyValueElementAttributes.h */,
+				B58B0CE0208569E400146A34 /* IAKeyValueElementOperations.c */,
+				B58B0CE5208569E400146A34 /* IAKeyValueElementOperations.h */,
 			);
 			path = "key-value-countainer";
 			sourceTree = "<group>";
@@ -344,16 +344,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B58B0CFC208569E400146A34 /* IAKeyValueDelegateOperations.c in Sources */,
+				B58B0CFC208569E400146A34 /* IAKeyValueElementOperations.c in Sources */,
 				B58B0D0A208569E400146A34 /* IALocalisation.m in Sources */,
-				B58B0CFE208569E400146A34 /* IAKeyValueContainer.c in Sources */,
+				B58B0CFE208569E400146A34 /* IAKeyValueHashMap.c in Sources */,
 				B58B0D04208569E400146A34 /* IAString+Assets.c in Sources */,
-				B58B0CF8208569E400146A34 /* IAKeyValueDelegate.c in Sources */,
+				B58B0CF8208569E400146A34 /* IAKeyValueElement.c in Sources */,
 				B58B0D0E208569E400146A34 /* IAStorage.m in Sources */,
 				B58B0D06208569E400146A34 /* IA_XML_Strings.c in Sources */,
 				B58B0D02208569E400146A34 /* IA_XML_Atlas.c in Sources */,
 				B58B0D00208569E400146A34 /* IAAtlasAssets.c in Sources */,
-				B58B0CFA208569E400146A34 /* IAKeyValueDelegateAttributes.c in Sources */,
+				B58B0CFA208569E400146A34 /* IAKeyValueElementAttributes.c in Sources */,
 				B58B0D0C208569E400146A34 /* IAString.m in Sources */,
 				B58B0D08208569E400146A34 /* IAStorage.c in Sources */,
 			);

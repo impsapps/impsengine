@@ -14,23 +14,24 @@
 #ifdef IA_POSIX_AVAILABLE
 
 void IARecursiveLock_init(IARecursiveLock * this){
+    this->object = IAObject_make(this);
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init((pthread_mutex_t *) this, &attr);
+    pthread_mutex_init(&this->mutex, &attr);
     pthread_mutexattr_destroy(&attr);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 bool IARecursiveLock_lock(IARecursiveLock * this){
-    if(pthread_mutex_lock((pthread_mutex_t *) this) == 0){
+    if(pthread_mutex_lock(&this->mutex) == 0){
         return true;
     }else{
         return false;
     }
 }
 bool IARecursiveLock_unlock(IARecursiveLock * this){
-    if(pthread_mutex_unlock((pthread_mutex_t *) this) == 0){
+    if(pthread_mutex_unlock(&this->mutex) == 0){
         return true;
     }else{
         return false;
@@ -38,8 +39,8 @@ bool IARecursiveLock_unlock(IARecursiveLock * this){
 }
 
 void IARecursiveLock_deinit(IARecursiveLock * this){
-    pthread_mutex_destroy((pthread_mutex_t *) this);
-    IA_decreaseAllocationCount();
+    pthread_mutex_destroy(&this->mutex);
+    IA_decrementInitCount();
 }
 
 #endif

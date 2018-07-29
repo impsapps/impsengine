@@ -10,9 +10,12 @@
 #define IAOverscrollingHandler_h
 
 #include "IAOverscrollingBehavior.h"
+#include "IAObject.h"
 
 typedef struct{
-	float currentDragLength;
+    //@extend
+    IAObject base;
+    float currentDragLength;
 	IAOverscrollingBehavior behavior;
 	float accelerationInPixelPerDragLengthSquared;
 } IAOverscrollingHandler;

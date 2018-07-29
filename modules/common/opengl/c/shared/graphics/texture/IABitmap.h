@@ -15,6 +15,8 @@
 typedef struct IABitmap IABitmap;
 
 struct IABitmap{
+    //@extend
+    IAObject base;
     IAString * assetName;
     void * (*createRef)(IABitmap *);
     void * bitmapRef;

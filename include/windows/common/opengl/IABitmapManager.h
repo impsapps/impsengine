@@ -13,6 +13,8 @@
 #include "IAArrayList.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     IAArrayList * bitmaps;
     IABitmap * lockedBitmap;
 } IABitmapManager;

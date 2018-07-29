@@ -24,7 +24,7 @@ void IATouchDelegate_init(IATouchDelegate * this, const IATouchDelegateAttribute
         .zOrder = IATouchDelegateAttributes_getZOrder(attr)
     };
     IAArrayList_init(&this->touchesForTouchEvent, 10);
-    IA_increaseAllocationCount();
+    IA_incrementInitCount();
 }
 
 void IATouchDelegate_addTouchToTouchEvent(IATouchDelegate * this, IATouch * touch){
@@ -69,7 +69,7 @@ void IATouchDelegate_touchCanceled(IATouchDelegate * this){
 
 void IATouchDelegate_deinit(IATouchDelegate * this){
     IAArrayList_deinit(&this->touchesForTouchEvent);
-    IA_decreaseAllocationCount();
+    IA_decrementInitCount();
 }
 
 

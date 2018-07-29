@@ -16,15 +16,23 @@
 /// this macro marks a constructor function
 #define IA_CONSTRUCTOR
 
-/// this macro marks a destructor function
-#define IA_DESTRUCTOR
-
 #include "IAAssert.h"
 #include "IAOperatingSystem.h"
 
 void IALibrary_commenceIfNeeded(void);
 
 #ifdef DEBUG
+
+#define IA_new(size, deinitFunction) IALibrary_new(size, deinitFunction, CLASSNAME)
+#define IA_newWithClassName(size, deinitFunction, className) IALibrary_new(size, deinitFunction, className)
+#define IA_retain(object) IALibrary_retain(object)
+#define IA_autorelease(object) IALibrary_autorelease(object)
+#define IA_release(object) IALibrary_release(object)
+
+void * IALibrary_new(size_t size, void (*deinit)(void * object), const char * className);
+void IALibrary_retain(void * object);
+void IALibrary_autorelease(void * object);
+void IALibrary_release(void * object);
 
 #define IA_malloc(size) IALibrary_malloc(size, CLASSNAME)
 #define IA_mallocWithClassName(size, className) IALibrary_malloc(size, className)
@@ -38,9 +46,20 @@ void IALibrary_commenceIfNeeded(void);
 void * IALibrary_malloc(size_t size, const char * className);
 void * IALibrary_calloc(size_t count, size_t size, const char * className);
 void * IALibrary_realloc(void * object, size_t size, const char * className);
-void IALibrary_free(void* object, const char * className);
+void IALibrary_free(void * object, const char * className);
 
 #else
+
+#define IA_new(size, deinitFunction) IALibrary_new(size, deinitFunction)
+#define IA_newWithClassName(size, deinitFunction, className) IALibrary_new(size, deinitFunction)
+#define IA_retain(object) IALibrary_retain(object)
+#define IA_autorelease(object) IALibrary_autorelease(object)
+#define IA_release(object) IALibrary_release(object)
+
+void * IALibrary_new(size_t size, void (*deinit)(void * object));
+void IALibrary_retain(void * object);
+void IALibrary_autorelease(void * object);
+void IALibrary_release(void * object);
 
 #define IA_malloc(size) IALibrary_malloc(size)
 #define IA_mallocWithClassName(size, className) IALibrary_malloc(size)

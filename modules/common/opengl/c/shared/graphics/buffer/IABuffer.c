@@ -33,7 +33,8 @@ void IABuffer_onNewOpenGLContext(){
 }
 
 void IABuffer_init(IABuffer * this, GLenum target, size_t size, GLvoid * data, GLenum usage){
-	this->bufferId = 0;
+    this->base = IAObject_make(this);
+    this->bufferId = 0;
 	this->target = target;
 	this->size = size;
 	this->data = IA_malloc(size);
@@ -43,9 +44,11 @@ void IABuffer_init(IABuffer * this, GLenum target, size_t size, GLvoid * data, G
     IABuffer_makeOpenGLResourceDelegate(this);
 	IAOpenGLResourceManager_registerOpenGLResourceDelegate(&this->delegate);
     glAssert();
+    IA_incrementInitCount();
 }
 
 void IABuffer_initCopy(IABuffer * this, const IABuffer * bufferToCopy){
+    this->base = IAObject_make(this);
     this->bufferId = 0;
     this->target = bufferToCopy->target;
     this->size = bufferToCopy->size;
@@ -56,6 +59,7 @@ void IABuffer_initCopy(IABuffer * this, const IABuffer * bufferToCopy){
     IABuffer_makeOpenGLResourceDelegate(this);
     IAOpenGLResourceManager_registerOpenGLResourceDelegate(&this->delegate);
     glAssert();
+    IA_incrementInitCount();
 }
 
 void IABuffer_makeOpenGLResourceDelegate(IABuffer * this){
@@ -116,5 +120,6 @@ void IABuffer_bufferData(IABuffer * this){
 void IABuffer_deinit(IABuffer * this){
 	IAOpenGLResourceManager_unregisterOpenGLResourceDelegate(&this->delegate);
 	IA_free(this->data);
+    IA_decrementInitCount();
 }
 

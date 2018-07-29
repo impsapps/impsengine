@@ -10,6 +10,7 @@
 #define IARecursiveLock_h
 
 #include "IAPosixAvailable.h"
+#include "IAObject.h"
 
 #ifdef IA_POSIX_AVAILABLE
 
@@ -18,6 +19,8 @@
 /// This class is basically a recursive pthread_mutex_t with an imps-engine-style interface.
 
 typedef struct{
+    //@extend
+    IAObject object;
     //@getAsRef
     pthread_mutex_t mutex;
 } IARecursiveLock;

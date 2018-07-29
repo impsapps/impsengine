@@ -13,6 +13,7 @@
 
 
 void IAAtlasAssets_init(IAAtlasAssets * this, const IAAtlasAssetsAttributes * attr){
+    this->base = IAObject_make(this);
     IAString_init(&this->name, attr->name);
     IAString_init(&this->namingTemplate, attr->namingTemplate);
     IAString_init(&this->assetNameTemp, attr->namingTemplate);
