@@ -23,7 +23,7 @@ IA_CONSTRUCTOR static inline void IAOpenGLResourceEvent_init(IAOpenGLResourceEve
 
 static inline void IAOpenGLResourceEvent_deinit(IAOpenGLResourceEvent * this);
 IA_CONSTRUCTOR static inline IAOpenGLResourceEvent * IAOpenGLResourceEvent_new(){
-	IAOpenGLResourceEvent * this = IA_internal_newWithClassName(sizeof(IAOpenGLResourceEvent), (void (*)(void *)) IAOpenGLResourceEvent_deinit, "IAOpenGLResourceEvent");
+	IAOpenGLResourceEvent * this = IA_newWithClassName(sizeof(IAOpenGLResourceEvent), (void (*)(void *)) IAOpenGLResourceEvent_deinit, "IAOpenGLResourceEvent");
 	IAOpenGLResourceEvent_init(this);
 	return this;
 }

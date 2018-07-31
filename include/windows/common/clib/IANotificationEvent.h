@@ -23,7 +23,7 @@ IA_CONSTRUCTOR static inline void IANotificationEvent_init(IANotificationEvent *
 
 static inline void IANotificationEvent_deinit(IANotificationEvent * this);
 IA_CONSTRUCTOR static inline IANotificationEvent * IANotificationEvent_new(){
-	IANotificationEvent * this = IA_internal_newWithClassName(sizeof(IANotificationEvent), (void (*)(void *)) IANotificationEvent_deinit, "IANotificationEvent");
+	IANotificationEvent * this = IA_newWithClassName(sizeof(IANotificationEvent), (void (*)(void *)) IANotificationEvent_deinit, "IANotificationEvent");
 	IANotificationEvent_init(this);
 	return this;
 }

@@ -63,11 +63,11 @@ void IABuffer_initCopy(IABuffer * this, const IABuffer * bufferToCopy){
 }
 
 void IABuffer_makeOpenGLResourceDelegate(IABuffer * this){
-    IAOpenGLResourceDelegateAttributes arguments;
-    IAOpenGLResourceDelegateAttributes_make(&arguments, this);
-    IAOpenGLResourceDelegateAttributes_setCreateResourcesFunction(&arguments, (void(*)(void * correspondingObject)) IABuffer_createOpenGLResource);
-    IAOpenGLResourceDelegateAttributes_setDestroyResourcesFunction(&arguments, (void(*)(void * correspondingObject)) IABuffer_destroyOpenGLResource);
-    IAOpenGLResourceDelegate_make(&this->delegate, &arguments);
+    IAOpenGLResourceDelegateAttributes attr;
+    IAOpenGLResourceDelegateAttributes_make(&attr, this);
+    IAOpenGLResourceDelegateAttributes_setCreateResourcesFunction(&attr, (void(*)(void * correspondingObject)) IABuffer_createOpenGLResource);
+    IAOpenGLResourceDelegateAttributes_setDestroyResourcesFunction(&attr, (void(*)(void * correspondingObject)) IABuffer_destroyOpenGLResource);
+    IAOpenGLResourceDelegate_make(&this->delegate, &attr);
 }
 
 void IABuffer_createOpenGLResource(IABuffer * this){

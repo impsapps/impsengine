@@ -19,14 +19,10 @@ typedef struct{
     //@extend
     IAObject base;
     IAStructArrayList_IAMemoryPoolElement * elements;
-    long shouldReleaseImmediatlyCount;
 } IAMemoryPool;
 
 
 void IAMemoryPool_init(IAMemoryPool * this);
-
-void IAMemoryPool_incrementShouldReleaseImmediatlyCount(IAMemoryPool * this);
-void IAMemoryPool_decrementShouldReleaseImmediatlyCount(IAMemoryPool * this);
 
 void IAMemoryPool_add(IAMemoryPool * this, void * object);
 void IAMemoryPool_run(IAMemoryPool * this);

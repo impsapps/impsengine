@@ -19,8 +19,6 @@ void IAProgram_createOpenGLResources(IAProgram * this);
 void IAProgram_stopUsingCurrentProgram();
 void IAProgram_destroyOpenGLResources(IAProgram * this);
 
-void IAProgram_releaseAttribute(IAProgramAttribute * attribute);
-
 
 static IAProgram * currentProgram = NULL;
 
@@ -35,7 +33,7 @@ void IAProgram_init(IAProgram * this, const char * vertexShaderCode, const char 
 	this->programId = 0;
 	this->vertexShader = IAShader_new(GL_VERTEX_SHADER, vertexShaderCode);
 	this->fragmentShader = IAShader_new(GL_FRAGMENT_SHADER, fragmentShaderCode);
-	this->attributes = IAArrayList_new(8);
+	IA_STRUCT_ARRAY_LIST_MALLOC_MAKE(this->attributes, IAProgramAttribute, 8);
     this->glBindAttributeLocations = glBindAttributeLocations;
 
     IAOpenGLResourceDelegateAttributes arguments;
@@ -64,9 +62,11 @@ void IAProgram_createOpenGLResources(IAProgram * this){
 }
 
 void IAProgram_registerDynamicAttribute(IAProgram * this, GLint attributeLocation){
-    IAProgramAttribute * attribute = IA_malloc(sizeof(IAProgramAttribute));
-    attribute->attributeLocation = attributeLocation;
-    IAArrayList_add(this->attributes, attribute);
+    IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IF_NEEDED(this->attributes, IAProgramAttribute);
+    IAProgramAttribute attribute = (IAProgramAttribute){
+        .attributeLocation = attributeLocation
+    };
+    IAStructArrayList_IAProgramAttribute_add(this->attributes, attribute);
 }
 
 GLint IAProgram_getAttributeLocation(IAProgram * this, const GLchar * name){
@@ -98,9 +98,9 @@ void IAProgram_use(IAProgram * this){
     if (this != currentProgram) {
         IAProgram_stopUsingCurrentProgram();
         glUseProgram(this->programId);
-        IAProgramAttribute * attribute;
-        foreach (attribute in arrayList(this->attributes)){
-            glEnableVertexAttribArray(attribute->attributeLocation);
+        for (int i = 0; i < IAStructArrayList_IAProgramAttribute_getCurrentSize(this->attributes); i++) {
+            IAProgramAttribute attribute = IAStructArrayList_IAProgramAttribute_get(this->attributes, i);
+            glEnableVertexAttribArray(attribute.attributeLocation);
         }
         currentProgram = this;
     }
@@ -108,9 +108,9 @@ void IAProgram_use(IAProgram * this){
 
 void IAProgram_stopUsingCurrentProgram(){
     if (currentProgram != NULL) {
-        IAProgramAttribute * attribute;
-        foreach (attribute in arrayList(currentProgram->attributes)){
-            glDisableVertexAttribArray(attribute->attributeLocation);
+        for (int i = 0; i < IAStructArrayList_IAProgramAttribute_getCurrentSize(currentProgram->attributes); i++) {
+            IAProgramAttribute attribute = IAStructArrayList_IAProgramAttribute_get(currentProgram->attributes, i);
+            glDisableVertexAttribArray(attribute.attributeLocation);
         }
         currentProgram = NULL;
     }
@@ -129,12 +129,8 @@ void IAProgram_deinit(IAProgram * this){
 	IAOpenGLResourceManager_unregisterOpenGLResourceDelegate(&this->delegate);
 	IAShader_release(this->vertexShader);
 	IAShader_release(this->fragmentShader);
-    IAArrayList_callFunctionOnAllObjects(this->attributes, (void (*)(void *)) IAProgram_releaseAttribute);
-    IAArrayList_release(this->attributes);
+    IA_STRUCT_ARRAY_LIST_FREE(this->attributes);
     IANotificationEvent_deinit(&this->linkingComplete);
     IA_decrementInitCount();
 }
 
-void IAProgram_releaseAttribute(IAProgramAttribute * attribute){
-    IA_free(attribute);
-}

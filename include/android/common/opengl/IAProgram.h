@@ -11,7 +11,7 @@
 
 #include <stdbool.h>
 
-#include "IAArrayList.h"
+#include "IAStructArrayList.h"
 #include "IAShader.h"
 #include "IAOpenGLHeaders.h"
 #include "IAOpenGLResourceDelegate.h"
@@ -21,6 +21,8 @@
 typedef struct{
     GLint attributeLocation;
 } IAProgramAttribute;
+
+#define IA
 
 typedef struct{
     //@extend

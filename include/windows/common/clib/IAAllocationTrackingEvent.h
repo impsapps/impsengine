@@ -23,7 +23,7 @@ IA_CONSTRUCTOR static inline void IAAllocationTrackingEvent_init(IAAllocationTra
 
 static inline void IAAllocationTrackingEvent_deinit(IAAllocationTrackingEvent * this);
 IA_CONSTRUCTOR static inline IAAllocationTrackingEvent * IAAllocationTrackingEvent_new(){
-	IAAllocationTrackingEvent * this = IA_internal_newWithClassName(sizeof(IAAllocationTrackingEvent), (void (*)(void *)) IAAllocationTrackingEvent_deinit, "IAAllocationTrackingEvent");
+	IAAllocationTrackingEvent * this = IA_newWithClassName(sizeof(IAAllocationTrackingEvent), (void (*)(void *)) IAAllocationTrackingEvent_deinit, "IAAllocationTrackingEvent");
 	IAAllocationTrackingEvent_init(this);
 	return this;
 }

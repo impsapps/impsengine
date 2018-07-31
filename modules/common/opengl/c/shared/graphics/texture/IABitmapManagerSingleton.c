@@ -16,14 +16,15 @@
 static IABitmapManager * defaultBitmapManager;
 static IANotificationDelegate notificationDelegate;
 
-static void IABitmapManagerSingleton_onMemoryWarningFunction(void * object){
-    IABitmapManager_destroyBitmapRefs(defaultBitmapManager);
+static void IABitmapManagerSingleton_onMemoryWarningFunction(IABitmapManager * bitmapManager){
+    IABitmapManager_destroyBitmapRefs(bitmapManager);
 }
 
 IABitmapManager * IABitmapManagerSingleton_getDefaultBitmapManager(){
     if (defaultBitmapManager == NULL) {
         defaultBitmapManager = IABitmapManager_new();
         notificationDelegate = (IANotificationDelegate){
+            .correspondingObject = defaultBitmapManager,
             .notify = (void (*)(void *)) IABitmapManagerSingleton_onMemoryWarningFunction
         };
         IALibrary_registerOnMemoryWarningNotification(&notificationDelegate);

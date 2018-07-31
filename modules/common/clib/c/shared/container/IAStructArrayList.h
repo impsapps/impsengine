@@ -14,6 +14,7 @@
 #include "IALibrary.h"
 
 #define IA_STRUCT_ARRAY_LIST(type) IA_STRUCT_ARRAY_LIST_IMPL(IAStructArrayList_ ## type, type)
+#define IA_VOID_STRUCT_ARRAY_LIST() IA_STRUCT_ARRAY_LIST_IMPL(IAStructArrayList, void *)
 #define IA_STRUCT_ARRAY_LIST_IMPL(ListType, DataType) \
 \
 _Pragma("clang diagnostic push") \
@@ -129,5 +130,7 @@ do { \
 
 #define IA_STRUCT_ARRAY_LIST_FREE(name) \
 IA_free(name)
+
+IA_VOID_STRUCT_ARRAY_LIST();
 
 #endif

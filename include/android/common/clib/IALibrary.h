@@ -23,12 +23,13 @@ void IALibrary_commenceIfNeeded(void);
 
 #ifdef DEBUG
 
-#define IA_internal_newWithClassName(size, deinitFunction, className) IALibrary_internal_new(size, deinitFunction, className)
+#define IA_new(size, deinitFunction) IALibrary_new(size, deinitFunction, CLASSNAME)
+#define IA_newWithClassName(size, deinitFunction, className) IALibrary_new(size, deinitFunction, className)
 #define IA_retain(object) IALibrary_retain(object)
 #define IA_autorelease(object) IALibrary_autorelease(object)
 #define IA_release(object) IALibrary_release(object)
 
-void * IALibrary_internal_new(size_t size, void (*deinit)(void * object), const char * className);
+void * IALibrary_new(size_t size, void (*deinit)(void * object), const char * className);
 void IALibrary_retain(void * object);
 void IALibrary_autorelease(void * object);
 void IALibrary_release(void * object);
@@ -49,12 +50,13 @@ void IALibrary_free(void * object, const char * className);
 
 #else
 
-#define IA_internal_newWithClassName(size, deinitFunction, className) IALibrary_internal_new(size, deinitFunction)
+#define IA_new(size, deinitFunction) IALibrary_new(size, deinitFunction)
+#define IA_newWithClassName(size, deinitFunction, className) IALibrary_new(size, deinitFunction)
 #define IA_retain(object) IALibrary_retain(object)
 #define IA_autorelease(object) IALibrary_autorelease(object)
 #define IA_release(object) IALibrary_release(object)
 
-void * IALibrary_internal_new(size_t size, void (*deinit)(void * object));
+void * IALibrary_new(size_t size, void (*deinit)(void * object));
 void IALibrary_retain(void * object);
 void IALibrary_autorelease(void * object);
 void IALibrary_release(void * object);
