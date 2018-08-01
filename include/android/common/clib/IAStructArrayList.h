@@ -154,6 +154,8 @@ do { \
     ListType ## _make(name, size, (DataType *) (name + 1)); \
 } while(0)
 
+
+//These macros guarantee, that the list referenced by name is replaced in one operation. At no time name shall reference to an invalid list.
 #define IA_STRUCT_ARRAY_LIST_REALLOC_MAKE(name, type, size) IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_WITH_CLASSNAME(name, type, size, CLASSNAME)
 #define IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_WITH_CLASSNAME(name, type, size, className) IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IMPL(name, IAStructArrayList_ ## type, type, size, className)
 #define IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE(name, size) IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_WITH_CLASSNAME(name, size, CLASSNAME)
@@ -163,8 +165,9 @@ do { \
     ListType * newList = IA_mallocWithClassName(sizeof(ListType) + sizeof(DataType) * (newSize), className); \
     ListType ## _make(newList, (newSize), (DataType *) (newList + 1)); \
     ListType ## _addAllFromList(newList, name); \
-    IA_freeWithClassName(name, className); \
+    ListType * oldList = name; \
     name = newList; \
+    IA_freeWithClassName(oldList, className); \
 } while(0)
 
 #define IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IF_NEEDED(name, type) IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(name, type, CLASSNAME)

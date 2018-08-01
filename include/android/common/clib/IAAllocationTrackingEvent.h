@@ -40,7 +40,7 @@ static inline void IAAllocationTrackingEvent_retain(IAAllocationTrackingEvent * 
 
 /// \memberof IAAllocationTrackingDelegate
 static inline void IAAllocationTrackingEvent_register(IAAllocationTrackingEvent * this, IAAllocationTrackingDelegate * delegate){
-	IA_retainWithClassName(delegate, "IAAllocationTrackingDelegate");
+	IA_retain(delegate);
 	IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->delegates, "IAAllocationTrackingEvent");
 	IAStructArrayList_add(this->delegates, delegate);
 }
@@ -52,7 +52,7 @@ static inline void IAAllocationTrackingEvent_unregister(IAAllocationTrackingEven
 		IAAllocationTrackingDelegate * delegateInList = (IAAllocationTrackingDelegate *) IAStructArrayList_get(this->delegates, i);
 		if (delegateInList == delegate) {
 			IAStructArrayList_removeAtIndex(this->delegates, i);
-			IA_releaseWithClassName(delegateInList, "IAAllocationTrackingDelegate");
+			IA_release(delegateInList);
 			debugOnly(isFound = true);
 			break;
 		}

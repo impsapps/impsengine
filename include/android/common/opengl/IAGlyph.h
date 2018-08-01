@@ -27,7 +27,7 @@ typedef struct{
 } IAGlyph;
 
 
-void IAGlyph_initAndGivePermissionForReleasingImage(IAGlyph *, IAImage * image, IAGlyphInformation glyphInformation);
+void IAGlyph_init(IAGlyph *, IAImage * image, IAGlyphInformation glyphInformation);
 
 void IAGlyph_setCurrentFontSize(IAGlyph *, float currentFontSize);
 float IAGlyph_getCurrentFontSize(IAGlyph *);

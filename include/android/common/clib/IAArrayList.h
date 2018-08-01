@@ -13,9 +13,7 @@
 #include <stdbool.h>
 #include "IAObject.h"
 
-typedef struct IAArrayList IAArrayList;
-
-struct IAArrayList{
+typedef struct{
     //@extend
     IAObject base;
     void ** objects;
@@ -23,7 +21,7 @@ struct IAArrayList{
     //@get
     size_t currentSize;
     size_t arraySize;
-};
+} IAArrayList;
 
 
 void IAArrayList_init(IAArrayList *, size_t initialArraySize);

@@ -75,6 +75,7 @@
 		B58B0CB52085691A00146A34 /* IADefaultFramebuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0C2A2085691A00146A34 /* IADefaultFramebuffer.c */; };
 		B58B0CB72085691A00146A34 /* IAOffscreenFramebuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = B58B0C2D2085691A00146A34 /* IAOffscreenFramebuffer.c */; };
 		B58B0CB92085691A00146A34 /* IABitmap.m in Sources */ = {isa = PBXBuildFile; fileRef = B58B0C312085691A00146A34 /* IABitmap.m */; };
+		B59CCF432111A5C9008ED2F4 /* IAKerningAmount.c in Sources */ = {isa = PBXBuildFile; fileRef = B59CCF422111A5C9008ED2F4 /* IAKerningAmount.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -360,6 +361,8 @@
 		B58B0C2F2085691A00146A34 /* IACurrentFramebuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IACurrentFramebuffer.h; sourceTree = "<group>"; };
 		B58B0C312085691A00146A34 /* IABitmap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IABitmap.m; sourceTree = "<group>"; };
 		B58B0C322085691A00146A34 /* IAOpenGLHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IAOpenGLHeaders.h; sourceTree = "<group>"; };
+		B59CCF412111A5C9008ED2F4 /* IAKerningAmount.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IAKerningAmount.h; sourceTree = "<group>"; };
+		B59CCF422111A5C9008ED2F4 /* IAKerningAmount.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = IAKerningAmount.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -687,21 +690,23 @@
 		B58B0BFE2085691A00146A34 /* text */ = {
 			isa = PBXGroup;
 			children = (
-				B58B0BFF2085691A00146A34 /* IAFontInformationAttributes.c */,
-				B58B0C002085691A00146A34 /* IAFontInformation.c */,
-				B58B0C012085691A00146A34 /* IAUTF8Helper.c */,
-				B58B0C022085691A00146A34 /* IAFontAtlas+IterateOverGlyphList.h */,
-				B58B0C032085691A00146A34 /* IAFontAtlas.h */,
 				B58B0C042085691A00146A34 /* IAColorableFontAtlas.c */,
-				B58B0C052085691A00146A34 /* IAGlyph.c */,
-				B58B0C062085691A00146A34 /* IATextAlignment.h */,
-				B58B0C072085691A00146A34 /* IAFontInformation.h */,
-				B58B0C082085691A00146A34 /* IAFontInformationAttributes.h */,
-				B58B0C092085691A00146A34 /* IAGlyphInformation.h */,
-				B58B0C0A2085691A00146A34 /* IAUTF8Helper.h */,
-				B58B0C0B2085691A00146A34 /* IAGlyph.h */,
 				B58B0C0C2085691A00146A34 /* IAColorableFontAtlas.h */,
 				B58B0C0D2085691A00146A34 /* IAFontAtlas.c */,
+				B58B0C032085691A00146A34 /* IAFontAtlas.h */,
+				B58B0C022085691A00146A34 /* IAFontAtlas+IterateOverGlyphList.h */,
+				B58B0C002085691A00146A34 /* IAFontInformation.c */,
+				B58B0C072085691A00146A34 /* IAFontInformation.h */,
+				B58B0BFF2085691A00146A34 /* IAFontInformationAttributes.c */,
+				B58B0C082085691A00146A34 /* IAFontInformationAttributes.h */,
+				B58B0C052085691A00146A34 /* IAGlyph.c */,
+				B58B0C0B2085691A00146A34 /* IAGlyph.h */,
+				B58B0C092085691A00146A34 /* IAGlyphInformation.h */,
+				B58B0C062085691A00146A34 /* IATextAlignment.h */,
+				B58B0C012085691A00146A34 /* IAUTF8Helper.c */,
+				B58B0C0A2085691A00146A34 /* IAUTF8Helper.h */,
+				B59CCF412111A5C9008ED2F4 /* IAKerningAmount.h */,
+				B59CCF422111A5C9008ED2F4 /* IAKerningAmount.c */,
 			);
 			path = text;
 			sourceTree = "<group>";
@@ -909,6 +914,7 @@
 				B58B0C812085691A00146A34 /* IATextureDelegateAttributes.c in Sources */,
 				B58B0C492085691A00146A34 /* IAMeassure.c in Sources */,
 				B58B0C7F2085691A00146A34 /* IAImage.c in Sources */,
+				B59CCF432111A5C9008ED2F4 /* IAKerningAmount.c in Sources */,
 				B58B0C732085691A00146A34 /* IAAccelerationAnimationAttributes.c in Sources */,
 				B58B0C3F2085691A00146A34 /* IASize.c in Sources */,
 				B58B0C852085691A00146A34 /* IATextureSelection.c in Sources */,

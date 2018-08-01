@@ -15,6 +15,7 @@
 #include "IAFontInformationAttributes.h"
 #include "IAString+Assets.h"
 #include "IABitmapManagerSingleton.h"
+#include "IAKerningAmount.h"
 
 
 #define CLASSNAME "IAFontAtlas"
@@ -126,16 +127,16 @@ void IAFontAtlas_addGlyphsFromFnt(IAFontAtlas * this, const char * fntResource, 
             IAImageAttributes attributes;
             IAImageAttributes_make(&attributes, texture, textureSelection);
             
-            IAImage * glyphImage = IAImage_new(&attributes);
-            IAGlyph * glyph = IAGlyph_newAndGivePermissionForReleasingImage(glyphImage, glyphInformation);
+            IAImage * glyphImage = IAImage_with(&attributes);
+            IAGlyph * glyph = IAGlyph_with(glyphImage, glyphInformation);
             
             IAHashMap_add(this->glyphs, character, glyph);
             
         }else if(IAString_isEqualToCharArray(part, "kerning")){
             int first = IAFontAtlas_parseNextPartToInt(&partsIterator);
             int second = IAFontAtlas_parseNextPartToInt(&partsIterator);
-            float * amount = IA_malloc(sizeof(float));
-            *amount = (float) -(IAFontAtlas_parseNextPartToInt(&partsIterator));
+            float value = IAFontAtlas_parseNextPartToInt(&partsIterator);
+            IAKerningAmount * amount = IAKerningAmount_with(-value);
             char key[9];
             int length = IAUTF8Helper_idToUTF8(first, key);
             length += IAUTF8Helper_idToUTF8(second, key + length);
@@ -165,7 +166,7 @@ void IAFontAtlas_addGlyphsFromFnt(IAFontAtlas * this, const char * fntResource, 
             IABitmap * bitmap = IABitmap_newWithAsset(IAString_toCharArray(assetName));
             IABitmapManager_addBitmap(this->bitmapManager, bitmap);
             IAArrayList_add(&this->bitmaps, bitmap);
-            texture = IATexture_new(bitmap);
+            texture = IATexture_with(bitmap);
             IATexture_setTextureDelegate(texture, &this->textureDelegate);
         }else if(IAString_isEqualToCharArray(part, "chars")){
             int countOfGlyphs = IAFontAtlas_parseNextPartToInt(&partsIterator);
@@ -199,7 +200,6 @@ void IAFontAtlas_addGlyphsFromFnt(IAFontAtlas * this, const char * fntResource, 
         IAArrayList_callFunctionOnAllObjects(partsOfLine, (void (*)(void *)) IAString_release);
         IAArrayList_release(partsOfLine);
     }
-    
     
     IAArrayList_callFunctionOnAllObjects(lines, (void (*)(void *)) IAString_release);
     IAArrayList_release(lines);
@@ -430,20 +430,13 @@ IAFontInformation * IAFontAtlas_getFontInformation(IAFontAtlas * this){
     return this->fontInformation;
 }
 
-void IAFontAtlas_releaseObject(void * object){
-    IA_free(object);
-}
-
 void IAFontAtlas_deinit(IAFontAtlas * this){
     if (this->glyphs != NULL) {
-        IAHashMap_callFunctionOnAllObjects(this->glyphs, (void (*)(void *)) IAGlyph_release);
         IAHashMap_release(this->glyphs);
     }
     if (this->kernings != NULL) {
-        IAHashMap_callFunctionOnAllObjects(this->kernings, IAFontAtlas_releaseObject);
         IAHashMap_release(this->kernings);
     }
-    IAArrayList_callFunctionOnAllObjects(this->textures, (void (*)(void *)) IATexture_release);
     IAArrayList_release(this->textures);
     if (this->fontInformation != NULL) {
         IAFontInformation_release(this->fontInformation);

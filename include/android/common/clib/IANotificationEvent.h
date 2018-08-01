@@ -40,7 +40,7 @@ static inline void IANotificationEvent_retain(IANotificationEvent * this){
 
 /// \memberof IANotificationDelegate
 static inline void IANotificationEvent_register(IANotificationEvent * this, IANotificationDelegate * delegate){
-	IA_retainWithClassName(delegate, "IANotificationDelegate");
+	IA_retain(delegate);
 	IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->delegates, "IANotificationEvent");
 	IAStructArrayList_add(this->delegates, delegate);
 }
@@ -52,7 +52,7 @@ static inline void IANotificationEvent_unregister(IANotificationEvent * this, IA
 		IANotificationDelegate * delegateInList = (IANotificationDelegate *) IAStructArrayList_get(this->delegates, i);
 		if (delegateInList == delegate) {
 			IAStructArrayList_removeAtIndex(this->delegates, i);
-			IA_releaseWithClassName(delegateInList, "IANotificationDelegate");
+			IA_release(delegateInList);
 			debugOnly(isFound = true);
 			break;
 		}

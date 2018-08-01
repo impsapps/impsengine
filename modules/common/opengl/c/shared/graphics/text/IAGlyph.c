@@ -15,7 +15,8 @@
 void IAGlyph_drawFunction(const IAGlyph * this);
 
 
-void IAGlyph_initAndGivePermissionForReleasingImage(IAGlyph * this, IAImage * image, IAGlyphInformation glyphInformation){
+void IAGlyph_init(IAGlyph * this, IAImage * image, IAGlyphInformation glyphInformation){
+    IAImage_retain(image);
     IADrawable_make((IADrawable *) this, (void (*)(const IADrawable *)) IAGlyph_drawFunction);
     this->image = image;
     this->glyphInformation = glyphInformation;
