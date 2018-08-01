@@ -7,17 +7,16 @@
 #ifndef IANotificationEvent_h
 #define IANotificationEvent_h
 
-#include "IAArrayList.h"
-#include "IAArrayListIterator.h"
+#include "IAStructArrayList.h"
 #include "IALibrary.h"
 #include "IANotificationDelegate.h"
 
 typedef struct{
-	IAArrayList delegates;
+	IAStructArrayList * delegates;
 } IANotificationEvent;
 
 IA_CONSTRUCTOR static inline void IANotificationEvent_init(IANotificationEvent * this){
-	IAArrayList_init(&this->delegates, 8);
+	IA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(this->delegates, 8, "IANotificationEvent");
 	IA_incrementInitCountForClass("IANotificationEvent");
 }
 
@@ -28,6 +27,12 @@ IA_CONSTRUCTOR static inline IANotificationEvent * IANotificationEvent_new(){
 	return this;
 }
 
+static inline IANotificationEvent * IANotificationEvent_with(){
+	IANotificationEvent * this = IANotificationEvent_new();
+	IA_autorelease(this);
+	return this;
+}
+
 /// \memberof IANotificationDelegate
 static inline void IANotificationEvent_retain(IANotificationEvent * this){
 	IA_retain(this);
@@ -35,25 +40,42 @@ static inline void IANotificationEvent_retain(IANotificationEvent * this){
 
 /// \memberof IANotificationDelegate
 static inline void IANotificationEvent_register(IANotificationEvent * this, IANotificationDelegate * delegate){
-	IAArrayList_add(&this->delegates, delegate);
+	IA_retain(delegate);
+	IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->delegates, "IANotificationEvent");
+	IAStructArrayList_add(this->delegates, delegate);
 }
 
 /// \memberof IANotificationDelegate
-static inline IANotificationDelegate * IANotificationEvent_unregister(IANotificationEvent * this, IANotificationDelegate * delegate){
-	return IAArrayList_removeObject(&this->delegates, delegate);
+static inline void IANotificationEvent_unregister(IANotificationEvent * this, IANotificationDelegate * delegate){
+	debugOnly(bool isFound = false;)
+	for (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->delegates); i++) {
+		IANotificationDelegate * delegateInList = (IANotificationDelegate *) IAStructArrayList_get(this->delegates, i);
+		if (delegateInList == delegate) {
+			IAStructArrayList_removeAtIndex(this->delegates, i);
+			IA_release(delegateInList);
+			debugOnly(isFound = true);
+			break;
+		}
+	}
+	debugAssert(isFound == true && "Delegate was not found!");
 }
 
 /// \memberof IANotificationDelegate
 static inline void IANotificationEvent_notify(const IANotificationEvent * this){
 	IANotificationDelegate * delegate;
-	foreach (delegate in arrayList(&this->delegates)) {
+	for (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->delegates); i++) {
+		delegate = IAStructArrayList_get(this->delegates, i);
 		IANotificationDelegate_notify(delegate);
 	}
 }
 
 static inline void IANotificationEvent_deinit(IANotificationEvent * this){
-	IAArrayList_deinit(&this->delegates);
+	IA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(this->delegates, "IANotificationEvent");
 	IA_decrementInitCountForClass("IANotificationEvent");
+}
+
+static inline void IANotificationEvent_autorelease(IANotificationEvent * this){
+	IA_autorelease(this);
 }
 
 static inline void IANotificationEvent_release(IANotificationEvent * this){

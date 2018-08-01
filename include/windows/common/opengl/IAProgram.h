@@ -22,7 +22,7 @@ typedef struct{
     GLint attributeLocation;
 } IAProgramAttribute;
 
-#define IA
+IA_STRUCT_ARRAY_LIST(IAProgramAttribute);
 
 typedef struct{
     //@extend
@@ -30,7 +30,7 @@ typedef struct{
     GLuint programId;
     IAShader * vertexShader;
     IAShader * fragmentShader;
-    IAArrayList * attributes;
+    IAStructArrayList_IAProgramAttribute * attributes;
     void (*glBindAttributeLocations)(GLuint programId);
     IAOpenGLResourceDelegate delegate;
     //@register

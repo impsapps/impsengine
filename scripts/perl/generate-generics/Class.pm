@@ -34,7 +34,8 @@ sub new{
 		functions => [],
 		isObject => 0,
 		isDelegate => 0,
-		isEvent => 0
+		isEvent => 0,
+		isEventWithoutRetain => 0
 	};
 	bless $self, $class;
 	return $self;

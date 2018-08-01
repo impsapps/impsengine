@@ -7,17 +7,16 @@
 #ifndef IAOpenGLResourceEvent_h
 #define IAOpenGLResourceEvent_h
 
-#include "IAArrayList.h"
-#include "IAArrayListIterator.h"
+#include "IAStructArrayList.h"
 #include "IALibrary.h"
 #include "IAOpenGLResourceDelegate.h"
 
 typedef struct{
-	IAArrayList delegates;
+	IAStructArrayList * delegates;
 } IAOpenGLResourceEvent;
 
 IA_CONSTRUCTOR static inline void IAOpenGLResourceEvent_init(IAOpenGLResourceEvent * this){
-	IAArrayList_init(&this->delegates, 8);
+	IA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(this->delegates, 8, "IAOpenGLResourceEvent");
 	IA_incrementInitCountForClass("IAOpenGLResourceEvent");
 }
 
@@ -28,6 +27,12 @@ IA_CONSTRUCTOR static inline IAOpenGLResourceEvent * IAOpenGLResourceEvent_new()
 	return this;
 }
 
+static inline IAOpenGLResourceEvent * IAOpenGLResourceEvent_with(){
+	IAOpenGLResourceEvent * this = IAOpenGLResourceEvent_new();
+	IA_autorelease(this);
+	return this;
+}
+
 /// \memberof IAOpenGLResourceDelegate
 static inline void IAOpenGLResourceEvent_retain(IAOpenGLResourceEvent * this){
 	IA_retain(this);
@@ -35,18 +40,29 @@ static inline void IAOpenGLResourceEvent_retain(IAOpenGLResourceEvent * this){
 
 /// \memberof IAOpenGLResourceDelegate
 static inline void IAOpenGLResourceEvent_register(IAOpenGLResourceEvent * this, IAOpenGLResourceDelegate * delegate){
-	IAArrayList_add(&this->delegates, delegate);
+	IA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->delegates, "IAOpenGLResourceEvent");
+	IAStructArrayList_add(this->delegates, delegate);
 }
 
 /// \memberof IAOpenGLResourceDelegate
-static inline IAOpenGLResourceDelegate * IAOpenGLResourceEvent_unregister(IAOpenGLResourceEvent * this, IAOpenGLResourceDelegate * delegate){
-	return IAArrayList_removeObject(&this->delegates, delegate);
+static inline void IAOpenGLResourceEvent_unregister(IAOpenGLResourceEvent * this, IAOpenGLResourceDelegate * delegate){
+	debugOnly(bool isFound = false;)
+	for (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->delegates); i++) {
+		IAOpenGLResourceDelegate * delegateInList = (IAOpenGLResourceDelegate *) IAStructArrayList_get(this->delegates, i);
+		if (delegateInList == delegate) {
+			IAStructArrayList_removeAtIndex(this->delegates, i);
+			debugOnly(isFound = true);
+			break;
+		}
+	}
+	debugAssert(isFound == true && "Delegate was not found!");
 }
 
 /// \memberof IAOpenGLResourceDelegate
 static inline void IAOpenGLResourceEvent_createResources(const IAOpenGLResourceEvent * this){
 	IAOpenGLResourceDelegate * delegate;
-	foreach (delegate in arrayList(&this->delegates)) {
+	for (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->delegates); i++) {
+		delegate = IAStructArrayList_get(this->delegates, i);
 		IAOpenGLResourceDelegate_createResources(delegate);
 	}
 }
@@ -54,14 +70,19 @@ static inline void IAOpenGLResourceEvent_createResources(const IAOpenGLResourceE
 /// \memberof IAOpenGLResourceDelegate
 static inline void IAOpenGLResourceEvent_destroyResources(const IAOpenGLResourceEvent * this){
 	IAOpenGLResourceDelegate * delegate;
-	foreach (delegate in arrayList(&this->delegates)) {
+	for (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->delegates); i++) {
+		delegate = IAStructArrayList_get(this->delegates, i);
 		IAOpenGLResourceDelegate_destroyResources(delegate);
 	}
 }
 
 static inline void IAOpenGLResourceEvent_deinit(IAOpenGLResourceEvent * this){
-	IAArrayList_deinit(&this->delegates);
+	IA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(this->delegates, "IAOpenGLResourceEvent");
 	IA_decrementInitCountForClass("IAOpenGLResourceEvent");
+}
+
+static inline void IAOpenGLResourceEvent_autorelease(IAOpenGLResourceEvent * this){
+	IA_autorelease(this);
 }
 
 static inline void IAOpenGLResourceEvent_release(IAOpenGLResourceEvent * this){

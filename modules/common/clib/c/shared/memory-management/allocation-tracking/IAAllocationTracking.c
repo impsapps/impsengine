@@ -55,18 +55,14 @@ void IAAllocationTracking_commenceIfNeeded(void){
 void IAAllocationTracking_register(IAAllocationTrackingDelegate * delegate){
     IA_POSIX_ONLY(IARecursiveLock_lock(lock));
     debugAssert(isTrackingEnabled == true);
-    isTrackingEnabled = false;
     IAAllocationTrackingEvent_register(event, delegate);
-    isTrackingEnabled = true;
     IA_POSIX_ONLY(IARecursiveLock_unlock(lock));
 }
 
 void IAAllocationTracking_unregister(IAAllocationTrackingDelegate * delegate){
     IA_POSIX_ONLY(IARecursiveLock_lock(lock));
     debugAssert(isTrackingEnabled == true);
-    isTrackingEnabled = false;
     IAAllocationTrackingEvent_unregister(event, delegate);
-    isTrackingEnabled = true;
     IA_POSIX_ONLY(IARecursiveLock_unlock(lock));
 }
 

@@ -203,7 +203,7 @@ foreach my $key (sort keys %sourceClasses){
         }else{
           printf HEADER "\t%s_%s(this, %s);\n", $className, $function->{name}, $valueParams;
         }
-        print HEADER "\tIAAutoreleasePool_add(this);\n";
+        print HEADER "\tIA_autorelease(this);\n";
         print HEADER "\treturn this;\n";
         print HEADER "}\n\n";
       }
@@ -398,6 +398,12 @@ foreach my $key (sort keys %sourceClasses){
 
 
   if($class->{isObject} || $class->{isDelegate}){
+    printf HEADER $functionPrefix;
+    printf HEADER "void %s_autorelease(%s * %s){\n", $className, $className, $objectVariableName;
+    printf HEADER "\tIA_autorelease(%s);\n", $objectVariableName;
+    print HEADER "}\n";
+    print HEADER "\n";
+    print HEADER "\n";
     printf HEADER $functionPrefix;
     printf HEADER "void %s_release(%s * %s){\n", $className, $className, $objectVariableName;
     printf HEADER "\tIA_release(%s);\n", $objectVariableName;
@@ -650,7 +656,7 @@ foreach my $key (sort keys %sourceClasses){
   close HEADER;
 
   #generate event class
-  if($class->{isEvent} == 1){
+  if($class->{isEvent} == 1 || $class->{isEventWithoutRetain} == 1){
     my $eventClassName = $className;
     $eventClassName =~ s/(Delegate)?$/Event/;
     my $listName = "delegates";
@@ -677,17 +683,16 @@ foreach my $key (sort keys %sourceClasses){
     print HEADER "#ifndef ${eventClassName}_h\n";
     print HEADER "#define ${eventClassName}_h\n";
     print HEADER "\n";
-    print HEADER "#include \"IAArrayList.h\"\n";
-    print HEADER "#include \"IAArrayListIterator.h\"\n";
+    print HEADER "#include \"IAStructArrayList.h\"\n";
     print HEADER "#include \"IALibrary.h\"\n";
     print HEADER "#include \"$className.h\"\n";
     print HEADER "\n";
     print HEADER "typedef struct{\n";
-    print HEADER "\tIAArrayList $listName;\n";
+    print HEADER "\tIAStructArrayList * $listName;\n";
     print HEADER "} $eventClassName;\n";
     print HEADER "\n";
     print HEADER $constructorPrefix . $functionPrefix . "void ${eventClassName}_init($eventClassName * this){\n";
-    print HEADER "\tIAArrayList_init(&this->$listName, 8);\n";
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(this->$listName, 8, \"${eventClassName}\");\n";
     printf HEADER "\tIA_incrementInitCountForClass(\"%s\");\n", $eventClassName;
     print HEADER "}\n";
     print HEADER "\n";
@@ -698,6 +703,12 @@ foreach my $key (sort keys %sourceClasses){
     print HEADER "\treturn this;\n";
     print HEADER "}\n";
     print HEADER "\n";
+    print HEADER $functionPrefix . "$eventClassName * ${eventClassName}_with(){\n";
+    print HEADER "\t${eventClassName} * this = ${eventClassName}_new();\n";
+    print HEADER "\tIA_autorelease(this);\n";
+    print HEADER "\treturn this;\n";
+    print HEADER "}\n";
+    print HEADER "\n";
     printf HEADER $memberOfFormat, $className;
     print HEADER $functionPrefix . "void ${eventClassName}_retain($eventClassName * this){\n";
     print HEADER "\tIA_retain(this);\n";
@@ -705,12 +716,28 @@ foreach my $key (sort keys %sourceClasses){
     print HEADER "\n";
     printf HEADER $memberOfFormat, $className;
     print HEADER $functionPrefix . "void ${eventClassName}_register($eventClassName * this, $className * delegate){\n";
-    print HEADER "\tIAArrayList_add(&this->$listName, delegate);\n";
+    if ($class->{isEvent}) {
+      print HEADER "\tIA_retain(delegate);\n";
+    }
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->$listName, \"${eventClassName}\");\n";
+    print HEADER "\tIAStructArrayList_add(this->$listName, delegate);\n";
     print HEADER "}\n";
     print HEADER "\n";
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . "$className * ${eventClassName}_unregister($eventClassName * this, $className * delegate){\n";
-    print HEADER "\treturn IAArrayList_removeObject(&this->$listName, delegate);\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_unregister($eventClassName * this, $className * delegate){\n";
+    print HEADER "\tdebugOnly(bool isFound = false;)\n";
+    print HEADER "\tfor (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->$listName); i++) {\n";
+    print HEADER "\t\t$className * delegateInList = ($className *) IAStructArrayList_get(this->$listName, i);\n";
+    print HEADER "\t\tif (delegateInList == delegate) {\n";
+    print HEADER "\t\t\tIAStructArrayList_removeAtIndex(this->$listName, i);\n";
+    if ($class->{isEvent}) {
+      print HEADER "\t\t\tIA_release(delegateInList);\n";
+    }
+    print HEADER "\t\t\tdebugOnly(isFound = true);\n";
+    print HEADER "\t\t\tbreak;\n";
+    print HEADER "\t\t}\n";
+    print HEADER "\t}\n";
+    print HEADER "\tdebugAssert(isFound == true && \"Delegate was not found!\");\n";
     print HEADER "}\n";
     print HEADER "\n";
     foreach my $function (@executeableFunctions){
@@ -720,8 +747,12 @@ foreach my $key (sort keys %sourceClasses){
       }
     }
     print HEADER $functionPrefix . "void ${eventClassName}_deinit($eventClassName * this){\n";
-    print HEADER "\tIAArrayList_deinit(&this->$listName);\n";
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(this->$listName, \"${eventClassName}\");\n";
     print HEADER "\tIA_decrementInitCountForClass(\"${eventClassName}\");\n";
+    print HEADER "}\n";
+    print HEADER "\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_autorelease($eventClassName * this){\n";
+    print HEADER "\tIA_autorelease(this);\n";
     print HEADER "}\n";
     print HEADER "\n";
     print HEADER $functionPrefix . "void ${eventClassName}_release($eventClassName * this){\n";

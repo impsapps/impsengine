@@ -56,93 +56,93 @@ sub privateGetSetterFunction{
 	if($self->{isFunctionPointer} == 0){
 		return sprintf "void %s_set%s(%s * %s, %s %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name};
 	}else{
-    return sprintf "void %s_set%sFunction(%s * %s, %s(*%s)(%s))", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name}, $self->{params};
+		return sprintf "void %s_set%sFunction(%s * %s, %s(*%s)(%s))", $className, ucfirst($self->{name}), $className, $variableName, $self->{type}, $self->{name}, $self->{params};
 	}
 }
 
 sub getSetterPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetSetterFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetSetterFunction($className, $variableName) . ";\n";
 }
 
 sub getSetterImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $setter = $self->privateGetSetterFunction($className, $variableName) . "{\n";
-    $setter = $setter . "\t$variableName" . "->" . $self->{name} . " = " . $self->{name} . ";\n}\n\n";
-    return $setter;
+	my $setter = $self->privateGetSetterFunction($className, $variableName) . "{\n";
+	$setter = $setter . "\t$variableName" . "->" . $self->{name} . " = " . $self->{name} . ";\n}\n\n";
+	return $setter;
 }
 
 sub privateGetReferenceOfTyp{
-    my $self = shift;
-    if($self->{type} =~ m/\*$/){
-        return $self->{type} . "*";
-    }else{
-        return $self->{type} . " *";
-    }
+	my $self = shift;
+	if($self->{type} =~ m/\*$/){
+		return $self->{type} . "*";
+	}else{
+		return $self->{type} . " *";
+	}
 }
 
 sub privateGetSetterAsRefFunction{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    if($self->{isFunctionPointer} == 0){
-        return sprintf "void %s_set%s(%s * %s, %s %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->privateGetReferenceOfTyp(), $self->{name};
-    }else{
-        die sprintf "setAsRef: function pointers are not implemented for attribute \"%s\" of type \"%s\" in class \"%s\"!", $self->{name}, $self->{type}, $className;
-    }
+	if($self->{isFunctionPointer} == 0){
+		return sprintf "void %s_set%s(%s * %s, %s %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->privateGetReferenceOfTyp(), $self->{name};
+	}else{
+		die sprintf "setAsRef: function pointers are not implemented for attribute \"%s\" of type \"%s\" in class \"%s\"!", $self->{name}, $self->{type}, $className;
+	}
 }
 
 sub getSetterAsRefPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetSetterAsRefFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetSetterAsRefFunction($className, $variableName) . ";\n";
 }
 
 sub getSetterAsRefImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $setter = $self->privateGetSetterAsRefFunction($className, $variableName) . "{\n";
-    $setter = $setter . "\t$variableName" . "->" . $self->{name} . " = *" . $self->{name} . ";\n}\n\n";
-    return $setter;
+	my $setter = $self->privateGetSetterAsRefFunction($className, $variableName) . "{\n";
+	$setter = $setter . "\t$variableName" . "->" . $self->{name} . " = *" . $self->{name} . ";\n}\n\n";
+	return $setter;
 }
 
 sub privateGetSetterAsCharArrayFunction{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return sprintf "void %s_set%s(%s * %s, const char * %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->{name};
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return sprintf "void %s_set%s(%s * %s, const char * %s)", $className, ucfirst($self->{name}), $className, $variableName, $self->{name};
 }
 
 sub getSetterAsCharArrayPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetSetterAsCharArrayFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetSetterAsCharArrayFunction($className, $variableName) . ";\n";
 }
 
 sub getSetterAsCharArrayImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $setCharArrayCall = "";
-    if($self->{type} =~ m/^IAString\s*\*$/){
-        $setCharArrayCall = sprintf "IAString_set(%s->%s, %s)", $variableName, $self->{name}, $self->{name};
-    }elsif($self->{type} =~ m/^IAString$/){
-        $setCharArrayCall = sprintf "IAString_set(&%s->%s, %s)", $variableName, $self->{name}, $self->{name};
-    }else{
-        die sprintf "Cannot generate setAsCharArray for attribute \"%s\" of type \"%s\" in class \"%s\"! Only working if attribute is of type \"IAString *\" or \"IAString\".", $self->{name}, $self->{type}, $className;
-    }
-    return  $self->privateGetSetterAsCharArrayFunction($className, $variableName) . "{\n" . "\t" . $setCharArrayCall . ";\n}\n\n";
+	my $setCharArrayCall = "";
+	if($self->{type} =~ m/^IAString\s*\*$/){
+		$setCharArrayCall = sprintf "IAString_set(%s->%s, %s)", $variableName, $self->{name}, $self->{name};
+	}elsif($self->{type} =~ m/^IAString$/){
+		$setCharArrayCall = sprintf "IAString_set(&%s->%s, %s)", $variableName, $self->{name}, $self->{name};
+	}else{
+		die sprintf "Cannot generate setAsCharArray for attribute \"%s\" of type \"%s\" in class \"%s\"! Only working if attribute is of type \"IAString *\" or \"IAString\".", $self->{name}, $self->{type}, $className;
+	}
+	return  $self->privateGetSetterAsCharArrayFunction($className, $variableName) . "{\n" . "\t" . $setCharArrayCall . ";\n}\n\n";
 }
 
 sub privateGetGetterFunctionName{
@@ -165,146 +165,146 @@ sub privateGetGetterFunction{
 	my $variableName = shift;
 	my $functionName = $self->privateGetGetterFunctionName();
 
-    if($self->{isFunctionPointer} == 0){
-        return sprintf "%s %s_%s(const %s * %s)", $self->{type}, $className, $functionName, $className, $variableName;
-    }else{
-        return sprintf "%s (* %s_%s(const %s * %s))(%s)", $self->{type}, $className, $functionName, $className, $variableName, $self->{params};
-    }
+	if($self->{isFunctionPointer} == 0){
+		return sprintf "%s %s_%s(const %s * %s)", $self->{type}, $className, $functionName, $className, $variableName;
+	}else{
+		return sprintf "%s (* %s_%s(const %s * %s))(%s)", $self->{type}, $className, $functionName, $className, $variableName, $self->{params};
+	}
 }
 
 sub getGetterPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetGetterFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetGetterFunction($className, $variableName) . ";\n";
 }
 
 sub getGetterImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return  $self->privateGetGetterFunction($className, $variableName) . "{\n" . "\treturn $variableName" . "->" . $self->{name} . ";\n}\n\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return  $self->privateGetGetterFunction($className, $variableName) . "{\n" . "\treturn $variableName" . "->" . $self->{name} . ";\n}\n\n";
 }
 
 sub getGetterAsConstPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return "const " . $self->privateGetGetterFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return "const " . $self->privateGetGetterFunction($className, $variableName) . ";\n";
 }
 
 sub getGetterAsConstImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return "const " . $self->privateGetGetterFunction($className, $variableName) . "{\n" . "\treturn $variableName" . "->" . $self->{name} . ";\n}\n\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return "const " . $self->privateGetGetterFunction($className, $variableName) . "{\n" . "\treturn $variableName" . "->" . $self->{name} . ";\n}\n\n";
 }
 
 sub privateGetGetterAsRefFunction{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    my $classNamePrefix = shift // "";
-    my $functionName = $self->privateGetGetterFunctionName();
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	my $classNamePrefix = shift // "";
+	my $functionName = $self->privateGetGetterFunctionName();
 
-    if($self->{isFunctionPointer} == 0){
-        return sprintf "%s %s_%s(%s%s * %s)", $self->privateGetReferenceOfTyp(), $className, $functionName, $classNamePrefix, $className, $variableName;
-    }else{
-        die sprintf "getAsRef: function pointers are not implemented for attribute \"%s\" of type \"%s\" in class \"%s\"!", $self->{name}, $self->{type}, $className;
-    }
+	if($self->{isFunctionPointer} == 0){
+		return sprintf "%s %s_%s(%s%s * %s)", $self->privateGetReferenceOfTyp(), $className, $functionName, $classNamePrefix, $className, $variableName;
+	}else{
+		die sprintf "getAsRef: function pointers are not implemented for attribute \"%s\" of type \"%s\" in class \"%s\"!", $self->{name}, $self->{type}, $className;
+	}
 }
 
 sub getGetterAsRefPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetGetterAsRefFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetGetterAsRefFunction($className, $variableName) . ";\n";
 }
 
 sub getGetterAsRefImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $dereferenceString = "&";
-    if($self->{params} ne ""){
-        $dereferenceString = "";
-    }
-    return  $self->privateGetGetterAsRefFunction($className, $variableName) . "{\n" . "\treturn $dereferenceString$variableName" . "->" . $self->{name} . ";\n}\n\n";
+	my $dereferenceString = "&";
+	if($self->{params} ne ""){
+		$dereferenceString = "";
+	}
+	return  $self->privateGetGetterAsRefFunction($className, $variableName) . "{\n" . "\treturn $dereferenceString$variableName" . "->" . $self->{name} . ";\n}\n\n";
 }
 
 sub getGetterAsConstRefPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return "const " . $self->privateGetGetterAsRefFunction($className, $variableName, "const ") . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return "const " . $self->privateGetGetterAsRefFunction($className, $variableName, "const ") . ";\n";
 }
 
 sub getGetterAsConstRefImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $dereferenceString = "&";
-    if($self->{params} ne ""){
-        $dereferenceString = "";
-    }
-    return "const " . $self->privateGetGetterAsRefFunction($className, $variableName, "const ") . "{\n" . "\treturn $dereferenceString$variableName" . "->" . $self->{name} . ";\n}\n\n";
+	my $dereferenceString = "&";
+	if($self->{params} ne ""){
+		$dereferenceString = "";
+	}
+	return "const " . $self->privateGetGetterAsRefFunction($className, $variableName, "const ") . "{\n" . "\treturn $dereferenceString$variableName" . "->" . $self->{name} . ";\n}\n\n";
 }
 
 sub privateGetGetterAsCharArrayFunction{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return sprintf "const char * %s_get%s(const %s * %s)", $className, ucfirst($self->{name}), $className, $variableName;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return sprintf "const char * %s_get%s(const %s * %s)", $className, ucfirst($self->{name}), $className, $variableName;
 }
 
 sub getGetterAsCharArrayPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetGetterAsCharArrayFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetGetterAsCharArrayFunction($className, $variableName) . ";\n";
 }
 
 sub getGetterAsCharArrayImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
 
-    my $toCharArrayCall = "";
-    if($self->{type} =~ m/^IAString\s*\*$/){
-        $toCharArrayCall = sprintf "IAString_toCharArray(%s->%s)", $variableName, $self->{name};
-    }elsif($self->{type} =~ m/^IAString$/){
-        $toCharArrayCall = sprintf "IAString_toCharArray(&%s->%s)", $variableName, $self->{name};
-    }else{
-        die sprintf "Cannot generate getAsCharArray for attribute \"%s\" of type \"%s\" in class \"%s\"! Only working if attribute is of type \"IAString *\" or \"IAString\".", $self->{name}, $self->{type}, $className;
-    }
-    return  $self->privateGetGetterAsCharArrayFunction($className, $variableName) . "{\n" . "\treturn " . $toCharArrayCall . ";\n}\n\n";
+	my $toCharArrayCall = "";
+	if($self->{type} =~ m/^IAString\s*\*$/){
+		$toCharArrayCall = sprintf "IAString_toCharArray(%s->%s)", $variableName, $self->{name};
+	}elsif($self->{type} =~ m/^IAString$/){
+		$toCharArrayCall = sprintf "IAString_toCharArray(&%s->%s)", $variableName, $self->{name};
+	}else{
+		die sprintf "Cannot generate getAsCharArray for attribute \"%s\" of type \"%s\" in class \"%s\"! Only working if attribute is of type \"IAString *\" or \"IAString\".", $self->{name}, $self->{type}, $className;
+	}
+	return  $self->privateGetGetterAsCharArrayFunction($className, $variableName) . "{\n" . "\treturn " . $toCharArrayCall . ";\n}\n\n";
 }
 
 sub privateGetRespondsToFunction{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    if($self->{isFunctionPointer} == 0){
-        die "privatGetRespondsToFunction called with non function attribute!";
-    }else{
-        return sprintf "bool %s_respondsTo%s(%s * %s)", $className, ucfirst($self->{name}), $className, $variableName;
-    }
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	if($self->{isFunctionPointer} == 0){
+		die "privatGetRespondsToFunction called with non function attribute!";
+	}else{
+		return sprintf "bool %s_respondsTo%s(%s * %s)", $className, ucfirst($self->{name}), $className, $variableName;
+	}
 }
 
 sub getRespondsToPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetRespondsToFunction($className, $variableName) . ";\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetRespondsToFunction($className, $variableName) . ";\n";
 }
 
 sub getRespondsToImplPrintable{
-    my $self = shift;
-    my $className = shift;
-    my $variableName = shift;
-    return $self->privateGetRespondsToFunction($className, $variableName) . "{\n" . "\tif (${variableName}->$self->{name} != NULL){\n\t\treturn true;\n\t}else{\n\t\treturn false;\n\t}\n}\n\n";
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	return $self->privateGetRespondsToFunction($className, $variableName) . "{\n" . "\tif (${variableName}->$self->{name} != NULL){\n\t\treturn true;\n\t}else{\n\t\treturn false;\n\t}\n}\n\n";
 }
 
 sub isValidExeFunction{
@@ -478,7 +478,7 @@ sub privateGetUnregisterFunction{
 	my $classesRef = shift;
 	my $delegateName = $self->privateGetDelegateName($className, $classesRef);
 	my $delegateVariableName = "delegate";
-	return sprintf "%s * %s_unregisterFrom%s(%s * %s, %s * %s)", $delegateName, $className, ucfirst($self->{name}), $className, $variableName, $delegateName, $delegateVariableName;
+	return sprintf "void %s_unregisterFrom%s(%s * %s, %s * %s)", $className, ucfirst($self->{name}), $className, $variableName, $delegateName, $delegateVariableName;
 }
 
 sub getRegisterPrintable{
@@ -498,12 +498,12 @@ sub getUnregisterPrintable{
 }
 
 sub privateGetOptionalEnreferenceSymbolForRegisterFunctions{
-    my $self = shift;
-    if(index($self->{type}, "*") == -1){
-        return "&";
-    }else{
-        return "";
-    }
+	my $self = shift;
+	if(index($self->{type}, "*") == -1){
+		return "&";
+	}else{
+		return "";
+	}
 }
 
 sub getRegisterImplPrintable{
@@ -516,7 +516,7 @@ sub getRegisterImplPrintable{
 	my $registerImpl = $self->privateGetRegisterFunction($className, $variableName, $classesRef) . "{\n";
 	my $type = $self->{type};
 	$type =~ s/^([\w\d]*).*$/$1/;
-    my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();
+	my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();
 	$registerImpl = $registerImpl . sprintf ("\t%s_register(%s%s->%s, %s)", $type, $optionalEnreferenceSymbol, $variableName, $self->{name}, $delegateVariableName) . ";\n}\n\n";
 	return $registerImpl;
 }
@@ -531,8 +531,8 @@ sub getUnregisterImplPrintable{
 	my $unregisterImpl = $self->privateGetUnregisterFunction($className, $variableName, $classesRef) . "{\n";
 	my $type = $self->{type};
 	$type =~ s/^([\w\d]*).*$/$1/;
-    my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();
-    $unregisterImpl = $unregisterImpl . sprintf ("\treturn %s_unregister(%s%s->%s, %s)", $type, $optionalEnreferenceSymbol, $variableName, $self->{name}, $delegateVariableName) . ";\n}\n\n";
+	my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();
+	$unregisterImpl = $unregisterImpl . sprintf ("\t%s_unregister(%s%s->%s, %s)", $type, $optionalEnreferenceSymbol, $variableName, $self->{name}, $delegateVariableName) . ";\n}\n\n";
 	return $unregisterImpl;
 }
 

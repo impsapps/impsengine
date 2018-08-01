@@ -290,7 +290,8 @@ sub getExeEventImplementationPrintable{
 	my $str =
 	"${header}{\n" .
 	"\t$delegateName * delegate;\n" .
-	"\tforeach (delegate in arrayList(&${variableName}->$listName)) {\n" .
+	"\tfor (size_t i = 0; i < IAStructArrayList_getCurrentSize(${variableName}->$listName); i++) {\n" .
+	"\t\tdelegate = IAStructArrayList_get(${variableName}->$listName, i);\n" .
 	"\t\t${delegateName}_$functionName($params);\n" .
 	"\t}\n" .
 	"}\n\n";
