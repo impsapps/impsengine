@@ -77,6 +77,9 @@ void IAArray_callFunctionOnAllObjects(const IAArray *, void(*function)(void * ob
  */
 void IAArray_deinit(IAArray *);
 
+
+#define IAArray(T) IAArray
+
 #include "IAArrayIterator.h"
 #include "IAArray+Generated.h"
 

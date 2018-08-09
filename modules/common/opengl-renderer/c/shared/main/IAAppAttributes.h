@@ -28,7 +28,7 @@ typedef struct{
     void (*onSurfaceSizeChanged)(void * correspondingObject, IASize surfaceSize);
     
     //@set+get
-    void (*render)(void * correspondingObject);
+    void (*onRender)(void * correspondingObject);
     
     //@set+get
     void (*switchToPauseScreen)(void * correspondingObject);

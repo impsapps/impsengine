@@ -68,13 +68,13 @@ IASize IAAppHandler_getSurfaceSize(){
 }
 
 void IAAppHandler_render(){
-    uint64_t renderTimeStart;
+    uint64_t renderTimeStart = 0;
     if (IAApp_shouldLogRenderingPerformance(&appDelegate)){
         renderTimeStart = IATime_getTimeInMilliseconds();
     }
     IAOpenGL_onRenderBegin();
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    IAApp_render(&appDelegate);
+    IAApp_onRender(&appDelegate);
     IAOpenGL_onRenderEnd();
     if (IAApp_shouldLogRenderingPerformance(&appDelegate)){
         logInfo("Rendering finished. Time needed (in ms): %lld", IATime_getTimeInMilliseconds() - renderTimeStart);
