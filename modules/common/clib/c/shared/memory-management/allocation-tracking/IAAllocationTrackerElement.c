@@ -11,6 +11,7 @@
 
 #define CLASSNAME "IAAllocationTrackerElement"
 
+#ifdef DEBUG
 
 void IAAllocationTrackerElement_make(IAAllocationTrackerElement * this){
     *this = (IAAllocationTrackerElement){
@@ -53,4 +54,5 @@ void IAAllocationTrackerElement_onDeallocated(IAAllocationTrackerElement * this,
     IAAllocationTrackerElement_reduceAllocationSize(this);
 }
 
+#endif
 

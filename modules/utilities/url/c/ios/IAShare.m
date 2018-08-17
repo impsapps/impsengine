@@ -16,8 +16,6 @@ void IAShare_shareBitmap(const char * text, IABitmap * bitmap){
     NSMutableArray *sharingItems = [[NSMutableArray alloc] init];
     UIImage * image = (UIImage *) IABitmap_getBitmapRef(bitmap);
     [sharingItems addObject:image];
-    /*NSString * str = [NSString stringWithUTF8String:text];
-    [sharingItems addObject:str];*/
     UIActivityViewController *activityController = [[UIActivityViewController alloc] initWithActivityItems:sharingItems applicationActivities:nil];
     [sharingItems release];
     UIViewController* viewController = [UIApplication sharedApplication].keyWindow.rootViewController;
@@ -28,4 +26,5 @@ void IAShare_shareBitmap(const char * text, IABitmap * bitmap){
         activityController.popoverPresentationController.permittedArrowDirections = 0;
     }
     [viewController presentViewController:activityController animated:YES completion:nil];
+    [activityController release];
 }

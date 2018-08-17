@@ -6,16 +6,17 @@ use warnings;
 BEGIN {push @INC, '.'}
 
 my $usage =
-"usage: ./GenerateGenericsMain.pl {moduleGroup} {moduleName} {sourceDir} [additionalIncludeDir, ...]\n" .
-"moduleGroup ... the group of the module\n" .
-"moduleName ... the module name\n" .
-"sourceDir ... path to your source\n" .
-"additionalIncludeDir ... dir to include recursively\n";
+"Usage: perl GenerateGenericsMain.pl [option, ...]\n" .
+"\"option\" must be one of the following:\n" .
+"-N{moduleName} ... the name of the module [required]\n" .
+"-D{genDir} ... the dir where to save generated files [required]\n" .
+"-S{sourceDir} ... a source dir [at least one required]\n" .
+"-I{additionalIncludeDir} ... an include dir [optional]\n" .
+"-G{groupName} ... the group name of the module [optional]\n" .
+"Directories will not be searched recursively.\n";
 
-
-my $genericsFolderName = "generics";
-my $genericsHeaderFolderName = "headers";
-my $genericsClassExtension = "Generated";
+my $genericsClassExtension = "+Generated.h";
+my $genericsModuleExtension = "_moduledesc_generated.h";
 
 my $copyright = "//  \n" .
 "//  This file has been automatically generated.\n" .
@@ -64,72 +65,97 @@ use Helper;
 use Parsing;
 use Constants;
 
-if (scalar @ARGV < 3){
-  die "Invalid number of arguments!\n" . "Arguments submitted: @ARGV\n" . $usage;
-}
+my $moduleName = "";
+my $genDir = "";
+my @sourceDirs = ();
+my @additionalIncludeDirs = ();
+my $moduleGroup = "";
 
-
-my $moduleGroup = $ARGV[0];
-my $moduleName = $ARGV[1];
-$moduleName =~ s/\+/_/;
-my $sourceDir = $ARGV[2];
-my $genericsDir = $sourceDir . "/" . $genericsFolderName;
-
-if (-d $sourceDir){
-  if (not -d $genericsDir){
-    mkdir $genericsDir;
-  }
-  if (not -d $genericsDir . "/" . $genericsHeaderFolderName){
-    mkdir $genericsDir . "/" . $genericsHeaderFolderName;
-  }
-}
-
-
-my @includeDirs;
-
-my $currentPosition = 3;
-while ($currentPosition < scalar @ARGV){
-  push(@includeDirs, $ARGV[$currentPosition]);
-  $currentPosition++;
-}
-
-
-my %classes;
-my %sourceClasses;
-
-addClasses($sourceDir, \%classes);
-foreach my $key (keys %classes){
-  $sourceClasses{$key} = $classes{$key};
-}
-
-foreach my $includeDir (@includeDirs){
-  addClasses($includeDir, \%classes);
-}
-
-opendir(HEADERFILESDIR, $genericsDir . "/". $genericsHeaderFolderName);
-my @availableHeaderFiles = readdir(HEADERFILESDIR);
-my %filesToDelete = ();
-foreach my $name (@availableHeaderFiles){
-  if (not $name =~ m/^\./){
-    $filesToDelete{$name} = "";
+foreach my $arg (@ARGV){
+  if ($arg =~ m/-(\w)(.+)/){
+    my $option = $1;
+    my $value = $2;
+    if ($option eq "N") {
+      $moduleName = $value;
+    } elsif ($option eq "D") {
+      $genDir = $value;
+    } elsif ($option eq "S") {
+      push @sourceDirs, $value;
+    } elsif ($option eq "I") {
+      push @additionalIncludeDirs, $value;
+    } elsif ($option eq "G") {
+      $moduleGroup = $value;
+    }
+  }else{
+    die "Invalid arg: \"$arg\".\n" . $usage;
   }
 }
-closedir(HEADERFILESDIR);
 
-foreach my $key (sort keys %sourceClasses){
-  my $class = $sourceClasses{$key};
+die "No module name specified.\n" . $usage if ($moduleName eq "");
+die "No gen dir specified.\n" . $usage if ($genDir eq "");
+die "No source dir specified.\n" . $usage if (scalar @sourceDirs == 0);
+
+
+my %parsedClasses = ();
+my %parsedSourceClasses = ();
+my %additionalHeaderFiles = ();
+
+my @sourceHeaderFiles = ();
+foreach my $sourceDir (@sourceDirs){
+  next if ($sourceDir eq $genDir);
+  push @sourceHeaderFiles, getHeaderFilesForDir($sourceDir);
+}
+
+foreach my $sourceHeaderFile (@sourceHeaderFiles){
+  my $class = parseFile($sourceHeaderFile);
+  if ($class) {
+    my $className = $class->getClassName();
+    $parsedClasses{$className} = $class;
+    $parsedSourceClasses{$className} = $class;
+  }
+}
+
+foreach my $additionalIncludeDir (@additionalIncludeDirs){
+  next if ($additionalIncludeDir eq $genDir);
+  my @headerFiles = getHeaderFilesForDir($additionalIncludeDir);
+  foreach my $headerFile (@headerFiles){
+    my $className = getClassNameWithExtensionForHeaderFile($headerFile);
+    if ($className){
+      $additionalHeaderFiles{$className} = $headerFile;
+    }
+  }
+}
+
+sub getClass{
+  my $className = shift;
+  return undef if ($className =~ m/\+/);
+
+  if (exists $parsedSourceClasses{$className}) {
+    return $parsedSourceClasses{$className};
+  }
+  if (exists $additionalHeaderFiles{$className}) {
+    my $class = parseFile($additionalHeaderFiles{$className});
+    $parsedSourceClasses{$className} = $class;
+    return $class;
+  }
+  return undef;
+}
+
+if (not -d $genDir) {
+  mkdir $genDir;
+}
+
+
+foreach my $key (sort keys %parsedSourceClasses){
+  my $class = $parsedSourceClasses{$key};
   my $className = $class->{className};
-  my $fileName = $className . '+' . $genericsClassExtension . ".h";
-  my $path = $genericsDir . "/" . $genericsHeaderFolderName . "/" . $fileName;
+  my $fileName = $className . $genericsClassExtension;
+  my $path = $genDir . "/" . $fileName;
 
   my $objectVariableName = $class->getObjectVariableName();
 
   if($class->isValidClass() == 0){
     next;
-  }
-
-  if(exists($filesToDelete{$fileName})){
-    delete($filesToDelete{$fileName});
   }
 
   open HEADER, ">", $path or die "unable to open header file $path for writing!";
@@ -342,7 +368,7 @@ foreach my $key (sort keys %sourceClasses){
     }
     my $attribute = $class->{attributes}->{$exe};
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getExeImplPrintable($className, $objectVariableName, \%classes);
+    print HEADER $functionPrefix . $attribute->getExeImplPrintable($className, $objectVariableName, \&getClass);
   }
   if($isCommented == 1){
     print HEADER "\n";
@@ -374,9 +400,9 @@ foreach my $key (sort keys %sourceClasses){
     }
     my $attribute = $class->{attributes}->{$register};
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getRegisterImplPrintable($className, $objectVariableName, \%classes);
+    print HEADER $functionPrefix . $attribute->getRegisterImplPrintable($className, $objectVariableName, \&getClass);
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getUnregisterImplPrintable($className, $objectVariableName, \%classes);
+    print HEADER $functionPrefix . $attribute->getUnregisterImplPrintable($className, $objectVariableName, \&getClass);
   }
   if($isCommented == 1){
     print HEADER "\n";
@@ -423,11 +449,11 @@ foreach my $key (sort keys %sourceClasses){
       last;
     }
 
-    if (not exists ($classes{$superClassName})){
+    if (not getClass($superClassName)){
       die sprintf("Super class %s in class %s not found!", $superClassName, $className);
     }
 
-    my $superClass = $classes{$superClassName};
+    my $superClass = getClass($superClassName);
 
     #inherit setter functions
     $isCommented = 0;
@@ -606,11 +632,11 @@ foreach my $key (sort keys %sourceClasses){
         print HEADER $com;
       }
       my $attribute = $superClass->{attributes}->{$register};
-      my $printedHeaderFunction = $attribute->getRegisterPrintable($superClassName, $objectVariableName, \%classes);
-      (my $header, my $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \%classes);
+      my $printedHeaderFunction = $attribute->getRegisterPrintable($superClassName, $objectVariableName, \&getClass);
+      (my $header, my $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \&getClass);
       print HEADER $functionPrefix . $impl;
-      $printedHeaderFunction = $attribute->getUnregisterPrintable($superClassName, $objectVariableName, \%classes);
-      ($header, $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \%classes);
+      $printedHeaderFunction = $attribute->getUnregisterPrintable($superClassName, $objectVariableName, \&getClass);
+      ($header, $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \&getClass);
       print HEADER $functionPrefix . $impl;
     }
     if($isCommented == 1){
@@ -661,18 +687,14 @@ foreach my $key (sort keys %sourceClasses){
     $eventClassName =~ s/(Delegate)?$/Event/;
     my $listName = "delegates";
     my $eventFileName = $eventClassName . ".h";
-    my $eventPath = $genericsDir . "/" . $genericsHeaderFolderName . "/" . $eventFileName;
-
-    if(exists($filesToDelete{$eventFileName})){
-      delete($filesToDelete{$eventFileName});
-    }
+    my $eventPath = $genDir . "/" . $eventFileName;
 
     my @executeableFunctions = ();
     $class->addExeFunctionsToList($objectVariableName, \@executeableFunctions);
 
     $superClassName = $class->getSuperClassName();
-    while(exists ($classes{$superClassName})){
-      my $superClass = $classes{$superClassName};
+    while(getClass($superClassName)){
+      my $superClass = getClass($superClassName);
       $superClass->addExeFunctionsToList($objectVariableName, \@executeableFunctions, $eventClassName);
       $superClassName = $superClass->getSuperClassName();
     }
@@ -766,12 +788,7 @@ foreach my $key (sort keys %sourceClasses){
   }
 }
 
-foreach my $key (keys %filesToDelete) {
-  my $file = $genericsDir . "/" . $genericsHeaderFolderName . "/" . $key;
-  unlink $file  or die sprintf("Could not unlink $file: $!\n");
-}
-
-my $moduleGenericsPath = $genericsDir . "/" . $genericsHeaderFolderName . "/" . $moduleName . '+' . $genericsClassExtension . ".h";
+my $moduleGenericsPath = $genDir . "/" . $moduleName . $genericsModuleExtension;
 open HEADER, ">", $moduleGenericsPath or die "unable to open header file $moduleGenericsPath for writing!";
 
 print HEADER "/**\n";
@@ -785,17 +802,16 @@ print HEADER " * \\ingroup $moduleGroup\n";
 print HEADER " * \@{\n";
 print HEADER " */\n";
 
-foreach my $key (sort keys %sourceClasses){
-  my $class = $sourceClasses{$key};
+foreach my $key (sort keys %parsedSourceClasses){
+  my $class = $parsedSourceClasses{$key};
   if($class->isValidClass()){
     my $className = $class->{className};
     print HEADER "/// \\class $className\n";
   }
 }
 
-my $headerFiles = getHeaderFilesForDir($sourceDir);
-foreach my $value (@$headerFiles){
-  print HEADER "/// \\file $value\n";
+foreach my $headerFile (@sourceHeaderFiles){
+  print HEADER "/// \\file $headerFile\n";
 }
 
 print HEADER "/**\n";

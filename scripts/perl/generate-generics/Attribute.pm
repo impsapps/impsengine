@@ -358,17 +358,17 @@ sub getExeImplPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
+	my $getClassFn = shift;
 
 	$self->{params} =~ m/^\s*$matchType\s*$matchName/;
 	my $correspondingObjectVariableName = $2;
 	my $correspondingObjectTemp = $correspondingObjectVariableName;
-	my $classTemp = $classesRef->{$className};
+	my $classTemp = $getClassFn->($className);
 	while(not exists ($classTemp->{attributes}->{$correspondingObjectVariableName})){
 		my $superClassName = $classTemp->getSuperClassName();
-		if (exists($classesRef->{$superClassName})){
+		if ($getClassFn->($superClassName)){
 			$correspondingObjectTemp = $classTemp->{superClassName} . "." . $correspondingObjectTemp;
-			$classTemp = $classesRef->{$superClassName};
+			$classTemp = $getClassFn->($superClassName);
 		}else{
 			$correspondingObjectTemp = $correspondingObjectVariableName;
 			last;
@@ -443,7 +443,7 @@ sub getUnlockImplPrintable{
 sub privateGetDelegateName(){
 	my $self = shift;
 	my $className = shift;
-	my $classesRef = shift;
+	my $getClassFn = shift;
 	if(!($self->{type} =~ m/Event(\s*\*)?$/)){
 		die "Cannot generate register functions for event \"" . $self->{name} . "\" in class \"$className\" because the it is not an event!\n";
 	}
@@ -452,9 +452,9 @@ sub privateGetDelegateName(){
 	$delegateName1 =~ s/Event(\s*\*)?$/Delegate/;
 	my $delegateName2 = $self->{type};
 	$delegateName2 =~ s/Event(\s*\*)?$//;
-	if(exists ($classesRef->{$delegateName1})){
+	if($getClassFn->($delegateName1)){
 		return $delegateName1;
-	}elsif(exists ($classesRef->{$delegateName2})){
+	}elsif($getClassFn->($delegateName2)){
 		return $delegateName2;
 	}else{
 		die "Cannot generate register functions for event \"" . $self->{name} . "\" in class \"$className\" because such an event cannot be found!\n";
@@ -465,8 +465,8 @@ sub privateGetRegisterFunction{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	my $delegateName = $self->privateGetDelegateName($className, $classesRef);
+	my $getClassFn = shift;
+	my $delegateName = $self->privateGetDelegateName($className, $getClassFn);
 	my $delegateVariableName = "delegate";
 	return sprintf "void %s_registerFor%s(%s * %s, %s * %s)", $className, ucfirst($self->{name}), $className, $variableName, $delegateName, $delegateVariableName;
 }
@@ -475,8 +475,8 @@ sub privateGetUnregisterFunction{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	my $delegateName = $self->privateGetDelegateName($className, $classesRef);
+	my $getClassFn = shift;
+	my $delegateName = $self->privateGetDelegateName($className, $getClassFn);
 	my $delegateVariableName = "delegate";
 	return sprintf "void %s_unregisterFrom%s(%s * %s, %s * %s)", $className, ucfirst($self->{name}), $className, $variableName, $delegateName, $delegateVariableName;
 }
@@ -485,16 +485,16 @@ sub getRegisterPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	return $self->privateGetRegisterFunction($className, $variableName, $classesRef) . ";\n";
+	my $getClassFn = shift;
+	return $self->privateGetRegisterFunction($className, $variableName, $getClassFn) . ";\n";
 }
 
 sub getUnregisterPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	return $self->privateGetUnregisterFunction($className, $variableName, $classesRef) . ";\n";
+	my $getClassFn = shift;
+	return $self->privateGetUnregisterFunction($className, $variableName, $getClassFn) . ";\n";
 }
 
 sub privateGetOptionalEnreferenceSymbolForRegisterFunctions{
@@ -510,10 +510,10 @@ sub getRegisterImplPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	my $delegateName = $self->privateGetDelegateName($className, $classesRef);
+	my $getClassFn = shift;
+	my $delegateName = $self->privateGetDelegateName($className, $getClassFn);
 	my $delegateVariableName = "delegate";
-	my $registerImpl = $self->privateGetRegisterFunction($className, $variableName, $classesRef) . "{\n";
+	my $registerImpl = $self->privateGetRegisterFunction($className, $variableName, $getClassFn) . "{\n";
 	my $type = $self->{type};
 	$type =~ s/^([\w\d]*).*$/$1/;
 	my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();
@@ -525,10 +525,10 @@ sub getUnregisterImplPrintable{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
-	my $classesRef = shift;
-	my $delegateName = $self->privateGetDelegateName($className, $classesRef);
+	my $getClassFn = shift;
+	my $delegateName = $self->privateGetDelegateName($className, $getClassFn);
 	my $delegateVariableName = "delegate";
-	my $unregisterImpl = $self->privateGetUnregisterFunction($className, $variableName, $classesRef) . "{\n";
+	my $unregisterImpl = $self->privateGetUnregisterFunction($className, $variableName, $getClassFn) . "{\n";
 	my $type = $self->{type};
 	$type =~ s/^([\w\d]*).*$/$1/;
 	my $optionalEnreferenceSymbol = $self->privateGetOptionalEnreferenceSymbolForRegisterFunctions();

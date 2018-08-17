@@ -14,7 +14,6 @@
 
 
 void IAImageAttributes_make(IAImageAttributes * this, IATexture * texture, IATextureSelection textureSelection){
-	IAPoint zeroPoint = IAPoint_make(0.0f, 0.0f);
     *this = (IAImageAttributes){
         .texture = texture,
         .textureSelection = textureSelection

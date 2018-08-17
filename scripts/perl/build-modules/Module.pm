@@ -11,221 +11,132 @@ our @EXPORT = qw(setupModuleWithAbsolutePathToRootDirAndCWD);
 
 use Storable qw(dclone);
 
+use Constants;
+
 
 my $absolutePathToRootDir = "";
 my $cwd = "";
 
 sub setupModuleWithAbsolutePathToRootDirAndCWD{
-    $absolutePathToRootDir = shift;
-    $cwd = shift;
-    if ($absolutePathToRootDir eq "/"){
-        $absolutePathToRootDir = "";
-    }
+  $absolutePathToRootDir = shift;
+  $cwd = shift;
+  if ($absolutePathToRootDir eq "/"){
+    $absolutePathToRootDir = "";
+  }
 }
 
 sub new{
-    my $class = shift;
-    my $name = shift;
-    my $structure = shift;
-    my $path = shift;
-    my $self = dclone($structure);
-    $self->{"name"} = $name;
-    $self->{"path"} = $path;
-    if($self->{"path"} ne ""){
-        $self->{"path"} = $self->{"path"} . "/";
-    }
-    bless $self, $class;
-    
-    if ($self->shouldBuildSharedCSourceFolder()){
-        if (not -d $self->getSharedCSourceFolder()){
-            die "Module with name \"" . $self->{"name"} . "\" has no c shared folder which was specified!";
+  my $class = shift;
+  my $name = shift;
+  my $structure = shift;
+  my $path = shift;
+  my $self = dclone($structure);
+  $self->{"name"} = $name;
+  $self->{"path"} = $path;
+  if($self->{"path"} ne ""){
+    $self->{"path"} = $self->{"path"} . "/";
+  }
+  bless $self, $class;
+
+  if(exists ($self->{"c"})){
+    foreach my $folderName (@{$self->{"c"}}){
+      if (not $folderName eq $sharedSourceFolder) {
+        my $isValid = 0;
+        foreach my $possibleSourceFolderName (@possibleSourceFolderNames){
+          if ($folderName eq $possibleSourceFolderName) {
+            $isValid = 1;
+            last;
+          }
         }
+        die "$folderName is not a valid source folder name for module $name." if ($isValid == 0);
+      }
+      die "$folderName is not available for module $name which was specified." if ($self->hasCSourceFolder($folderName) == 0);
     }
-    
-    if ($self->shouldBuildIOSCSourceFolder()){
-        if (not -d $self->getIOSCSourceFolder()){
-            die "Module with name \"" . $self->{"name"} . "\" has no c ios folder which was specified!";
-        }
-    }
-    
-    if ($self->shouldBuildAndroidCSourceFolder()){
-        if (not -d $self->getAndroidCSourceFolder()){
-            die "Module with name \"" . $self->{"name"} . "\" has no c android folder which was specified!";
-        }
-    }
-    
-    return $self;
+  }
+  return $self;
 }
 
 sub getName{
-    my $self = shift;
-    return $self->{"name"};
+  my $self = shift;
+  return $self->{"name"};
 }
 
-sub getModuleGroup{
-    my $self = shift;
-    $self->{"path"} =~ m/([^\/]*)\/$/;
-    my $moduleGroup = $1;
-    if ($moduleGroup eq ""){
-        $moduleGroup = "nil";
+sub getGroup{
+  my $self = shift;
+  $self->{"path"} =~ m/([^\/]*)\/$/;
+  my $moduleGroup = $1;
+  if ($moduleGroup eq ""){
+    $moduleGroup = "nil";
+  }
+  return $moduleGroup;
+}
+
+sub getDependencies{
+  my $self = shift;
+  if(exists $self->{"dep"}){
+    return @{$self->{"dep"}};
+  }else{
+    return ();
+  }
+}
+
+sub hasCSourceFolder{
+  my $self = shift;
+  my $folderName = shift;
+  if(not exists ($self->{"c"})){
+    return 0;
+  }
+  my $cSourceFolders = $self->{"c"};
+  foreach my $cSourceFolder (@$cSourceFolders){
+    if($cSourceFolder eq $folderName){
+      if (-d $self->getCSourceFolder($folderName)) {
+        return 1;
+      }else{
+        return 0;
+      }
     }
-    return $moduleGroup;
-}
-
-sub hasIncludes{
-	my $self = shift;
-	if(exists ($self->{"include"})){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
-sub getIncludes{
-	my $self = shift;
-	if(exists $self->{"include"}){
-		return @{$self->{"include"}};
-	}else{
-		return ();
-	}
-}
-
-sub privateShouldBuildFolderInCSource{
-    my $self = shift;
-    my $folderName = shift;
-    if(not exists ($self->{"c"})){
-        die "Module with name \"" . $self->{"name"} . "\" has no c source!";
-    }
-    my $cSourceFolders = $self->{"c"};
-    my $hasFolderInCSource = 0;
-    foreach my $cSourceFolder (@$cSourceFolders){
-    	if($cSourceFolder eq $folderName){
-    		$hasFolderInCSource = 1;
-    	}
-    }
-    return $hasFolderInCSource;
-}
-
-sub shouldBuildSharedCSourceFolder{
-    my $self = shift;
-    return $self->privateShouldBuildFolderInCSource("shared");
-}
-
-sub shouldBuildAndroidCSourceFolder{
-    my $self = shift;
-    return $self->privateShouldBuildFolderInCSource("android");
-}
-
-sub shouldBuildIOSCSourceFolder{
-    my $self = shift;
-    return $self->privateShouldBuildFolderInCSource("ios");
-}
-
-sub privateGetShortedPath{
-    my $self = shift;
-    my $shortedPath = $self->{"path"};
-    $shortedPath =~ s/modules\///;
-    return $shortedPath;
+  }
+  return 0;
 }
 
 sub getCSourceFolder{
-    my $self = shift;
-    my $modulePath = $self->{"path"};
-    return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/c";
-}
-
-sub getSharedCSourceFolder{
-    my $self = shift;
-    return $self->getCSourceFolder() . "/shared";
-}
-
-sub getAndroidIncludeFolder{
-    my $self = shift;
-    return $absolutePathToRootDir . "/include/android/" .  $self->privateGetShortedPath() . $self->{"name"};
-}
-
-sub getAndroidCSourceFolder{
-    my $self = shift;
-    return $self->getCSourceFolder() . "/android";
-}
-
-sub getIOSIncludeFolder{
-    my $self = shift;
-    return $absolutePathToRootDir . "/include/ios/" .  $self->privateGetShortedPath() . $self->{"name"};
-}
-
-sub getIOSCSourceFolder{
-    my $self = shift;
-    return $self->getCSourceFolder() . "/ios";
-}
-
-sub getWindowsIncludeFolder{
-    my $self = shift;
-    return $absolutePathToRootDir . "/include/windows/" .  $self->privateGetShortedPath() . $self->{"name"};
-}
-
-sub getWindowsCSourceFolder{
-    my $self = shift;
-    return $self->getCSourceFolder() . "/windows";
+  my $self = shift;
+  my $folderName = shift;
+  my $modulePath = $self->{"path"};
+  return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/c/" . $folderName;
 }
 
 sub getJavaSourceFolder{
-    my $self = shift;
-    my $modulePath = $self->{"path"};
-    return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/java";
+  my $self = shift;
+  my $modulePath = $self->{"path"};
+  return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/java";
 }
 
-sub symlinkAndroidHeadersForModuleIfNeeded{
-    my $self = shift;
-    my $outputDir = $self->getAndroidIncludeFolder();
-    my $sharedSourceFolder = $self->getSharedCSourceFolder();
-    my $androidSourceFolder = $self->getAndroidCSourceFolder();
-	$self->privateSymlinkHeaders($outputDir, 0, $sharedSourceFolder, $androidSourceFolder);
+sub getExternalIncludeDirs{
+  my $self = shift;
+  if (exists $self->{"external-include-dirs"}) {
+    return @{$self->{"external-include-dirs"}};
+  } else {
+    return ();
+  }
 }
 
-sub symlinkIOSHeadersForModuleIfNeeded{
-    my $self = shift;
-    my $outputDir = $self->getIOSIncludeFolder();
-    my $sharedSourceFolder = $self->getSharedCSourceFolder();
-    my $iOSSourceFolder = $self->getIOSCSourceFolder();
-	$self->privateSymlinkHeaders($outputDir, 1, $sharedSourceFolder, $iOSSourceFolder);
+sub getExternalSrcFiles{
+  my $self = shift;
+  if (exists $self->{"external-src-files"}) {
+    return @{$self->{"external-src-files"}};
+  } else {
+    return ();
+  }
 }
 
-sub symlinkWindowsHeadersForModuleIfNeeded{
-    my $self = shift;
-    my $outputDir = $self->getWindowsIncludeFolder();
-    my $sharedSourceFolder = $self->getSharedCSourceFolder();
-    my $windowsSourceFolder = $self->getWindowsCSourceFolder();
-	$self->privateSymlinkHeaders($outputDir, 0, $sharedSourceFolder, $windowsSourceFolder);
-}
-
-sub privateSymlinkHeaders{
-	my $self = shift;
-	my $outputDir = shift;
-    my $useSymlinks = shift;
-	my @headerFolders = @_;
-	
-	if($self->{"symlink-headers"}){
-        if($self->{"symlink-headers"} eq "false"){
-            return;
-        }
-    }
-    my @args = ($outputDir, $useSymlinks);
-	foreach my $headerFolder (@headerFolders){
-		if (-d $headerFolder ){
-			push @args, $headerFolder ;
-		}
-	}
-	if(@args > 1){
-		privateExecuteCreateSymlinksForHeaders(@args);
-	}
-}
-
-sub privateExecuteCreateSymlinksForHeaders{
-    my @arguments = @_;
-    chdir "../create-symlinks-for-headers";
-    system("perl CreateSymlinksForHeaders.pl @arguments") == 0 or die "Error in create-symlinks-for-headers: $?";
-    chdir $cwd;
+sub shouldGenerateGenerics{
+  my $self = shift;
+  if ($self->{"no-generics"}) {
+    return 0;
+  } else {
+    return 1;
+  }
 }
 
 1;

@@ -1,1 +1,0 @@
-../../../../modules/common/multi-touch/c/shared/IATouchHandler.h

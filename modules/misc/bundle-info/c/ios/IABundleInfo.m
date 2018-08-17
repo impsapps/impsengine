@@ -9,6 +9,7 @@
 #include "IALibrary.h"
 #include "IABundleInfo.h"
 #include "IACharArray.h"
+#undef in
 #import <Foundation/Foundation.h>
 
 #define CLASSNAME "IABundleInfo"

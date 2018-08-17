@@ -164,7 +164,7 @@ void IALibrary_free(void * object, const char * className){
 
 #else
 
-void * IALibrary_new(size_t size, void (*deinit)(void * object), const char * className){
+void * IALibrary_new(size_t size, void (*deinit)(void * object)){
     IAObjectInformation * information = malloc(size + sizeof(IAObjectInformation));
     while (information == NULL) {
         IALibrary_onMemoryWarning();
@@ -178,17 +178,17 @@ void * IALibrary_new(size_t size, void (*deinit)(void * object), const char * cl
     return object;
 }
 
-void IALibrary_retain(void * object, const char * className){
+void IALibrary_retain(void * object){
     IAObjectInformation * information = object;
     information -= 1;
     information->allocationCount++;
 }
 
 void IALibrary_autorelease(void * object){
-    IAAutoreleasePool_add(object, IALibrary_release);
+    IAAutoreleasePool_add(object);
 }
 
-void IALibrary_release(void * object, const char * className){
+void IALibrary_release(void * object){
     IAObjectInformation * information = object;
     information -= 1;
     information->allocationCount--;

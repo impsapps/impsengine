@@ -220,7 +220,7 @@ void IAFontAtlas_addGlyphsFromFnt(IAFontAtlas * this, const char * fntResource, 
 int IAFontAtlas_parseNextPartToInt(IAArrayListIterator * iterator){
     IAString * string = IAArrayListIterator_getNextObject(iterator);
     size_t index;
-    bool wasIndexFound = IAString_getIndexOfFirstPatternMatch(string, "=", &index);
+    debugOnly(bool wasIndexFound =) IAString_getIndexOfFirstPatternMatch(string, "=", &index);
     debugAssert(wasIndexFound);
     IAString_substringWithStartingIndexTillEnd(string, index + 1);
     return IAString_toInt(string);
@@ -229,7 +229,7 @@ int IAFontAtlas_parseNextPartToInt(IAArrayListIterator * iterator){
 IAString * IAFontAtlas_parseNextPartToString(IAArrayListIterator * iterator){
     IAString * string = IAArrayListIterator_getNextObject(iterator);
     size_t index;
-    bool wasIndexFound = IAString_getIndexOfFirstPatternMatch(string, "=", &index);
+    debugOnly(bool wasIndexFound =) IAString_getIndexOfFirstPatternMatch(string, "=", &index);
     debugAssert(wasIndexFound);
     IAString_substringWithStartingIndexTillEnd(string, index + 2);
     IAString_substring(string, IAString_getLength(string) - 1);

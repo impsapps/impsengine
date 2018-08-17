@@ -51,6 +51,11 @@ sub isValidClass{
 	}
 }
 
+sub getClassName{
+	my $self = shift;
+	return $self->{className};
+}
+
 sub getSuperClassName{
 	my $self = shift;
 	return $self->{superClassName};
@@ -136,6 +141,9 @@ sub hasAnnotations{
 		return 1;
 	}
 	if($class->{isEvent}){
+		return 1;
+	}
+	if($class->{isEventWithoutRetain}){
 		return 1;
 	}
 	return 0;

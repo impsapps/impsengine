@@ -1,1 +1,0 @@
-../../../../modules/common/opengl/c/shared/graphics/texture/IABitmapManagerSingleton.h

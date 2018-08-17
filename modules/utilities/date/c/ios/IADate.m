@@ -20,6 +20,7 @@ void IADate_nativeMakeWithCurrentDate(IADate * this){
     NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-SS"];//@"yyyy-MM-dd'T'HH:mm:SS.SSS'Z'"
     NSString* dateTime = [dateFormatter stringFromDate:date];
+    [dateFormatter release];
     IADate_nativeMakeDateWithNSString(this, dateTime);
 }
 
@@ -29,6 +30,7 @@ void IADate_nativeMakeWithCurrentUTCDate(IADate * this){
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
     [dateFormatter setDateFormat:@"yyyy-MM-dd-HH-mm-SS"];
     NSString* dateTime = [dateFormatter stringFromDate:date];
+    [dateFormatter release];
     IADate_nativeMakeDateWithNSString(this, dateTime);
 }
 

@@ -60,7 +60,6 @@
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
     IAInterfaceOrientationMask mask = IAAppEntryPoint_getInterfaceOrientationMask();
     return IAInterfaceOrientationMask_convert(mask);
-    
 }
 
 - (void)viewDidLoad{
@@ -228,6 +227,7 @@
     if ([EAGLContext currentContext] == self.context) {
         [EAGLContext setCurrentContext:nil];
     }
+    [self.context release];
     [super dealloc];
 }
 

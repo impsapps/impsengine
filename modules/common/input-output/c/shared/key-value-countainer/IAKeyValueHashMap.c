@@ -101,7 +101,7 @@ bool IAKeyValueHashMap_load(const IAHashMap * elements, const IAString * data){
         return false;
     }else{
         size_t hashTagPosition;
-        bool wasHashTagPositionFound = IAString_getIndexOfFirstPatternMatch(data, "#", &hashTagPosition);
+        debugOnly(bool wasHashTagPositionFound =) IAString_getIndexOfFirstPatternMatch(data, "#", &hashTagPosition);
         debugAssert(wasHashTagPositionFound);
         const char * dataPosition = IAString_toCharArray(data);
         dataPosition += hashTagPosition + 1;

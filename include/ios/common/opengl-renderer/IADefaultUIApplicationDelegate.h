@@ -1,1 +1,0 @@
-../../../../modules/common/opengl-renderer/c/ios/IADefaultUIApplicationDelegate.h

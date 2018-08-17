@@ -110,7 +110,7 @@ void XMLCALL IAImageContext_startElement(IAImageContext * this, const char * nam
 
         IAString * imageName = IAHashMap_get(attributes, "n");
         size_t index;
-        bool isFound = IAString_getIndexOfLastPatternMatch(imageName, ".", &index);
+        debugOnly(bool isFound =) IAString_getIndexOfLastPatternMatch(imageName, ".", &index);
         debugAssert(isFound == true && "Name of bitmap in xml file not valid!");
         IAString_substring(imageName, index);
         if (IAString_getIndexOfLastPatternMatch(imageName, "/", &index)) {
