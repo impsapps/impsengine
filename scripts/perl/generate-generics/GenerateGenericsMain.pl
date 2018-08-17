@@ -57,6 +57,8 @@ BEGIN {
   push @INC, $absPath
 }
 
+use File::Path qw(make_path);
+
 use Class;
 use Attribute;
 use Expressions;
@@ -142,7 +144,7 @@ sub getClass{
 }
 
 if (not -d $genDir) {
-  mkdir $genDir;
+  make_path $genDir or die "Cannot create dir \"$genDir\".";
 }
 
 
