@@ -14,9 +14,7 @@ xcuserdata/
 # Generated
 *+Generated.h
 *_generated.h
-include/android/generated
-include/ios/generated
-include/windows/generated
+include/
 
 #built application files
 *.apk
