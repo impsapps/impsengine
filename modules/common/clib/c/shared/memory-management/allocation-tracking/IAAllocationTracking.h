@@ -13,7 +13,6 @@
 
 #ifdef DEBUG
 
-#include <pthread.h>
 #include "IAAllocationTrackingDelegate.h"
 
 void IAAllocationTracking_commenceIfNeeded(void);

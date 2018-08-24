@@ -5,12 +5,16 @@ package CreateCMakeLists;
 use strict;
 use warnings;
 
-BEGIN {push @INC, '.'}
+BEGIN {push @INC, 'scripts/perl/build-modules'}
+
+our $pathToRootDir = ".";
 
 use Cwd;
 use BuildModuleHelper;
 use Module;
 use Constants;
+
+BuildModuleHelper::initialize(".");
 
 
 sub addSrcHeaderAndCFiles {
@@ -92,7 +96,6 @@ sub getLibName{
   return $libName;
 }
 
-
 my $cmakeFile = getAbsolutePathToRootDir() . '/CMakeLists.txt';
 
 $, = " ";
@@ -108,15 +111,22 @@ print $fh "if(NOT DEFINED IA_PLATFORM)\n";
 print $fh "\tmessage(FATAL_ERROR \"IA_PLATFORM is not set. It must be one of \\\"android\\\", \\\"ios\\\" or \\\"windows\\\".\")\n";
 print $fh "endif()\n";
 print $fh "\n";
-print $fh "set(CMAKE_C_FLAGS_DEBUG \"\${CMAKE_C_FLAGS_DEBUG} -DDEBUG\")\n";
-print $fh "set(CMAKE_CXX_FLAGS_DEBUG \"\${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG\")\n";
+print $fh "set(CMAKE_C_FLAGS_DEBUG \"\${CMAKE_C_FLAGS_DEBUG} -DDEBUG -UNDEBUG\")\n";
+print $fh "set(CMAKE_CXX_FLAGS_DEBUG \"\${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -UNDEBUG\")\n";
 print $fh "list(APPEND CMAKE_MODULE_PATH \${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake)\n";
 print $fh "\n";
 print $fh "add_definitions(-DHAVE_MEMMOVE)\n";
 print $fh "find_package(HelperFunctions)\n";
 print $fh "\n";
 print $fh "\n";
+print $fh "if (\${IA_PLATFORM} STREQUAL windows)\n";
+print $fh "\texecute_process(COMMAND nuget install glew.v140 -OutputDirectory \${CMAKE_BINARY_DIR}\\\\packages -Version 1.12.0)\n";
+print $fh "\tadd_library(GLEW_CUSTOM INTERFACE IMPORTED GLOBAL)\n";
+print $fh "\tset_property(TARGET GLEW_CUSTOM PROPERTY INTERFACE_LINK_LIBRARIES \"\${CMAKE_BINARY_DIR}/packages/glew.v140.1.12.0/build/native/glew.v140.targets\")\n";
+print $fh "endif()\n";
 print $fh "\n";
+
+my $cwd = getcwd();
 
 my @groupNames = getAllModuleGroupNamesInValidOrder();
 foreach my $groupName (@groupNames){
@@ -165,6 +175,9 @@ foreach my $groupName (@groupNames){
         }
         print $fh "endif()\n";
       }
+			my $relativeCSourceFoulder = $module->getCSourceFolder();
+			$relativeCSourceFoulder =~ s/^$cwd//;
+			printf $fh "\tsource_group(TREE \${CMAKE_CURRENT_SOURCE_DIR}/%s FILES \${ia_source_h_files} \${ia_source_c_files})\n", $relativeCSourceFoulder;
     }
 
     my @externalIncludeDirs = $module->getExternalIncludeDirs();
@@ -183,18 +196,30 @@ foreach my $groupName (@groupNames){
     print $fh "if (ia_source_c_files)\n";
     print $fh "\tadd_library($libName STATIC \${ia_source_h_files} \${ia_source_c_files})\n";
     print $fh "\ttarget_include_directories($libName PUBLIC \${ia_include_dirs})\n";
-    print $fh "\tif(\${IA_PLATFORM} STREQUAL android)\n";
-    print $fh "\t\ttarget_link_libraries($libName android log GLESv2 EGL)\n";
-    print $fh "\tendif()\n";
+	
 
     my @dependencies = $module->getDependencies();
-    if (scalar @dependencies > 0){
-      foreach my $i (0 .. $#dependencies){
-        $dependencies[$i] = getLibName($dependencies[$i]);
-      }
+		if (scalar @dependencies > 0){
+			foreach my $i (0 .. $#dependencies){
+				$dependencies[$i] = getLibName($dependencies[$i]);
+			}
       print $fh "\ttarget_link_libraries($libName @dependencies)\n";
     }
-
+	
+		my @androidDependencies = $module->getDependencies("android");
+		if (scalar @androidDependencies > 0){
+			print $fh "\tif(\${IA_PLATFORM} STREQUAL android)\n";
+			print $fh "\t\ttarget_link_libraries($libName @androidDependencies)\n";
+			print $fh "\tendif()\n";
+		}
+		
+		my @windowsDependencies = $module->getDependencies("windows");
+		if (scalar @windowsDependencies > 0){
+			print $fh "\tif(\${IA_PLATFORM} STREQUAL windows)\n";
+			print $fh "\t\ttarget_link_libraries($libName @windowsDependencies)\n";
+			print $fh "\tendif()\n";
+		}
+		
     if ($module->shouldGenerateGenerics()) {
       print $fh "\ttarget_generate_generics($libName $genDir)\n";
     }

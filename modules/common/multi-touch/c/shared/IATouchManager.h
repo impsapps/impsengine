@@ -26,6 +26,4 @@ void IATouchManager_onTouchMoved(size_t lengthOfTouchHandlers, IATouchHandler * 
 void IATouchManager_onTouchEnded(size_t lengthOfTouchHandlers, IATouchHandler * touchHandlers[lengthOfTouchHandlers]);
 void IATouchManager_onTouchCanceled();
 
-void IATouchManager_terminate();
-
 #endif

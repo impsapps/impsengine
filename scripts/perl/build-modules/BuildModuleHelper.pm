@@ -14,13 +14,6 @@ use Cwd;
 use Module;
 use File::Spec;
 
-my $cwd = getcwd();
-
-my $pathToRootDir = "../../..";
-
-chdir $pathToRootDir;
-my $absolutePathToRootDir = getcwd();
-chdir $cwd;
 
 my $engineStructure = {
   "modules" => {
@@ -42,7 +35,8 @@ my $engineStructure = {
         "dep" => ["clib"]
       },
       "#clib" => {
-        "c" => ["android", "ios", "shared", "windows"]
+        "c" => ["android", "ios", "shared", "windows"],
+		"android-dep" => ["android", "log"]
       },
       "#concurrentlib" => {
         "c" => ["android", "shared"],
@@ -66,12 +60,14 @@ my $engineStructure = {
         "c" => ["shared"]
       },
       "#multi-touch" => {
-        "c" => ["android", "shared"],
+        "c" => ["android", "shared", "windows"],
         "dep" => ["opengl", "clib"]
       },
       "#opengl" => {
         "c" => ["android", "ios", "shared", "windows"],
-        "dep" => ["clib", "expat", "input-output", "mathlib"]
+        "dep" => ["clib", "expat", "input-output", "mathlib"], 
+		"android-dep" => ["GLESv2", "EGL"],
+		"windows-dep" => ["GLEW_CUSTOM"]
       },
       "#opengl-renderer" => {
         "c" => ["android", "ios", "shared"],
@@ -99,10 +95,21 @@ my $engineStructure = {
   }
 };
 
-
-setupModuleWithAbsolutePathToRootDirAndCWD($absolutePathToRootDir, $cwd);
-
 my $modules = {};
+my $absolutePathToRootDir = "";
+
+sub initialize{
+	my $pathToRootDir = shift or die "param \"\$pathToRootDir\" expected";
+	
+	my $cwd = getcwd();
+
+	chdir $pathToRootDir;
+	$absolutePathToRootDir = getcwd();
+	chdir $cwd;
+	
+	setupModuleWithAbsolutePathToRootDirAndCWD($absolutePathToRootDir, $cwd);
+	setupModulesRecursively($engineStructure, "");
+}
 
 sub setupModulesRecursively{
   my $structure = shift;
@@ -124,8 +131,6 @@ sub setupModulesRecursively{
     }
   }
 }
-
-setupModulesRecursively($engineStructure, "");
 
 sub getAbsolutePathToRootDir{
   return $absolutePathToRootDir;
@@ -159,13 +164,6 @@ sub getAllModuleNamesForGroupNameInValidOrder{
   } else {
     return ();
   }
-}
-
-sub privateExecuteGenerateGenerics{
-  my @arguments = @_;
-  chdir "../generate-generics";
-  system("perl GenerateGenericsMain.pl @arguments") == 0 or die "Error in generate-generics: $?";
-  chdir $cwd;
 }
 
 1;

@@ -73,11 +73,17 @@ sub getGroup{
 
 sub getDependencies{
   my $self = shift;
-  if(exists $self->{"dep"}){
-    return @{$self->{"dep"}};
-  }else{
-    return ();
+  my $platform = shift // "";
+  if ($platform eq ""){
+    if(exists $self->{"dep"}){
+	  return @{$self->{"dep"}};
+    }
+  } else {
+	if(exists $self->{$platform . "-dep"}){
+	  return @{$self->{$platform . "-dep"}};
+    }
   }
+  return ();
 }
 
 sub hasCSourceFolder{
@@ -101,7 +107,7 @@ sub hasCSourceFolder{
 
 sub getCSourceFolder{
   my $self = shift;
-  my $folderName = shift;
+  my $folderName = shift // "";
   my $modulePath = $self->{"path"};
   return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/c/" . $folderName;
 }

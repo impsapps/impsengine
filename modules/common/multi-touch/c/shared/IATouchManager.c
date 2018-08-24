@@ -9,6 +9,7 @@
 #include "IALibrary.h"
 #include "IATouchManager.h"
 #include "IAArrayListIterator.h"
+#include "IAOperatingSystem.h"
 
 #define CLASSNAME "IATouchManager"
 
@@ -138,16 +139,4 @@ void IATouchManager_executeTouchEvent(void (*executeMethod)(IATouchDelegate * to
     }
     IAArrayList_callFunctionOnAllObjects(touchesToExcecuteTemp, (void (*)(void *)) executeMethod);
 }
-
-void IATouchManager_terminate(){
-    IAArrayList_release(registeredTouchDelegates);
-    IAArrayList_callFunctionOnAllObjects(touchHandlers, (void (*)(void *)) IATouchHandler_release);
-    IAArrayList_release(touchHandlers);
-    IAArrayList_callFunctionOnAllObjects(unusedTouchHandlers, (void (*)(void *)) IATouchHandler_release);
-    IAArrayList_release(unusedTouchHandlers);
-    if (touchesToExcecuteTemp != NULL) {
-        IAArrayList_release(touchesToExcecuteTemp);
-    }
-}
-
 

@@ -17,5 +17,6 @@ static const IARect IAViewPort_defaultRectForContent = {
 };
 
 IASize IAViewPort_getSize();
+void IAViewPort_modifySize(IASize newSize);
 
 #endif

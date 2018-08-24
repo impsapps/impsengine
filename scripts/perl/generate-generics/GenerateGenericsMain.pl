@@ -240,7 +240,7 @@ foreach my $key (sort keys %parsedSourceClasses){
 
   if ($class->{isObject} || $class->{isDelegate}) {
     printf HEADER $functionPrefix;
-    printf HEADER "void %s_retain($className * this){\n", $className, $className;
+    printf HEADER "void %s_retain(%s * this){\n", $className, $className;
     printf HEADER "\tIA_retain(this);\n";
     print HEADER "}\n\n";
   }

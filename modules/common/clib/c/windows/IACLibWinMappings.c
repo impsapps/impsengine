@@ -15,9 +15,9 @@ void IACLibWinMappings_setMappings(IACLibWinMappings mappingsTemp) {
 	mappings = mappingsTemp;
 }
 
-void IATime_commence(void) {
-	if (mappings.IATime_commence) {
-		mappings.IATime_commence();
+void IATime_commenceIfNeeded(void) {
+	if (mappings.IATime_commenceIfNeeded) {
+		mappings.IATime_commenceIfNeeded();
 	}
 }
 
