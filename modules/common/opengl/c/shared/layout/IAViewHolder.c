@@ -18,6 +18,7 @@ void IAViewHolder_finishCurrentSwitch(IAViewHolder * this, uint64_t currentTime)
 
 void IAViewHolder_make(IAViewHolder * this){
     *this = (IAViewHolder){
+		.base = IAObject_make(this)
     };
 }
 
@@ -28,11 +29,12 @@ IAView * IAViewHolder_getLatestView(const IAViewHolder * this){
     return this->currentView;
 }
 
-void IAViewHolder_start(IAViewHolder * this, IAView * view, uint64_t currentTime){
+void IAViewHolder_start(IAViewHolder * this, IAView * view, uint64_t currentTime, const void * viewArgs){
     debugAssert(this->isInsideAnyFunction == false && "Cannot call IAViewHolder_start inside a view delegate call!");
     debugAssert(this->currentView == NULL && "Error in IAViewHolder_start: View holder already started!");
     this->isInsideAnyFunction = true;
     this->currentView = view;
+	IAView_setArgs(this->currentView, viewArgs);
     IAView_onFadeInStart(this->currentView, currentTime, 0);
     IAView_onFadeInFinished(this->currentView, currentTime, 0, currentTime);
     this->isInsideAnyFunction = false;

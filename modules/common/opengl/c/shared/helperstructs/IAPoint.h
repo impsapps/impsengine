@@ -15,7 +15,7 @@ typedef struct{
 } IAPoint;
 
 static const IAPoint IAPoint_ZERO = {.x = 0.0f, .y = 0.0f};
-static const IAPoint IAPoint_ONE = {.x = 1.0f,.y = 1.0f};
+static const IAPoint IAPoint_ONE = {.x = 1.0f, .y = 1.0f};
 
 IAPoint IAPoint_make(float x, float y);
 
