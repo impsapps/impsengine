@@ -33,7 +33,7 @@ void IAButton_drawFunction(const IAButton * this);
 
 
 void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
-    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAButton_drawFunction, (void (*)(IADrawableRect *, IARect)) IAButton_setRectFunction);
+    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAButton_drawFunction, (void (*)(IADrawableRect *, IARect)) IAButton_setRectFunction, NULL);
     IAImage * image = IAButtonAttributes_getButtonImageNormal(attributes);
     if (image != NULL){
         this->buttonImageNormal = IAImage_newCopy(image);

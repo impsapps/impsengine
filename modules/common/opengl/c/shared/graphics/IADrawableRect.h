@@ -23,11 +23,12 @@ struct IADrawableRect{
     //@extend
     IADrawable drawable;
     void (*setRect)(IADrawableRect *, IARect);
+	IASize(*getMinSizeNeededNullable)(IADrawableRect *);
     IARect rect;
 };
 
 
-void IADrawableRect_make(IADrawableRect *, void (*drawFunction)(const IADrawable*), void (*setRect)(IADrawableRect *, IARect));
+void IADrawableRect_make(IADrawableRect *, void (*drawFunction)(const IADrawable*), void (*setRect)(IADrawableRect *, IARect), IASize(*getMinSizeNeededNullable)(IADrawableRect *));
 void IADrawableRect_makeCopy(IADrawableRect *, const IADrawableRect * drawableRectToCopy);
 
 void IADrawableRect_setLeftTopPoint(IADrawableRect *, IAPoint point);
@@ -42,6 +43,8 @@ float IADrawableRect_getWidth(const IADrawableRect *);
 float IADrawableRect_getHeight(const IADrawableRect *);
 IASize IADrawableRect_getSize(const IADrawableRect *);
 IARect IADrawableRect_getRect(const IADrawableRect *);
+
+IASize IADrawableRect_getMinSizeNeeded(const IADrawableRect *);
 
 #include "IADrawableRect+Generated.h"
 

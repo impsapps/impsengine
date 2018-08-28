@@ -9,5 +9,5 @@
 
 
 void <%= ClassName %>_make(<%= ClassName %> * this){
-  this->base = IAObject_make(this);
+	this->base = IAObject_make(this);
 }

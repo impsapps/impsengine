@@ -60,6 +60,7 @@ BEGIN {
 use File::Path qw(make_path);
 
 use Class;
+use ClassProvider;
 use Attribute;
 use Expressions;
 use Function;
@@ -98,67 +99,40 @@ die "No gen dir specified.\n" . $usage if ($genDir eq "");
 die "No source dir specified.\n" . $usage if (scalar @sourceDirs == 0);
 
 
-my %parsedClasses = ();
-my %parsedSourceClasses = ();
-my %additionalHeaderFiles = ();
+my $classProvider = new ClassProvider();
 
 my @sourceHeaderFiles = ();
+my @sourceClassNames = ();
 foreach my $sourceDir (@sourceDirs){
   next if ($sourceDir eq $genDir);
   push @sourceHeaderFiles, getHeaderFilesForDir($sourceDir);
+  $classProvider->addHeaderFileDir($sourceDir);
 }
 
 foreach my $sourceHeaderFile (@sourceHeaderFiles){
-  my $class = parseFile($sourceHeaderFile);
-  if ($class) {
-    my $className = $class->getClassName();
-    $parsedClasses{$className} = $class;
-    $parsedSourceClasses{$className} = $class;
-  }
+  my $className = getClassNameWithExtensionForHeaderFile($sourceHeaderFile);
+  push @sourceClassNames, $className;
 }
 
 foreach my $additionalIncludeDir (@additionalIncludeDirs){
   next if ($additionalIncludeDir eq $genDir);
-  my @headerFiles = getHeaderFilesForDir($additionalIncludeDir);
-  foreach my $headerFile (@headerFiles){
-    my $className = getClassNameWithExtensionForHeaderFile($headerFile);
-    if ($className){
-      $additionalHeaderFiles{$className} = $headerFile;
-    }
-  }
-}
-
-sub getClass{
-  my $className = shift;
-  return undef if ($className =~ m/\+/);
-
-  if (exists $parsedSourceClasses{$className}) {
-    return $parsedSourceClasses{$className};
-  }
-  if (exists $additionalHeaderFiles{$className}) {
-    my $class = parseFile($additionalHeaderFiles{$className});
-    $parsedSourceClasses{$className} = $class;
-    return $class;
-  }
-  return undef;
+  $classProvider->addHeaderFileDir($additionalIncludeDir);
 }
 
 if (not -d $genDir) {
   make_path $genDir or die "Cannot create dir \"$genDir\".";
 }
 
-
-foreach my $key (sort keys %parsedSourceClasses){
-  my $class = $parsedSourceClasses{$key};
-  my $className = $class->{className};
+foreach my $className (sort @sourceClassNames){
+  my $class = $classProvider->getClass($className);
   my $fileName = $className . $genericsClassExtension;
   my $path = $genDir . "/" . $fileName;
 
-  my $objectVariableName = $class->getObjectVariableName();
-
-  if($class->isValidClass() == 0){
+  if((not $class) || $class->isValidClass() == 0){
     next;
   }
+
+  my $objectVariableName = $class->getObjectVariableName();
 
   open HEADER, ">", $path or die "unable to open header file $path for writing!";
   print HEADER $copyright;
@@ -370,7 +344,7 @@ foreach my $key (sort keys %parsedSourceClasses){
     }
     my $attribute = $class->{attributes}->{$exe};
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getExeImplPrintable($className, $objectVariableName, \&getClass);
+    print HEADER $functionPrefix . $attribute->getExeImplPrintable($className, $objectVariableName, $classProvider);
   }
   if($isCommented == 1){
     print HEADER "\n";
@@ -402,9 +376,9 @@ foreach my $key (sort keys %parsedSourceClasses){
     }
     my $attribute = $class->{attributes}->{$register};
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getRegisterImplPrintable($className, $objectVariableName, \&getClass);
+    print HEADER $functionPrefix . $attribute->getRegisterImplPrintable($className, $objectVariableName, $classProvider);
     printf HEADER $memberOfFormat, $className;
-    print HEADER $functionPrefix . $attribute->getUnregisterImplPrintable($className, $objectVariableName, \&getClass);
+    print HEADER $functionPrefix . $attribute->getUnregisterImplPrintable($className, $objectVariableName, $classProvider);
   }
   if($isCommented == 1){
     print HEADER "\n";
@@ -451,11 +425,11 @@ foreach my $key (sort keys %parsedSourceClasses){
       last;
     }
 
-    if (not getClass($superClassName)){
+    if (not $classProvider->getClass($superClassName)){
       die sprintf("Super class %s in class %s not found!", $superClassName, $className);
     }
 
-    my $superClass = getClass($superClassName);
+    my $superClass = $classProvider->getClass($superClassName);
 
     #inherit setter functions
     $isCommented = 0;
@@ -634,11 +608,11 @@ foreach my $key (sort keys %parsedSourceClasses){
         print HEADER $com;
       }
       my $attribute = $superClass->{attributes}->{$register};
-      my $printedHeaderFunction = $attribute->getRegisterPrintable($superClassName, $objectVariableName, \&getClass);
-      (my $header, my $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \&getClass);
+      my $printedHeaderFunction = $attribute->getRegisterPrintable($superClassName, $objectVariableName, $classProvider);
+      (my $header, my $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName);
       print HEADER $functionPrefix . $impl;
-      $printedHeaderFunction = $attribute->getUnregisterPrintable($superClassName, $objectVariableName, \&getClass);
-      ($header, $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName, \&getClass);
+      $printedHeaderFunction = $attribute->getUnregisterPrintable($superClassName, $objectVariableName, $classProvider);
+      ($header, $impl) = inheritFunction($printedHeaderFunction, $className, $objectVariableName);
       print HEADER $functionPrefix . $impl;
     }
     if($isCommented == 1){
@@ -695,8 +669,8 @@ foreach my $key (sort keys %parsedSourceClasses){
     $class->addExeFunctionsToList($objectVariableName, \@executeableFunctions);
 
     $superClassName = $class->getSuperClassName();
-    while(getClass($superClassName)){
-      my $superClass = getClass($superClassName);
+    while($classProvider->getClass($superClassName)){
+      my $superClass = $classProvider->getClass($superClassName);
       $superClass->addExeFunctionsToList($objectVariableName, \@executeableFunctions, $eventClassName);
       $superClassName = $superClass->getSuperClassName();
     }
@@ -804,10 +778,9 @@ print HEADER " * \\ingroup $moduleGroup\n";
 print HEADER " * \@{\n";
 print HEADER " */\n";
 
-foreach my $key (sort keys %parsedSourceClasses){
-  my $class = $parsedSourceClasses{$key};
-  if($class->isValidClass()){
-    my $className = $class->{className};
+foreach my $className (sort @sourceClassNames){
+  my $class = $classProvider->getClass($className);
+  if($class && $class->isValidClass()){
     print HEADER "/// \\class $className\n";
   }
 }

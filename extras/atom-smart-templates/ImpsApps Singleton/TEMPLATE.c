@@ -9,9 +9,9 @@
 
 
 void <%= ClassName %>_commence(){
-
+	
 }
 
 void <%= ClassName %>_terminate(){
-
+	
 }

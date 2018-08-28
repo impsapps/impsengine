@@ -31,7 +31,7 @@ void IAGraphicRect_commence(){
 }
 
 void IAGraphicRect_make(IAGraphicRect * this, void (*transformRectToRender)(const IAGraphicRect *, IARect *), void (*setupRendering)(const IAGraphicRect *, IARect)){
-    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAGraphicRect_drawFunction, (void (*)(IADrawableRect *, IARect)) IAGraphicRect_setRectFunction);
+    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAGraphicRect_drawFunction, (void (*)(IADrawableRect *, IARect)) IAGraphicRect_setRectFunction, NULL);
     this->transformedRectToRender = IARect_make(0.0f, 0.0f, 100.0f, 100.0f);
     this->transformRectToRender = transformRectToRender;
     this->setupRendering = setupRendering;

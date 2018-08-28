@@ -13,7 +13,7 @@ use Helper;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getClassNameWithExtensionForHeaderFile parseFile getHeaderFilesForDir);
+our @EXPORT = qw(getClassNameWithExtensionForHeaderFile getClassNameForYamlFile parseFile getHeaderFilesForDir getYamlFilesForDir);
 
 my $matchComment = qr/(?:\/\*((?:.|\s)*?)\*\/|\/\/([^\n]*))/;
 my $matchAnnotationInCommand = qr/@([^@]*)/;
@@ -23,6 +23,12 @@ my $matchSeperateAnnotationAndInfo = qr/^([^:]*?)(?::((?:.|\n)*?))?\s*$/;
 sub getClassNameWithExtensionForHeaderFile {
 	my $path = shift;
 	(my $className = $path) =~ s/.*\/(.*)\.h/$1/;
+	return $className;
+}
+
+sub getClassNameForYamlFile {
+	my $path = shift;
+	(my $className = $path) =~ s/.*\/(.*)\.yaml/$1/;
 	return $className;
 }
 
@@ -369,6 +375,37 @@ sub getHeaderFilesForDir {
 
 		if(-f $newName){
 			if(privateIsValidHeaderFile($name)){
+				push @files, $newName;
+			}
+		}
+	}
+	return @files;
+}
+
+sub privateIsValidYamlFile {
+	my $name = shift;
+	if (substr ($name, 0, 1) eq '.'){
+		return 0;
+	}elsif(not $name =~ m/\.yaml$/){
+		return 0;
+	}else{
+		return 1;
+	}
+}
+
+sub getYamlFilesForDir {
+	my $dir = shift;
+	my @files = ();
+
+	opendir(DH, $dir) or die "Could not read from dir $dir.";
+	my @names = readdir(DH);
+	closedir(DH);
+
+	foreach my $name (@names){
+		my $newName = $dir . '/' . $name;
+
+		if(-f $newName){
+			if(privateIsValidYamlFile($name)){
 				push @files, $newName;
 			}
 		}

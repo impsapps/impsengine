@@ -8,10 +8,10 @@
 #include "IAObject.h"
 
 typedef struct{
-  //@extend
-  IAObject base;
-
-
+	//@extend
+	IAObject base;
+	
+	
 } <%= ClassName %>;
 
 

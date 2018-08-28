@@ -9,10 +9,7 @@ macro(add_include_dirs_of_target list target)
   endif()
 endmacro(add_include_dirs_of_target)
 
-
-set(ia_helper_functions_dir ${CMAKE_CURRENT_LIST_DIR} CACHE string "Store helper functions dir" FORCE)
-
-function(target_generate_generics target dir)
+macro(add_source_dirs_and_include_dirs_of_target target source_dirs include_dirs)
   list(APPEND libs ${target})
   set(counter 0)
   set(list_length 1)
@@ -28,19 +25,24 @@ function(target_generate_generics target dir)
     if (NOT "${linked_libs}" STREQUAL linked_libs-NOTFOUND)
       foreach(linked_lib ${linked_libs})
         if(TARGET ${linked_lib})
-      		get_target_property(target_type ${linked_lib} TYPE)
-      		if (NOT target_type STREQUAL "INTERFACE_LIBRARY")
-      		  if(NOT ${linked_lib} IN_LIST libs)
-      			list(APPEND libs ${linked_lib})
-      		  endif()
-      		endif ()
+          get_target_property(target_type ${linked_lib} TYPE)
+          if (NOT target_type STREQUAL "INTERFACE_LIBRARY")
+            if(NOT ${linked_lib} IN_LIST libs)
+            list(APPEND libs ${linked_lib})
+            endif()
+          endif ()
         endif ()
       endforeach(linked_lib)
     endif()
     list(LENGTH libs list_length)
     math(EXPR counter "${counter} + 1")
   endwhile()
+endmacro()
 
+set(ia_helper_functions_dir ${CMAKE_CURRENT_LIST_DIR} CACHE string "Store helper functions dir" FORCE)
+
+function(target_generate_generics target dir)
+  add_source_dirs_and_include_dirs_of_target(${target} source_dirs include_dirs)
 
   list(TRANSFORM source_dirs PREPEND "-S")
   list(TRANSFORM include_dirs PREPEND "-I")
@@ -52,3 +54,17 @@ function(target_generate_generics target dir)
     WORKING_DIRECTORY ${ia_helper_functions_dir}/../perl/generate-generics
   )
 endfunction(target_generate_generics)
+
+function(target_generate_from_yaml target dir)
+  add_source_dirs_and_include_dirs_of_target(${target} source_dirs include_dirs)
+
+  list(TRANSFORM source_dirs PREPEND "-S")
+  list(TRANSFORM include_dirs PREPEND "-I")
+
+  add_custom_command(
+    TARGET ${target}
+    PRE_BUILD
+    COMMAND perl GenerateFromYamlMain.pl "-D${CMAKE_CURRENT_SOURCE_DIR}/${dir}" ${source_dirs} ${include_dirs}
+    WORKING_DIRECTORY ${ia_helper_functions_dir}/../perl/generate-from-yaml
+  )
+endfunction(target_generate_from_yaml)

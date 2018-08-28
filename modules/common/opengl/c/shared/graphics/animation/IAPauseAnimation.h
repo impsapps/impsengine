@@ -14,7 +14,7 @@
 
 typedef struct{
     //@extend
-    IADrawableRect drawable;
+	IADrawableRect drawable;
     IADrawableRect * drawableRectToAnimate;
     //@get
     uint64_t duration;

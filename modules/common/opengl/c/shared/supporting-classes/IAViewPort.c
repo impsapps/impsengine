@@ -31,6 +31,14 @@ IASize IAViewPort_getSize(){
     return size;
 }
 
+float IAViewPort_getWidth() {
+	return size.width;
+}
+
+float IAViewPort_getHeight() {
+	return size.height;
+}
+
 void IAViewPort_modifySize(IASize newSize) {
 	size = newSize;
 }

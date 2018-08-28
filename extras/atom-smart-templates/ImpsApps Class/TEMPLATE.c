@@ -9,10 +9,10 @@
 
 
 void <%= ClassName %>_init(<%= ClassName %> * this){
-  this->base = IAObject_make(this);
-  IA_incrementInitCount();
+	this->base = IAObject_make(this);
+	IA_incrementInitCount();
 }
 
 void <%= ClassName %>_deinit(<%= ClassName %> * this){
-  IA_decrementInitCount();
+	IA_decrementInitCount();
 }
