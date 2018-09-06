@@ -16,7 +16,7 @@ our $matchUnnamedParamRaw = qr/$matchTypeRaw|$matchTypeRaw\s*\(\s*\*\s*\)\s*\($m
 sub normalizeParams{
 	my $params = shift;
 	my $paramInt = 0;
-	while($params =~ m/^((?:\s*$matchParamWithNameRaw\s*,)*?\s*)($matchUnnamedParamRaw)(\s*(?:,\s*(?:$matchUnnamedParamRaw|$matchParamWithNameRaw)\s*)*)\s*$/){
+	while($params =~ m/^((?:\s*$matchSingleNormalizedParamRaw\s*,)*?\s*)($matchUnnamedParamRaw)(\s*(?:,\s*(?:$matchUnnamedParamRaw|$matchSingleNormalizedParamRaw)\s*)*)\s*$/){
 		my $begin = $1;
 		my $mid = $2;
 		my $end = $3;
@@ -35,7 +35,7 @@ sub normalizeParams{
 
 sub removeFirstParamFromParams{
     my $params = shift;
-    $params =~ s/^\s*($matchParamWithNameRaw|$matchUnnamedParamRaw)\s*(,?\s*|$)//;
+    $params =~ s/^\s*($matchSingleNormalizedParamRaw|$matchUnnamedParamRaw)\s*(,?\s*|$)//;
     return $params;
 }
 

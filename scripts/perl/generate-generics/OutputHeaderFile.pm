@@ -7,6 +7,7 @@ package OutputHeaderFile;
 
 use Constants;
 use Helper;
+use Function;
 
 require Exporter;
 our @ISA = qw(Exporter);

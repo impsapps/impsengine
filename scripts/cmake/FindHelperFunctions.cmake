@@ -47,10 +47,12 @@ function(target_generate_generics target dir)
   list(TRANSFORM source_dirs PREPEND "-S")
   list(TRANSFORM include_dirs PREPEND "-I")
 
-  add_custom_command(
-    TARGET ${target}
-    PRE_BUILD
+  set(custom_target_name "${target}-generate-generics")
+
+  add_custom_target(
+    ${custom_target_name}
     COMMAND perl GenerateGenericsMain.pl "-N${target}" "-D${CMAKE_CURRENT_SOURCE_DIR}/${dir}" ${source_dirs} ${include_dirs}
     WORKING_DIRECTORY ${ia_helper_functions_dir}/../perl/generate-generics
   )
+  add_dependencies(${target} ${custom_target_name})
 endfunction(target_generate_generics)

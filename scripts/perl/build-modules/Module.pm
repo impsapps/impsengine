@@ -50,7 +50,7 @@ sub new{
         }
         die "$folderName is not a valid source folder name for module $name." if ($isValid == 0);
       }
-      die "$folderName is not available for module $name which was specified." if ($self->hasCSourceFolder($folderName) == 0);
+      die "$folderName is not available for module $name which was specified." if (not $self->hasCSourceFolders($folderName));
     }
   }
   return $self;
@@ -86,7 +86,7 @@ sub getDependencies{
   return ();
 }
 
-sub hasCSourceFolder{
+sub hasCSourceFolders{
   my $self = shift;
   my $folderName = shift;
   if(not exists ($self->{"c"})){
@@ -95,21 +95,33 @@ sub hasCSourceFolder{
   my $cSourceFolders = $self->{"c"};
   foreach my $cSourceFolder (@$cSourceFolders){
     if($cSourceFolder eq $folderName){
-      if (-d $self->getCSourceFolder($folderName)) {
-        return 1;
-      }else{
-        return 0;
-      }
+      my @folders = $self->getCSourceFolders($folderName);
+      return scalar @folders;
     }
   }
   return 0;
 }
 
-sub getCSourceFolder{
+sub getCSourceFolders{
   my $self = shift;
-  my $folderName = shift // "";
-  my $modulePath = $self->{"path"};
-  return $absolutePathToRootDir . "/" . $modulePath . $self->{"name"} . "/c/" . $folderName;
+  my $folderName = shift;
+  my $dir = $self->getCGroupPath();
+  opendir(my $dh, $dir) or die "Could not read from dir $dir.";
+	my @names = readdir($dh);
+	closedir($dh);
+  my @folders = ();
+  foreach my $name (@names) {
+    if ($name =~ m/(^|\+)$folderName($|\+)/) {
+      push @folders, $dir . "/" . $name;
+    }
+  }
+  return @folders;
+}
+
+sub getCGroupPath{
+  my $self = shift;
+  my $groupPath = $absolutePathToRootDir . "/" . $self->{"path"} . $self->{"name"} . "/c";
+  return $groupPath;
 }
 
 sub getJavaSourceFolder{

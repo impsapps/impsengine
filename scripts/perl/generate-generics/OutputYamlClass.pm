@@ -11,7 +11,7 @@ our @EXPORT = qw(printFromYamlToFile);
 
 use Constants;
 use ParsingYaml;
-
+use Expressions;
 
 sub printFromYamlToFile{
   my $class = shift;
@@ -69,7 +69,7 @@ sub printFromYamlToFile{
     if (@initFunctions == 0) {
       @initFunctions = $expectedClass->getValidMakeFunctions();
     }
-    foreach my $initFunction (@initFunctions){
+    foreach my $function (@initFunctions){
       my $params = $function->{params};
       $params = removeFirstParamFromParams($params);
       $params = normalizeParams($params);

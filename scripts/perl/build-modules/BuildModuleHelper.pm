@@ -36,10 +36,10 @@ my $engineStructure = {
       },
       "#clib" => {
         "c" => ["android", "ios", "shared", "windows"],
-		"android-dep" => ["android", "log"]
+		    "android-dep" => ["android", "log"]
       },
       "#concurrentlib" => {
-        "c" => ["android", "shared"],
+        "c" => ["android", "ios"],
         "dep" => ["clib"]
       },
       "#expat" => {
@@ -65,9 +65,9 @@ my $engineStructure = {
       },
       "#opengl" => {
         "c" => ["android", "ios", "shared", "windows"],
-        "dep" => ["clib", "expat", "input-output", "mathlib"], 
-		"android-dep" => ["GLESv2", "EGL"],
-		"windows-dep" => ["GLEW_CUSTOM"]
+        "dep" => ["clib", "expat", "input-output", "mathlib"],
+		    "android-dep" => ["GLESv2", "EGL"],
+		    "windows-dep" => ["glew"]
       },
       "#opengl-renderer" => {
         "c" => ["android", "ios", "shared"],
@@ -100,13 +100,13 @@ my $absolutePathToRootDir = "";
 
 sub initialize{
 	my $pathToRootDir = shift or die "param \"\$pathToRootDir\" expected";
-	
+
 	my $cwd = getcwd();
 
 	chdir $pathToRootDir;
 	$absolutePathToRootDir = getcwd();
 	chdir $cwd;
-	
+
 	setupModuleWithAbsolutePathToRootDirAndCWD($absolutePathToRootDir, $cwd);
 	setupModulesRecursively($engineStructure, "");
 }
@@ -139,6 +139,7 @@ sub getAbsolutePathToRootDir{
 sub getPathRelativeToRootDir{
   my $absPath = shift;
   my $relPath = File::Spec->abs2rel( $absPath, $absolutePathToRootDir );
+  $relPath =~ s/\\/\//g;
   return $relPath;
 }
 
