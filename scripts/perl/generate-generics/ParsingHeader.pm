@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-package Parsing;
+package ParsingHeader;
 
 use Class;
 use Attribute;
@@ -13,7 +13,7 @@ use Helper;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getClassNameWithExtensionForHeaderFile getClassNameForYamlFile parseFile getHeaderFilesForDir getYamlFilesForDir);
+our @EXPORT = qw(getClassNameWithExtensionForHeaderFile parseHeaderFile getHeaderFilesForDir);
 
 my $matchComment = qr/(?:\/\*((?:.|\s)*?)\*\/|\/\/([^\n]*))/;
 my $matchAnnotationInCommand = qr/@([^@]*)/;
@@ -26,12 +26,6 @@ sub getClassNameWithExtensionForHeaderFile {
 	return $className;
 }
 
-sub getClassNameForYamlFile {
-	my $path = shift;
-	(my $className = $path) =~ s/.*\/(.*)\.yaml/$1/;
-	return $className;
-}
-
 sub getCommentContent {
 	if(defined $1){
 		return $1;
@@ -40,7 +34,38 @@ sub getCommentContent {
 	}
 }
 
-sub parseFile {
+sub privateIsValidHeaderFile {
+	my $name = shift;
+	if (substr ($name, 0, 1) eq '.'){
+		return 0;
+	}elsif(not $name =~ m/\.h$/){
+		return 0;
+	}else{
+		return 1;
+	}
+}
+
+sub getHeaderFilesForDir {
+	my $dir = shift;
+	my @files = ();
+
+	opendir(DH, $dir) or die "Could not read from dir $dir.";
+	my @names = readdir(DH);
+	closedir(DH);
+
+	foreach my $name (@names){
+		my $newName = $dir . '/' . $name;
+
+		if(-f $newName){
+			if(privateIsValidHeaderFile($name)){
+				push @files, $newName;
+			}
+		}
+	}
+	return @files;
+}
+
+sub parseHeaderFile {
 	my $path = shift;
 
 	die "Invalid path for parsing: $path" if (privateIsValidHeaderFile($path) == 0);
@@ -89,11 +114,11 @@ sub parseFile {
 				}
 			}
 
-			my $tempFunction = new Function();
+			my $tempFunction = Function->new();
 			my $returnCode = $tempFunction->initWithHeader($className, $command, $comment);
 			if($returnCode == 2){
 				if($isFunctionNameCheckDisabled == 0){
-					die sprintf("Invalid function name: %s in file %s.\n", $tempFunction->{name}, $path);
+					die sprintf("Invalid function name: \"%s\" with type \"%s\" in file \"%s\".\n", $tempFunction->{name}, $tempFunction->{returnType}, $path);
 				}
 			}
 		}
@@ -101,7 +126,7 @@ sub parseFile {
 	}
 
 
-	my $class = new Class($className);
+	my $class = Class->new($className);
 	my $isScanningClassAttributes = 0;
 
 	my $structNameDefinition = "";
@@ -111,7 +136,7 @@ sub parseFile {
 
 	my $isFirstAttribute = 1;
 
-      COMMAND_LOOP:
+	COMMAND_LOOP:
 	while(my $command = <FILE>){
 		my $annotationSet = 0;
 		my $annotationSetAsRef = 0;
@@ -174,12 +199,12 @@ sub parseFile {
 							$annotationEventWithoutRetain = 1;
 						}elsif($a eq "extend"){
 							$annotationExtend = 1;
-                          }elsif($a eq "disableFunctionNameCheck"){
-                              $isFunctionNameCheckDisabled = 1;
-                          }elsif($a eq "ignore"){
-                              $class = new Class($className);
-                              last COMMAND_LOOP;
-                          }else{
+						}elsif($a eq "disableFunctionNameCheck"){
+							$isFunctionNameCheckDisabled = 1;
+						}elsif($a eq "ignore"){
+							$class = Class->new($className);
+							last COMMAND_LOOP;
+						}else{
 							die sprintf("Invalid annotation %s in file %s.\n", $a, $path);
 						}
 					}
@@ -233,7 +258,9 @@ sub parseFile {
 
 		if($isScanningClassAttributes == 1){
 			if(index($command, '}') != -1){
-				if(($isTypedef && $command =~ m/\}\s*${className}\s*;/) || $isTypedef == 0){
+				$command =~ m/\}\s*$matchName\s*;/;
+				my $structName = $1;
+				if(($isTypedef && $className eq $structName) || $isTypedef == 0){
 					if ($className =~ m/Delegate$/) {
 						$class->{isDelegate} = 1;
 						if (! $class->{firstAttribute} || $class->{firstAttribute}->isObjectPointer() == 0) {
@@ -245,11 +272,13 @@ sub parseFile {
 					}
 				}else{
 					#reset class;
-					$class = new Class($className);
+					die "Annotations in non-class \"$structName\" found. File path: \"$path\"" if ($class->hasAnnotations());
+					$class = Class->new($className);
 				}
 				$isScanningClassAttributes = 0;
 			}else{
-				my $attribute = new Attribute($command);
+				my $attribute = Attribute->newWithCommand($command);
+
 				if(!$attribute){
 					die sprintf("Cannot parse attribute: %s in file %s. Please notice that incomplete types are not allowed in structs.\n", $command, $path);
 				}
@@ -327,90 +356,20 @@ sub parseFile {
 			$isFirstAttribute = 0;
 			next;
 		}
-		my $tempFunction = new Function();
+		my $tempFunction = Function->new();
 		my $returnCode = $tempFunction->initWithHeader($className, $command, $comment);
 		if ($returnCode == 1){
-			my $function = $tempFunction;
-			if(index($function->{name}, "init") == 0){
-				$class->{hasInitFunction} = 1;
-			}
-			push (@{$class->{functions}}, $function);
+			push (@{$class->{functions}}, $tempFunction);
 		}elsif($returnCode == 2){
 			if($isFunctionNameCheckDisabled == 0){
-				die sprintf("Invalid function name: %s in file %s.\n", $tempFunction->{name}, $path);
+				die sprintf("Invalid function name: \"%s\" with type \"%s\" in file \"%s\".\n", $tempFunction->{name}, $tempFunction->{returnType}, $path);
 			}
 		}elsif($returnCode == 3){
-			die sprintf("Invalid function name! A function which start with deinit must not have any additional characters: %s in file %s.\n", $tempFunction->{name}, $path);
+			die sprintf("Invalid function name! A function which start with deinit must not have any additional characters: \"%s\" with type \"%s\" in file \"%s\".\n", $tempFunction->{name}, $tempFunction->{returnType}, $path);
 		}
 	}
 	close FILE;
-
-	if ($class->{superClassName} ne ""){
-		$class->{isObject} = 1;
-	}
 	return $class;
-}
-
-sub privateIsValidHeaderFile {
-	my $name = shift;
-	if (substr ($name, 0, 1) eq '.'){
-		return 0;
-	}elsif(not $name =~ m/\.h$/){
-		return 0;
-	}else{
-		return 1;
-	}
-}
-
-sub getHeaderFilesForDir {
-	my $dir = shift;
-	my @files = ();
-
-	opendir(DH, $dir) or die "Could not read from dir $dir.";
-	my @names = readdir(DH);
-	closedir(DH);
-
-	foreach my $name (@names){
-		my $newName = $dir . '/' . $name;
-
-		if(-f $newName){
-			if(privateIsValidHeaderFile($name)){
-				push @files, $newName;
-			}
-		}
-	}
-	return @files;
-}
-
-sub privateIsValidYamlFile {
-	my $name = shift;
-	if (substr ($name, 0, 1) eq '.'){
-		return 0;
-	}elsif(not $name =~ m/\.yaml$/){
-		return 0;
-	}else{
-		return 1;
-	}
-}
-
-sub getYamlFilesForDir {
-	my $dir = shift;
-	my @files = ();
-
-	opendir(DH, $dir) or die "Could not read from dir $dir.";
-	my @names = readdir(DH);
-	closedir(DH);
-
-	foreach my $name (@names){
-		my $newName = $dir . '/' . $name;
-
-		if(-f $newName){
-			if(privateIsValidYamlFile($name)){
-				push @files, $newName;
-			}
-		}
-	}
-	return @files;
 }
 
 1;

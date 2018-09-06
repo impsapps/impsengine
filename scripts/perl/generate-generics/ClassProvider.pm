@@ -8,7 +8,8 @@ use warnings;
 
 package ClassProvider;
 
-use Parsing;
+use ParsingHeader;
+use ParsingYaml;
 
 sub new{
   my $class = shift;
@@ -22,17 +23,28 @@ sub new{
 
 sub addHeaderFile{
   my $self = shift;
-  my $headerFile = shift;
-  my $className = getClassNameWithExtensionForHeaderFile($headerFile);
-  $self->{pendingHeaderFiles}->{$className} = $headerFile;
+  my $filePath = shift;
+  my $className = getClassNameWithExtensionForHeaderFile($filePath);
+  $self->{pendingHeaderFiles}->{$className} = $filePath;
 }
 
-sub addHeaderFileDir{
+sub addYamlFile{
   my $self = shift;
-  my $headerFileDir = shift;
-  my @headerFiles = getHeaderFilesForDir($headerFileDir);
+  my $filePath = shift;
+  my $className = getClassNameForYamlFile($filePath);
+  $self->{classes}->{$className} = preParseYamlFile($filePath);
+}
+
+sub addFileDir{
+  my $self = shift;
+  my $fileDir = shift;
+  my @headerFiles = getHeaderFilesForDir($fileDir);
   foreach my $headerFile (@headerFiles){
     $self->addHeaderFile($headerFile);
+  }
+  my @yamlFiles = getYamlFilesForDir($fileDir);
+  foreach my $yamlFile (@yamlFiles){
+    $self->addYamlFile($yamlFile);
   }
 }
 
@@ -45,7 +57,7 @@ sub getClass{
     return $self->{classes}->{$className};
   }
   if (exists $self->{pendingHeaderFiles}->{$className}) {
-    my $class = parseFile($self->{pendingHeaderFiles}->{$className});
+    my $class = parseHeaderFile($self->{pendingHeaderFiles}->{$className});
     die "Could not parse class \"$className\"." if (not $class);
     $self->{classes}->{$className} = $class;
     return $class;

@@ -43,7 +43,7 @@ sub convertParamsToValues{
 	my $params = shift;
 	my $convertedParams = "";
 	my $isFirstParam = 0;
-	while($params =~ m/\s*($matchType\s*$matchName|$matchFunction)\s*(,|$)/g){
+	while($params =~ m/$matchSingleNormalizedParam/g){
 		my $nextParam = $1;
 		if($nextParam =~ m/^$matchType\s*$matchName$/){
 			$nextParam = $2;

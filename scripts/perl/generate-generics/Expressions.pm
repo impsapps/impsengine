@@ -7,7 +7,7 @@ package Expressions;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw($matchName $matchNameAndExtension $matchTypeRaw $matchType $matchParamsRaw $matchParams $matchFunction $matchParamWithNameRaw);
+our @EXPORT = qw($matchName $matchNameAndExtension $matchTypeRaw $matchType $matchParamsRaw $matchParams $matchSingleNormalizedParam $matchFunction $matchParamWithNameRaw);
 
 our $matchNameRaw = qr/\w[\w\d]*(?![\w\d])(?:\s*\[(?:\d*|\w[\w\d]*)\])*(?!\s*\[(?:\d*|\w[\w\d]*)\])/;
 our $matchName = qr/(\w[\w\d]*)(?![\w\d])(?:\s*\[(?:\d*|\w[\w\d]*)\])*(?!\s*\[(?:\d*|\w[\w\d]*)\])/;
@@ -24,6 +24,8 @@ our $matchParams5 = qr/(?:[^\(\)]*\($matchParams4\))*[^\(\)]*/;
 our $matchParams6 = qr/(?:[^\(\)]*\($matchParams5\))*[^\(\)]*/;
 our $matchParamsRaw = qr/(?:[^\(\)]*\($matchParams6\))*[^\(\)]*(?![^\(\)])/;
 our $matchParams = qr/($matchParamsRaw)/;
+
+our $matchSingleNormalizedParam = qr/\s*($matchTypeRaw\s*$matchNameRaw|$matchFunctionRaw)\s*(,|$)/;
 
 # 1...return type; 2...function name; 3...params
 our $matchFunctionRaw = qr/$matchTypeRaw\s*\(\s*\*$matchNameRaw\s*\)\s*\($matchParamsRaw\)/;

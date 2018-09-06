@@ -30,12 +30,11 @@ sub new{
 		locks => [],
 		registers => [],
 		attributes => {},
-		hasInitFunction => 0,
 		functions => [],
-		isObject => 0,
 		isDelegate => 0,
 		isEvent => 0,
-		isEventWithoutRetain => 0
+		isEventWithoutRetain => 0,
+		yaml => undef
 	};
 	bless $self, $class;
 	return $self;
@@ -59,6 +58,20 @@ sub getClassName{
 sub getSuperClassName{
 	my $self = shift;
 	return $self->{superClassName};
+}
+
+sub isObject{
+	my $self = shift;
+	if ($self->getSuperClassName ne "") {
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+sub isDelegate{
+	my $self = shift;
+	return $self->{isDelegate};
 }
 
 sub addExeFunctionsToList{
@@ -101,9 +114,35 @@ sub getObjectVariableName{
 	}
 }
 
+sub getValidMakeFunctions{
+	my $self = shift;
+	my $className = $self->getClassName();
+	my @functions = ();
+	foreach my $function (@{$self->{functions}}){
+		if($function->isMakeFunction() && $function->isValidFunction($className) == 1){
+			push @functions, $function;
+		}
+	}
+	return @functions;
+}
+
+sub getValidInitFunctions{
+	my $self = shift;
+	my $className = $self->getClassName();
+	my @functions = ();
+	foreach my $function (@{$self->{functions}}){
+		if($function->isInitFunction() && $function->isValidFunction($className) == 1){
+			push @functions, $function;
+		}
+	}
+	return @functions;
+}
+
 sub hasAnnotations{
 	my $class = shift;
-
+	if($class->{superClassName} ne ""){
+		return 1;
+	}
 	if(scalar (keys @{$class->{setters}})){
 		return 1;
 	}

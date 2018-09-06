@@ -7,11 +7,29 @@ package Function;
 
 require Exporter;
 our @ISA = qw(Exporter);
+our @EXPORT = qw(convertFunctionNameForNew convertFunctionNameForWith);
 
 use Expressions;
 use Helper;
 use Constants;
 
+
+sub convertFunctionNameForNew{
+	my $functionName = shift;
+	$functionName =~ s/^(init|make)/new/;
+	return $functionName;
+}
+
+sub convertFunctionNameForWith{
+	my $functionName = shift;
+	$functionName =~ s/^(init|make)//;
+	if ($functionName eq "") {
+		$functionName = "with";
+	}else{
+		$functionName = lcfirst($functionName);
+	}
+	return $functionName;
+}
 
 sub new{
 	my $class = shift;
@@ -32,12 +50,14 @@ sub initWithHeader{
 	my $comment = shift;
 	my $returnCode = 0;
 
-	if ($header =~ m/($matchType|$matchFunction)\s*$matchName\s*\($matchParams\)\s*;/){
+	if ($header =~ m/($matchType|$matchFunction)\s*$matchName\s*\($matchParams\)\s*(;|\{)/){
 		my $returnType = $1;
 		my $params = $7;
 		my $functionName = $6;
-		#This if clause is needed because otherwise returns on statements in inline functions will be detected as functions. Please note, that inline functions are not officially supported yet. It is to prevent of throwing "invalid function name" errors because of generated inline function in event classes.
-		if(not $returnType eq "return"){
+		#This if clause is needed because otherwise returns on statements in inline functions will be detected as functions.
+		#Please note, that inline functions are not officially supported yet.
+		#It is to prevent of throwing "invalid function name" errors because of generated inline function in event classes.
+		if($returnType ne "return" and $returnType ne "define"){
 			if($functionName =~ m/${className}_$matchName/){
 				$functionName = $1;
 				$returnCode = 1;
@@ -98,15 +118,6 @@ sub isInitFunction{
 	}
 }
 
-sub isReinitFunction{
-	my $self = shift;
-	if(index($self->{name}, 'reinit') == 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
 sub isMakeFunction{
 	my $self = shift;
 	if(index($self->{name}, 'make') == 0){
@@ -125,36 +136,9 @@ sub isDeinitFunction{
 	}
 }
 
-sub privateIsNewFunction{
+sub isNewFunction{
 	my $self = shift;
 	if(index($self->{name}, 'new') == 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
-sub privateIsTempFunction{
-	my $self = shift;
-	if(index($self->{name}, 'temp') == 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
-sub privateIsReleaseFunction{
-	my $self = shift;
-	if(index($self->{name}, 'release') == 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
-sub isConstructorFunction{
-	my $self = shift;
-	if($self->privateIsNewFunction()){
 		return 1;
 	}else{
 		return 0;
@@ -164,12 +148,9 @@ sub isConstructorFunction{
 sub isSpecialFunction{
 	my $self = shift;
 	if($self->isInitFunction()
-			|| $self->isReinitFunction()
 			|| $self->isMakeFunction()
-			|| $self->privateIsNewFunction()
-			|| $self->privateIsTempFunction()
 			|| $self->isDeinitFunction()
-			|| $self->privateIsReleaseFunction()){
+			|| $self->isNewFunction()){
 		return 1;
 	}else{
 		return 0;
@@ -191,7 +172,7 @@ sub getDoxygenComment{
 	my $self = shift;
 	my $className = shift;
 	my $prefix = "";
-	if($self->isConstructorFunction()){
+	if($self->isNewFunction()){
 		$prefix = $constructorPrefix;
 	}
 	my $result = "";

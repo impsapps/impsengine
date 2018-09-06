@@ -11,7 +11,7 @@ our @ISA = qw(Exporter);
 use Expressions;
 use Helper;
 
-sub new{
+sub newWithCommand{
 	my $class = shift;
 	my $command = shift;
 	my $self;
