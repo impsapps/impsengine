@@ -12,9 +12,11 @@ use OutputYamlClassHelper;
 sub new{
   my $class = shift;
   my $classProvider = shift;
+  my $resourceProviders = shift;
   my $yamlFilePath = shift;
   my $self = {
     classProvider => $classProvider,
+    resourceProviders => $resourceProviders,
     includes => {},
 
     objectReferences => [],
@@ -95,7 +97,7 @@ sub parseExpression{
     die "Could not parse expression with yaml array. Expected type \"$typeExpected\" in \"" . $self->{yamlFilePath} . "\".";
   }elsif (defined $yaml and not ref $yaml){
     if ($typeExpected =~ m/^\w[\w\d]*$/ and $isDataTyp == 0) {
-      $self->{includes}->{$typeExpected} = $typeExpected;
+      $self->privateAddInclude($typeExpected);
       return $typeExpected . "_" . $yaml;
     }else{
       return $yaml;
@@ -120,7 +122,11 @@ sub parseExpressionForStruct{
 sub parseString{
   my $self = shift;
   my $yaml = shift;
-  return $yaml;
+  my $paramNameForLogging = shift;
+  die "Expected string for param \"$paramNameForLogging\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\"." if (not defined $yaml or ref $yaml);
+  my $string = $yaml;
+  $string =~ s/"/\\"/g;
+  return "\"" . $string . "\"";
 }
 
 sub parseObject{
@@ -136,11 +142,18 @@ sub parseObject{
   }
 
   my $classProvider = $self->{classProvider};
+  if (exists $yaml->{__resource__}) {
+    if ($variableName ne "") {
+      die "Key \"__resource__\" is invalid here. Error parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+    }
+    return $self->parseAsResource($yaml, $initLinesRef, $deinitLinesRef);
+  }
 
   my $class = $classProvider->getClass($className);
   my $attributeClassName = privateGetAttributeClassName($className);
   my $attributeClass = $classProvider->getClass($attributeClassName);
-  die "Class \"$className\" does not extend from \"IAObject\" which was expected. Error parsing yaml file \"" . $class->getFilePath() . "\"." if($variableName eq "" && not $class->isObject());
+  die "Class \"$className\" is not found. Error parsing yaml file \"" . $self->{yamlFilePath} . "\"." if(not defined $class);
+  die "Class \"$className\" is not a valid object. It should be a derivative of \"IAObject\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\"." if($variableName eq "" && not $class->isObject());
 
   my @yamlNames = getParamNamesForYamlNode($yaml);
 
@@ -162,7 +175,7 @@ sub parseObject{
       if ($wasAttributesAlreadyParsed) {
         die "Invalid parameter order. " .
           "Expected Attributes to be the last parameter for class \"${className}\" in yaml file \""
-          . $class->getFilePath() . "\".";
+          . $self->{yamlFilePath} . "\".";
       }
       if ($param =~ m/$matchType\s*$matchName/) {
         my $type = $1;
@@ -179,7 +192,7 @@ sub parseObject{
       }else{
         if (not $param =~ m/$matchFunction/){
           die "Internal error. Invalid matched param \"$param\" in yaml file \""
-            . $class->getFilePath() . "\".";
+            . $self->{yamlFilePath} . "\".";
         }
         push @requiredAttributeNames, $2;
       }
@@ -215,6 +228,45 @@ sub parseObject{
       . $self->{yamlFilePath} . "\".";
   }
   return $result;
+}
+
+sub parseAsResource{
+  my $self = shift;
+  my $yaml = shift;
+  my $initLinesRef = shift;
+  my $deinitLinesRef = shift;
+
+  my $resourceName = $yaml->{__resource__};
+  die "Could not find resource provider for name \"$resourceName\" in yaml file \""
+    . $self->{yamlFilePath} . "\"." if (not exists $self->{resourceProviders}->{$resourceName});
+  my $resourceProvider = $self->{resourceProviders}->{$resourceName};
+  my $className = $resourceProvider->getClassName();
+  my $function = $resourceProvider->getFunction();
+  my $functionParams = $function->{params};
+  $functionParams = normalizeParams($functionParams);
+  my @paramsForCall = ();
+
+  while ($functionParams =~ m/$matchSingleNormalizedParam/g){
+    my $param = $1;
+    if ($param =~ m/^$matchType\s*$matchName$/) {
+      my $matchedName = $2;
+      my $newYaml = $yaml->{$matchedName};
+      my $context = getContextForParams($param);
+      my $result = $self->parseContextForObject(
+        $context,
+        $newYaml,
+        $initLinesRef,
+        $deinitLinesRef,
+        $className,
+        $param);
+      push @paramsForCall, $result;
+    }else{
+      die "Expected type and name as params. Error in yaml file \"" . $self->{yamlFilePath} . "\".";
+    }
+  }
+  $self->privateAddInclude($className);
+  my $params = join(", ", @paramsForCall);
+  return $function->getStaticFunctionCallWithParams($className, $params);
 }
 
 sub privateGetAttributeClassName{
@@ -267,7 +319,7 @@ sub parseObjectWithFunctions{
   my $initFunction = shift;
   my $attributeInitFunction = shift // undef;
 
-  $self->{includes}->{$className} = $className;
+  $self->privateAddInclude($className);
 
   my $attributeClassName = privateGetAttributeClassName($className);
   my $attributeClass = $self->{classProvider}->getClass($attributeClassName);
@@ -351,9 +403,8 @@ sub parseObjectWithFunctions{
       }
     }
     if ($isAttributes == 0) {
-      my $matchedName = $2;
       if ($param =~ m/^$matchType\s*$matchName$/) {
-        $matchedName = $2;
+        my $matchedName = $2;
         my $newYaml = $yaml->{$matchedName};
         my $context = getContextForParams($param);
         my $result = $self->parseContextForObject(
@@ -365,7 +416,7 @@ sub parseObjectWithFunctions{
           $param);
         push @paramsForNewFunction, $result;
       }else{
-        die "Expected type and name as params.";
+        die "Expected type and name as params. Error in yaml file \"" . $self->{yamlFilePath} . "\".";
       }
     }
   }
@@ -396,10 +447,10 @@ sub getContextForParams{
   if (scalar @params == 1) {
     if ($params[0] =~ m/^$matchType\s*$matchName$/) {
       my $matchedType = $1;
-      if ($matchedType =~ m/\*$/) {
-        return "OBJECT";
-      }elsif ($matchedType =~ m/\s+char\s*\*$/){
+      if ($matchedType =~ m/char\s*\*$/) {
         return "STRING";
+      }elsif ($matchedType =~ m/\*$/){
+        return "OBJECT";
       }else{
         return "EXPRESSION";
       }
@@ -428,7 +479,7 @@ sub parseContextForObject{
   my $yaml = shift;
   my $initLinesRef = shift;
   my $deinitLinesRef = shift;
-  my $className = shift;
+  my $classNameForLogging = shift;
   my @params = @_;
   
   my $forceType = "";
@@ -462,10 +513,10 @@ sub parseContextForObject{
       }
       return $result;
     }else {
-      die "Unsupported type \"$expectedType\" for \"OBJECT\"-context in class \"$className\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+      die "Unsupported type \"$expectedType\" for \"OBJECT\"-context in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
     }
   }elsif($context eq "EXPRESSION") {
-    $params[0] =~ m/^$matchType\s*$matchName$/ or die "Expected type and name for \"EXPRESSION\"-context in class \"$className\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+    $params[0] =~ m/^$matchType\s*$matchName$/ or die "Expected type and name for \"EXPRESSION\"-context in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
     my $typeExpected = $1;
     return $self->parseExpression($typeExpected, $yaml);
   }elsif($context eq "ARRAY") {
@@ -480,14 +531,16 @@ sub parseContextForObject{
     if ($isValid) {
       return $self->parseObjectArray($expectedType, $yaml, $initLinesRef, $deinitLinesRef);
     }else {
-      die "Unsupported type \"$expectedType\" for \"ARRAY\"-context in class \"$className\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+      die "Unsupported type \"$expectedType\" for \"ARRAY\"-context in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
     }
   }elsif($context eq "FUNCTION") {
-    die "Function pointers are not supported yet in class \"$className\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+    die "Function pointers are not supported yet in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
   }elsif($context eq "STRING"){
-    return $self->parseString($yaml);
+    $params[0] =~ m/$matchType\s*$matchName/;
+    my $paramName = $2;
+    return $self->parseString($yaml, $paramName);
   }else {
-    die "Could not parse context \"$context\" in class \"$className\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+    die "Could not parse context \"$context\" in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
   }
 }
 
@@ -513,6 +566,12 @@ sub parseObjectArray{
   }
 
   return "$sizeVarName, $arrayVarName";
+}
+
+sub privateAddInclude{
+  my $self = shift;
+  my $classNameToInclude = shift;
+  $self->{includes}->{$classNameToInclude} = $classNameToInclude;
 }
 
 1;

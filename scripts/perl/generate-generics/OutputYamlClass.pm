@@ -18,6 +18,7 @@ use OutputYamlClassParser;
 sub printFromYamlToFile{
   my $class = shift;
   my $classProvider = shift;
+  my $resourceProviders = shift;
   my $outputDir = shift;
 
   die "Cannot printFromYamlToFile with not an yaml class \"" . $class->getClassName() . "\"." if (not $class->{yaml});
@@ -27,7 +28,7 @@ sub printFromYamlToFile{
 
   return if (exists $yaml->{__template__});
 
-  my $parser = OutputYamlClassParser->new($classProvider, $class->{filePath});
+  my $parser = OutputYamlClassParser->new($classProvider, $resourceProviders, $class->{filePath});
 
   my $classnameToGenerate = $class->{yaml}->{__generate__};
   my @initLines = ();

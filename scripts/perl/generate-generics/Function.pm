@@ -214,6 +214,13 @@ sub getFunctionCallWithParams{
 	return sprintf "%s_%s(%s, %s)", $className, $self->{name}, $variableName, $params;
 }
 
+sub getStaticFunctionCallWithParams{
+	my $self = shift;
+	my $className = shift;
+	my $params = shift // "";
+	return sprintf "%s_%s(%s)", $className, $self->{name}, $params;
+}
+
 sub getHeaderPrintable{
 	my $self = shift;
 	my $className = shift;

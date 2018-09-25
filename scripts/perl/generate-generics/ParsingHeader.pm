@@ -10,14 +10,15 @@ use Attribute;
 use Expressions;
 use Function;
 use Helper;
+use ResourceProvider;
 
 require Exporter;
 our @ISA = qw(Exporter);
 our @EXPORT = qw(getClassNameWithExtensionForHeaderFile parseHeaderFile getHeaderFilesForDir);
 
 my $matchComment = qr/(?:\/\*((?:.|\s)*?)\*\/|\/\/([^\n]*))/;
-my $matchAnnotationInCommand = qr/@([^@]*)/;
-my $matchSeperateAnnotationAndInfo = qr/^([^:]*?)(?::((?:.|\n)*?))?\s*$/;
+my $matchAnnotationInCommand = qr/\@$matchName(?:\($matchName\))?/;
+my $matchSeperateAnnotationAndInfo = qr/^$matchName(?::((?:.|\n)*?))?\s*$/;
 
 
 sub getClassNameWithExtensionForHeaderFile {
@@ -153,18 +154,20 @@ sub parseHeaderFile {
 		my $annotationEvent = 0;
 		my $annotationEventWithoutRetain = 0;
 		my $annotationExtend = 0;
+		my $annotationResourceProvider = "";
 		my $comment = "";
 
 		while($command =~ s/$matchComment//){
 			$comment = getCommentContent();
 			while($comment =~ m/$matchAnnotationInCommand/g){
-				$1 =~ m/$matchSeperateAnnotationAndInfo/;
+				my $annotationWithInfo = $1,
+				my $commandParam = $2;
+				$annotationWithInfo =~ m/$matchSeperateAnnotationAndInfo/;
 				my $annotation = $1;
 				my $info = $2;
 
-				if(not defined($info)){
-					$info = "";
-				}
+				$commandParam = "" if (not defined $commandParam);
+				$info = "" if(not defined $info);
 
 				if($info eq ""){
 					my @splited = split /\s*\+\s*/, $annotation;
@@ -199,13 +202,18 @@ sub parseHeaderFile {
 							$annotationEventWithoutRetain = 1;
 						}elsif($a eq "extend"){
 							$annotationExtend = 1;
+						}elsif($a eq "resourceProvider"){
+							$annotationResourceProvider = $commandParam;
+							if ($annotationResourceProvider eq "") {
+								die sprintf("Annotation \"resourceProvider\" in file \"%s\" must have a valid command param.\n", $a, $path);
+							}
 						}elsif($a eq "disableFunctionNameCheck"){
 							$isFunctionNameCheckDisabled = 1;
 						}elsif($a eq "ignore"){
 							$class = Class->new($className, $path);
 							last COMMAND_LOOP;
 						}else{
-							die sprintf("Invalid annotation %s in file %s.\n", $a, $path);
+							die sprintf("Invalid annotation \"%s\" in file \"%s\".\n", $a, $path);
 						}
 					}
 				}else{
@@ -361,6 +369,10 @@ sub parseHeaderFile {
 		my $returnCode = $tempFunction->initWithHeader($className, $command, $comment);
 		if ($returnCode == 0){
 			push (@{$class->{functions}}, $tempFunction);
+			if ($annotationResourceProvider ne "") {
+				my $resourceProvider = ResourceProvider->new($annotationResourceProvider, $className, $tempFunction);
+				push (@{$class->{resourceProviders}}, $resourceProvider);
+			}
 		}elsif($returnCode == 2){
 			if($isFunctionNameCheckDisabled == 0){
 				die sprintf("Invalid function name: \"%s\" with type \"%s\" in file \"%s\".\n", $tempFunction->{name}, $tempFunction->{returnType}, $path);

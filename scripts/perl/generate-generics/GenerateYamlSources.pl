@@ -34,6 +34,7 @@ use Attribute;
 use Function;
 use ParsingYaml;
 use Constants;
+use ParsingHeader;
 use OutputYamlClass;
 
 my $genDir = "";
@@ -79,10 +80,24 @@ foreach my $additionalIncludeDir (@additionalIncludeDirs){
   $classProvider->addFileDir($additionalIncludeDir);
 }
 
-my %resourceProviders = ();
+my @classNamesToScanForResourceProviders = ();
 foreach my $resourceProviderDir (@resourceProviderDirs){
+  next if ($resourceProviderDir eq $genDir);
   my @headerFiles = getHeaderFilesForDir($resourceProviderDir);
+  foreach my $headerFile (@headerFiles){
+    my $className = getClassNameWithExtensionForHeaderFile($headerFile);
+    push @classNamesToScanForResourceProviders, $className;
+  }
+  $classProvider->addFileDir($resourceProviderDir);
+}
 
+my %resourceProviders = ();
+foreach my $className (@classNamesToScanForResourceProviders){
+  my $class = $classProvider->getClass($className);
+  my @resourceProvidersTemp = $class->getResourceProviders();
+  foreach my $resourceProviderTemp (@resourceProvidersTemp){
+    $resourceProviders{$resourceProviderTemp->getResourceName()} = $resourceProviderTemp;
+  }
 }
 
 my @sourceYamlClassNames = ();
@@ -95,6 +110,6 @@ foreach my $sourceYamlFile (@sourceYamlFiles){
 foreach my $yamlClass (@sourceYamlClassNames){
   my $class = $classProvider->getClass($yamlClass);
   if (defined $class){
-    printFromYamlToFile($class, $classProvider, $genDir);
+    printFromYamlToFile($class, $classProvider, \%resourceProviders, $genDir);
   }
 }

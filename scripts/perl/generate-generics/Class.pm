@@ -37,6 +37,7 @@ sub new{
 		isDelegate => 0,
 		isEvent => 0,
 		isEventWithoutRetain => 0,
+		resourceProviders => [],
 		yaml => undef,
 		filePath => $filePath
 	};
@@ -92,6 +93,11 @@ sub isStruct{
 sub isDelegate{
 	my $self = shift;
 	return $self->{isDelegate};
+}
+
+sub getResourceProviders{
+	my $self = shift;
+	return @{$self->{resourceProviders}};
 }
 
 sub getFilePath{
