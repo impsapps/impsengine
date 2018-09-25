@@ -126,7 +126,7 @@ sub parseHeaderFile {
 	}
 
 
-	my $class = Class->new($className);
+	my $class = Class->new($className, $path);
 	my $isScanningClassAttributes = 0;
 
 	my $structNameDefinition = "";
@@ -202,7 +202,7 @@ sub parseHeaderFile {
 						}elsif($a eq "disableFunctionNameCheck"){
 							$isFunctionNameCheckDisabled = 1;
 						}elsif($a eq "ignore"){
-							$class = Class->new($className);
+							$class = Class->new($className, $path);
 							last COMMAND_LOOP;
 						}else{
 							die sprintf("Invalid annotation %s in file %s.\n", $a, $path);
@@ -273,7 +273,7 @@ sub parseHeaderFile {
 				}else{
 					#reset class;
 					die "Annotations in non-class \"$structName\" found. File path: \"$path\"" if ($class->hasAnnotations());
-					$class = Class->new($className);
+					$class = Class->new($className, $path);
 				}
 				$isScanningClassAttributes = 0;
 			}else{
@@ -283,6 +283,7 @@ sub parseHeaderFile {
 					die sprintf("Cannot parse attribute: %s in file %s. Please notice that incomplete types are not allowed in structs.\n", $command, $path);
 				}
 				$class->{attributes}->{$attribute->{name}} = $attribute;
+				push @{$class->{allAttributeNames}}, $attribute->{name};
 				if ($isFirstAttribute) {
 					$class->{firstAttribute} = $attribute;
 					if($annotationExtend == 1){
@@ -358,7 +359,7 @@ sub parseHeaderFile {
 		}
 		my $tempFunction = Function->new();
 		my $returnCode = $tempFunction->initWithHeader($className, $command, $comment);
-		if ($returnCode == 1){
+		if ($returnCode == 0){
 			push (@{$class->{functions}}, $tempFunction);
 		}elsif($returnCode == 2){
 			if($isFunctionNameCheckDisabled == 0){

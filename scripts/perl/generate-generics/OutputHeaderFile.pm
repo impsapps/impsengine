@@ -17,7 +17,6 @@ our @EXPORT = qw(printHeaderFilesForClass);
 my $genericsClassExtension = "+Generated.h";
 
 my $constructorComment = "// Constructor methods:\n";
-my $constructorDoxygenLinkComment = "// Link constructor functions for doxygen:\n";
 my $setterComment = "// Setters:\n";
 my $getterComment = "// Getters:\n";
 my $respondsToComment = "// Responds to:\n";
@@ -127,20 +126,6 @@ sub printHeaderFilesForClass{
     print HEADER "}\n\n";
   }
 
-  if($isCommented){
-    print HEADER "\n";
-  }
-
-  $isCommented = 0;
-  foreach my $function (@{$class->{functions}}){
-    if($function->isNewFunction()){
-      if($isCommented == 0){
-        $isCommented = 1;
-        print HEADER $constructorDoxygenLinkComment;
-      }
-      print HEADER $function->getDoxygenComment($className);
-    }
-  }
   if($isCommented){
     print HEADER "\n";
   }

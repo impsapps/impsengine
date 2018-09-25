@@ -10,96 +10,35 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(printFromYamlToFile);
 
 use Constants;
-use ParsingYaml;
 use Expressions;
+use Helper;
+use OutputYamlClassHelper;
+use OutputYamlClassParser;
 
 sub printFromYamlToFile{
   my $class = shift;
-  our $classProvider = shift;
+  my $classProvider = shift;
   my $outputDir = shift;
 
-  die "Cannot printFromYamlToFile with not an yaml class \"" . $class->{className} . "\"." if (not $class->{yaml});
+  die "Cannot printFromYamlToFile with not an yaml class \"" . $class->getClassName() . "\"." if (not $class->{yaml});
 
   my $className = $class->getClassName();
   my $yaml = $class->{yaml};
 
   return if (exists $yaml->{__template__});
 
-  our $isCorrespondingObjectNeeded = 0;
-  our @attributeLines = ();
+  my $parser = OutputYamlClassParser->new($classProvider, $class->{filePath});
 
-  our @initLines = ();
-  our @deinitLines = ();
+  my $classnameToGenerate = $class->{yaml}->{__generate__};
+  my @initLines = ();
+  my @deinitLines = ();
+  my $result = $parser->parseObject($classnameToGenerate, $yaml, \@initLines, \@deinitLines);
 
-  our @objectAttributes = ();
+  my $attributesName = ${className} . "Attributes";
+  my $referencesStructName = ${className} . "Ref";
 
-  sub parseValue{
-    my $yaml = shift;
-  }
-
-  sub parseString{
-    my $yaml = shift;
-  }
-
-  sub parseBoolean{
-    my $yaml = shift;
-  }
-
-  sub parseFunction{
-    my $yaml = shift;
-  }
-
-  sub parseObject{
-    my $yaml = shift;
-    my $classNameExpected = shift;
-    my $variableNameToUse = shift;
-    my $class = $classProvider->getClass($classNameExpected);
-
-    my @keys = ();
-    foreach my $key (keys %{$yaml}){
-      if (not $key =~ m/^__.*__$/) {
-        push @keys, $key;
-      }
-    }
-
-    my $expectedClass = $classProvider->getClass($classNameExpected);
-    die "Expected an Object of class \"${classNameExpected}\", but it is not a valid object." if(not $expectedClass->isObject());
-
-    my @initFunctions = $expectedClass->getValidInitFunctions();
-    if (@initFunctions == 0) {
-      @initFunctions = $expectedClass->getValidMakeFunctions();
-    }
-    foreach my $function (@initFunctions){
-      my $params = $function->{params};
-      $params = removeFirstParamFromParams($params);
-      $params = normalizeParams($params);
-      while ($params =~ m/$matchSingleNormalizedParam/g) {
-        my $param = $1;
-        if ($param =~ m/$matchType\s*$matchName/) {
-          # body...
-        }else{
-          if (not $param =~ m/$matchFunction/){
-            die "Internal error. Invalid matched param \"$param\".";
-          }
-
-        }
-
-
-
-      }
-
-
-    }
-  }
-
-  sub parseObjectArray{
-    my $yamlClass = shift;
-    my $yaml = shift;
-  }
-
-  parseObject($yaml, $class->{yaml}->{__generate__}, "IA_result");
-
-  open(my $fh, ">", $outputDir . "/" . $className . ".h");
+  my $fileName = $outputDir . "/" . $className . ".h";
+  open(my $fh, ">", $fileName) or die "Could not open file \"$fileName\".";
 
   print $fh $copyright;
 
@@ -109,18 +48,28 @@ sub printFromYamlToFile{
   print $fh "#define ${className}_h\n";
   print $fh "\n";
   print $fh "#include \"IALibrary.h\"\n";
+  foreach my $include (sort keys %{$parser->{includes}}){
+    print $fh "#include \"$include.h\"\n";
+  }
   print $fh "\n";
   print $fh "typedef struct{\n";
-  foreach my $attributeLine (@attributeLines){
-    print $fh "\t" . $attributeLine . "\n";
+  foreach my $objectAttribute (@{$parser->{objectAttributes}}){
+    print $fh "\t" . $objectAttribute . "\n";
   }
-  print $fh "} ${className}Ref;\n";
+  print $fh "} $attributesName;\n";
+  print $fh "\n";
+  print $fh "typedef struct{\n";
+  foreach my $objectReference (@{$parser->{objectReferences}}){
+    print $fh "\t" . $objectReference . "\n";
+  }
+  print $fh "} $referencesStructName;\n";
   print $fh "\n";
   print $fh "\n";
-  print $fh "static $className * ${className}_createFromYaml(const SampleLayoutAttributes * attr, SampleLayoutRefs * refsOut) {\n";
+  print $fh "static $classnameToGenerate * ${className}_new${classnameToGenerate}FromYaml(const $attributesName * attr, $referencesStructName * refsOut) {\n";
   foreach my $initLine (@initLines){
-    print $fh "\t" . $initLine . "\n";
+    print $fh $initLine;
   }
+  print $fh "\treturn $result;\n"; #don't use deinit lines to destroy result
   print $fh "}\n";
   print $fh "\n";
   print $fh "\n";
@@ -129,11 +78,6 @@ sub printFromYamlToFile{
   print $fh "#endif\n";
   print $fh "\n";
   close($fh);
-
-  if (@objectAttributes > 0){
-
-  }
-
 }
 
 sub parseYaml{
@@ -142,22 +86,13 @@ sub parseYaml{
   my $context = shift;
   my $contextParams = @_;
 
-  if (ref $yaml eq 'HASH'){
-    print $fh "Hash Begin:\n";
-    foreach my $key (keys %$yaml){
-      print $fh "Key: $key\n";
-      printYaml($yaml->{$key}, $fh);
-    }
-    print $fh "Hash End.\n";
-  }elsif (ref $yaml eq 'ARRAY'){
-    print $fh "Array Begin:\n";
-    foreach my $value (@$yaml){
-      printYaml($value, $fh);
-    }
-    print $fh "Array End.\n";
-  }elsif ($yaml and not ref $yaml){
-    print $fh "Value: $yaml\n";
-  }
+#  if (ref $newYaml eq 'HASH'){
+    #dict
+  #  }elsif (ref $newYaml eq 'ARRAY'){
+    #array
+  #}elsif ($newYaml and not ref $newYaml){
+    #scalar
+  #}
 }
 
 1;

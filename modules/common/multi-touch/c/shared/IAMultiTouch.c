@@ -16,7 +16,3 @@
 void IAMultiTouch_commence(){
     IATouchManager_commence();
 }
-
-void IAMultiTouch_terminate(){
-    IATouchManager_terminate();
-}

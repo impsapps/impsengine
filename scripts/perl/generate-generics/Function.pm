@@ -60,7 +60,6 @@ sub initWithHeader{
 		if($returnType ne "return" and $returnType ne "define"){
 			if($functionName =~ m/${className}_$matchName/){
 				$functionName = $1;
-				$returnCode = 1;
 				if ($functionName =~ m/^deinit.+/){
 					$returnCode = 3;
 				}
@@ -75,7 +74,7 @@ sub initWithHeader{
 		$self->{comment} = $comment;
 		return $returnCode;
 	}else{
-		return 0;
+		return 1;
 	}
 }
 
@@ -136,21 +135,11 @@ sub isDeinitFunction{
 	}
 }
 
-sub isNewFunction{
-	my $self = shift;
-	if(index($self->{name}, 'new') == 0){
-		return 1;
-	}else{
-		return 0;
-	}
-}
-
 sub isSpecialFunction{
 	my $self = shift;
 	if($self->isInitFunction()
 			|| $self->isMakeFunction()
-			|| $self->isDeinitFunction()
-			|| $self->isNewFunction()){
+			|| $self->isDeinitFunction()){
 		return 1;
 	}else{
 		return 0;
@@ -171,15 +160,10 @@ sub getPureFunction{
 sub getDoxygenComment{
 	my $self = shift;
 	my $className = shift;
-	my $prefix = "";
-	if($self->isNewFunction()){
-		$prefix = $constructorPrefix;
-	}
 	my $result = "";
 	if($self->isValidFunction($className)){
-		my $comment = $self->getComment();
 		$result .= "/**\n";
-		$result .= " * \\fn " . $prefix . $self->getPureFunction($className) . "\n";
+		$result .= " * \\fn " . $self->getPureFunction($className) . "\n";
 		$result .= " * \\memberof $className\n";
 		$result .= " " . $self->getComment();
 		$result .= "*/\n\n";
@@ -203,16 +187,31 @@ sub privateGetFunction{
 	return sprintf "%s %s_%s(%s)", $self->{returnType}, $className, $self->{name}, $params;
 }
 
-sub privateGetFunctionForValueParams{
+sub privateReplaceFirstVariableNameInParams{
+	my $variableName = shift;
+	my $params = shift;
+	if(not ($params =~ s/$matchName\s*(,|$)/$variableName$2/)){
+		$params = $variableName;
+	}
+	return $params;
+}
+
+sub privateGetFunctionCallWithParamsAndCast{
 	my $self = shift;
 	my $className = shift;
 	my $variableName = shift;
 	my $params = shift;
 	my $castPrefix = shift;
-	if(not ($params =~ s/$matchName\s*(,|$)/$variableName$2/)){
-		$params = $variableName;
-	}
+	$params = privateReplaceFirstVariableNameInParams($variableName, $params);
 	return sprintf "%s_%s((%s%s *) %s)", $className, $self->{name}, $castPrefix, $className, $params;
+}
+
+sub getFunctionCallWithParams{
+	my $self = shift;
+	my $className = shift;
+	my $variableName = shift;
+	my $params = shift // "";
+	return sprintf "%s_%s(%s, %s)", $className, $self->{name}, $variableName, $params;
 }
 
 sub getHeaderPrintable{
@@ -241,7 +240,7 @@ sub getImplForChildClassPrintable{
 		$function = $function . "return ";
 	}
 
-	$function = sprintf "%s%s;\n}\n\n", $function, $self->privateGetFunctionForValueParams($superClass, $variableName, $params, $castPrefix);
+	$function = sprintf "%s%s;\n}\n\n", $function, $self->privateGetFunctionCallWithParamsAndCast($superClass, $variableName, $params, $castPrefix);
 	return $function;
 }
 

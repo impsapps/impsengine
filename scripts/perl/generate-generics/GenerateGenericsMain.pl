@@ -35,10 +35,8 @@ use ClassProvider;
 use Attribute;
 use Function;
 use ParsingHeader;
-use ParsingYaml;
 use Constants;
 use OutputHeaderFile;
-use OutputYamlClass;
 
 my $moduleName = "";
 my $genDir = "";
@@ -53,10 +51,13 @@ foreach my $arg (@ARGV){
     if ($option eq "N") {
       $moduleName = $value;
     } elsif ($option eq "D") {
+      $value =~ s/\\/\//g;
       $genDir = $value;
     } elsif ($option eq "S") {
+      $value =~ s/\\/\//g;
       push @sourceDirs, $value;
     } elsif ($option eq "I") {
+      $value =~ s/\\/\//g;
       push @additionalIncludeDirs, $value;
     } elsif ($option eq "G") {
       $moduleGroup = $value;
@@ -71,28 +72,19 @@ die "No gen dir specified.\n" . $usage if ($genDir eq "");
 die "No source dir specified.\n" . $usage if (scalar @sourceDirs == 0);
 
 
-my $classProvider = new ClassProvider();
+my $classProvider = ClassProvider->new();
 
 my @sourceHeaderFiles = ();
-my @sourceYamlFiles = ();
 my @sourceClassNames = ();
-my @sourceYamlClassNames = ();
 foreach my $sourceDir (@sourceDirs){
   next if ($sourceDir eq $genDir);
   push @sourceHeaderFiles, getHeaderFilesForDir($sourceDir);
-  push @sourceYamlFiles, getYamlFilesForDir($sourceDir);
   $classProvider->addFileDir($sourceDir);
 }
 
 foreach my $sourceHeaderFile (@sourceHeaderFiles){
   my $className = getClassNameWithExtensionForHeaderFile($sourceHeaderFile);
   push @sourceClassNames, $className;
-}
-
-foreach my $sourceYamlFile (@sourceYamlFiles){
-  my $className = getClassNameForYamlFile($sourceYamlFile);
-  push @sourceClassNames, $className;
-  push @sourceYamlClassNames, $className;
 }
 
 foreach my $additionalIncludeDir (@additionalIncludeDirs){
@@ -108,13 +100,6 @@ foreach my $className (sort @sourceClassNames){
   my $class = $classProvider->getClass($className);
   if (defined $class) {
     printHeaderFilesForClass($class, $classProvider, $genDir);
-  }
-}
-
-foreach my $className (sort @sourceYamlClassNames){
-  my $class = $classProvider->getClass($className);
-  if (defined $class) {
-    printFromYamlToFile($class, $classProvider, $genDir);
   }
 }
 

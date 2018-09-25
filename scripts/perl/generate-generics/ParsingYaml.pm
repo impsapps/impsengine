@@ -59,7 +59,7 @@ sub preParseYamlFile {
 	die "Expected a hash on top level of yaml file \"$yamlFile\"" if (ref $yaml ne 'HASH');
   die "Expected key \"__generate__\" or \"__template__\" on top level of yaml file \"$yamlFile\"" if (not (exists $yaml->{__generate__} or exists $yaml->{__template__}));
 	my $className = getClassNameForYamlFile($yamlFile);
-  my $class = Class->new($className);
+  my $class = Class->new($className, $yamlFile);
 	$class->{yaml} = $yaml;
   return $class;
 }

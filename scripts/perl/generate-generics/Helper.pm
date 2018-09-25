@@ -9,7 +9,7 @@ use Expressions;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(normalizeParams removeFirstParamFromParams convertParamsToValues inheritFunction);
+our @EXPORT = qw(normalizeParams removeFirstParamFromParams listAllParams listAllParamNames convertParamToValue convertParamsToValues inheritFunction);
 
 our $matchUnnamedParamRaw = qr/$matchTypeRaw|$matchTypeRaw\s*\(\s*\*\s*\)\s*\($matchParamsRaw\)/;
 
@@ -39,27 +39,42 @@ sub removeFirstParamFromParams{
     return $params;
 }
 
-sub convertParamsToValues{
+sub listAllParams{
 	my $params = shift;
-	my $convertedParams = "";
-	my $isFirstParam = 0;
+	my @result = ();
 	while($params =~ m/$matchSingleNormalizedParam/g){
 		my $nextParam = $1;
-		if($nextParam =~ m/^$matchType\s*$matchName$/){
-			$nextParam = $2;
-		}elsif($nextParam =~ m/^$matchFunction$/){
-			$nextParam = $2;
-		}else{
-			die "Internal Error in convert Params to Values";
-		}
-		if($isFirstParam == 0){
-			$isFirstParam = 1;
-			$convertedParams = $nextParam;
-		}else{
-			$convertedParams = $convertedParams . ", " . $nextParam;
-		}
+		push @result, $nextParam;
 	}
-	return $convertedParams;
+	return @result;
+}
+
+sub listAllParamNames{
+	my $params = shift;
+	my @result = ();
+	foreach my $nextParam(listAllParams($params)){
+		push @result, convertParamToValue($nextParam);
+	}
+	return @result;
+}
+
+sub convertParamToValue{
+	my $param = shift;
+	if($param =~ m/^$matchType\s*$matchName$/){
+		$param = $2;
+	}elsif($param =~ m/^$matchFunction$/){
+		$param = $2;
+	}else{
+		die "Internal error. Expected param to be a type or function.";
+	}
+	return $param;
+}
+
+sub convertParamsToValues{
+	my $params = shift;
+	my @allParamNames = listAllParamNames($params);
+	my $result = join(", ", @allParamNames);
+	return $result;
 }
 
 sub inheritFunction{

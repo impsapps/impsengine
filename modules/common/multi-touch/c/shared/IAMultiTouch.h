@@ -13,6 +13,4 @@
 
 void IAMultiTouch_commence();
 
-void IAMultiTouch_terminate();
-
 #endif

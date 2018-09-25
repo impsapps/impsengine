@@ -17,7 +17,6 @@ static float primaryHeightOfScreen;
 static void (*acquireApplicationLock)(void);
 static void (*releaseApplicationLock)(void);
 
-#define _WIN32_WINNT 0x0400
 #pragma comment( lib, "user32.lib" )
 
 #include <windows.h>

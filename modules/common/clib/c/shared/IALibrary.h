@@ -103,9 +103,6 @@ void IALibrary_unregisterOnMemoryWarningNotification(IANotificationDelegate * de
         *IA_b =  IA_t; \
     } while (0)
 
-
-#define this this
-
 #define in ,
 
 #define list(type, ...) type, make, __VA_ARGS__

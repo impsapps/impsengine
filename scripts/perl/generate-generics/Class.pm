@@ -13,10 +13,13 @@ use Function;
 
 sub new{
 	my $class = shift;
+	my $className = shift;
+	my $filePath = shift;
 	my $self = {
-		className => shift,
+		className => $className,
 		superClassName => "",
 		firstAttribute => undef,
+		allAttributeNames => [],
 		setters => [],
 		settersAsRef => [],
 		settersAsCharArray => [],
@@ -34,7 +37,8 @@ sub new{
 		isDelegate => 0,
 		isEvent => 0,
 		isEventWithoutRetain => 0,
-		yaml => undef
+		yaml => undef,
+		filePath => $filePath
 	};
 	bless $self, $class;
 	return $self;
@@ -60,6 +64,12 @@ sub getSuperClassName{
 	return $self->{superClassName};
 }
 
+sub getAttribute{
+	my $self = shift;
+	my $attributeName = shift;
+	return $self->{attributes}->{$attributeName};
+}
+
 sub isObject{
 	my $self = shift;
 	if ($self->getSuperClassName ne "") {
@@ -69,9 +79,24 @@ sub isObject{
 	}
 }
 
+sub isStruct{
+	my $self = shift;
+	my @makeFunctions = $self->getMakeFunctionsForStruct();
+	if (@makeFunctions > 0) {
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 sub isDelegate{
 	my $self = shift;
 	return $self->{isDelegate};
+}
+
+sub getFilePath{
+	my $self = shift;
+	return $self->{filePath};
 }
 
 sub addExeFunctionsToList{
@@ -90,7 +115,7 @@ sub addExeFunctionsToList{
 	foreach my $exe(@{$self->{exes}}){
 		my $attribute = $self->{attributes}->{$exe};
 		my $newFunctionHeader = $attribute->getExePrintable($className, $objectVariableName);
-		our $newFunction = new Function();
+		our $newFunction = Function->new();
 		$newFunction->initWithHeader($className, $newFunctionHeader);
 		push @$listRef, $newFunction;
 	}
@@ -112,6 +137,18 @@ sub getObjectVariableName{
 	}else{
 		return "";
 	}
+}
+
+sub getMakeFunctionsForStruct{
+	my $self = shift;
+	my $className = $self->getClassName();
+	my @functions = ();
+	foreach my $function (@{$self->{functions}}){
+		if($function->isMakeFunction() && $function->isStaticFunction($className) == 1 && $function->{returnType} eq $className){
+			push @functions, $function;
+		}
+	}
+	return @functions;
 }
 
 sub getValidMakeFunctions{
@@ -136,6 +173,32 @@ sub getValidInitFunctions{
 		}
 	}
 	return @functions;
+}
+
+sub getDeinitFunction{
+	my $self = shift;
+	foreach my $function (@{$self->{functions}}){
+		if($function->isDeinitFunction()){
+			return $function;
+		}
+	}
+	return undef;
+}
+
+sub getAllNonSpecialValidFunctions{
+	my $self = shift;
+	my @result = ();
+	foreach my $function (@{$self->{functions}}){
+		if((not $function->isSpecialFunction()) && $function->isValidFunction($self->getClassName())){
+			push @result, $function;
+		}
+	}
+	return @result;
+}
+
+sub getAllSetterAttributeNames{
+	my $class = shift;
+	return (@{$class->{setters}}, @{$class->{settersAsRef}}, @{$class->{settersAsCharArray}});
 }
 
 sub hasAnnotations{

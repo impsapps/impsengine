@@ -11,25 +11,35 @@
 
 #include <stdint.h>
 
+
+typedef void (*IAViewAttributes_setArgs)(void * correspondingView, const void * args);
+typedef void (*IAViewAttributes_onFadeInStart)(void * correspondingView, uint64_t startTime, uint64_t duration);
+typedef void (*IAViewAttributes_drawFadeIn)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t currentTime);
+typedef void (*IAViewAttributes_onFadeInFinished)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t endTime);
+typedef void (*IAViewAttributes_drawFunction)(void * correspondingView, uint64_t currentTime);
+typedef void (*IAViewAttributes_onFadeOutStart)(void * correspondingView, uint64_t startTime, uint64_t duration);
+typedef void (*IAViewAttributes_drawFadeOut)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t currentTime);
+typedef void (*IAViewAttributes_onFadeOutFinished)(void *correspondingView, uint64_t startTime, uint64_t duration, uint64_t endTime);
+
 typedef struct{
     //@get
     void * correspondingView;
     //@set+get
-    void (*setArgs)(void * correspondingView, const void * args);
+    IAViewAttributes_setArgs setArgsFunction;
     //@set+get
-    void (*onFadeInStart)(void * correspondingView, uint64_t startTime, uint64_t duration);
+    IAViewAttributes_onFadeInStart onFadeInStartFunction;
     //@set+get
-    void (*drawFadeIn)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t currentTime);
+    IAViewAttributes_drawFadeIn drawFadeInFunction;
     //@set+get
-    void (*onFadeInFinished)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t endTime);
+    IAViewAttributes_onFadeInFinished onFadeInFinishedFunction;
     //@set+get
-    void (*draw)(void * correspondingView, uint64_t currentTime);
+    IAViewAttributes_drawFunction drawFunction;
     //@set+get
-    void (*onFadeOutStart)(void * correspondingView, uint64_t startTime, uint64_t duration);
+    IAViewAttributes_onFadeOutStart onFadeOutStartFunction;
     //@set+get
-    void (*drawFadeOut)(void * correspondingView, uint64_t startTime, uint64_t duration, uint64_t currentTime);
+    IAViewAttributes_drawFadeOut drawFadeOutFunction;
     //@set+get
-    void (*onFadeOutFinished)(void *correspondingView, uint64_t startTime, uint64_t duration, uint64_t endTime);
+    IAViewAttributes_onFadeOutFinished onFadeOutFinishedFunction;
     //@set+get
     int zOrder;
 } IAViewAttributes;
