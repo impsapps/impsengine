@@ -17,7 +17,7 @@ our @ISA = qw(Exporter);
 our @EXPORT = qw(getClassNameWithExtensionForHeaderFile parseHeaderFile getHeaderFilesForDir);
 
 my $matchComment = qr/(?:\/\*((?:.|\s)*?)\*\/|\/\/([^\n]*))/;
-my $matchAnnotationInCommand = qr/\@$matchName(?:\($matchName\))?/;
+my $matchAnnotationInCommand = qr/\@(\w[\w\d\+]*)(?:\($matchName\))?/;
 my $matchSeperateAnnotationAndInfo = qr/^$matchName(?::((?:.|\n)*?))?\s*$/;
 
 

@@ -8,23 +8,26 @@ use Expressions;
 use Function;
 use Helper;
 use OutputYamlClassHelper;
+use ObjectReference;
 
 sub new{
   my $class = shift;
   my $classProvider = shift;
   my $resourceProviders = shift;
+  my $attributesClassName = shift;
   my $yamlFilePath = shift;
   my $self = {
     classProvider => $classProvider,
     resourceProviders => $resourceProviders,
     includes => {},
+    attributesClassName => $attributesClassName,
 
-    objectReferences => [],
+    objectReferences => {},
 
     anonymousAttrCount => 0,
     anonymousObjCount => 0,
+    anonymousObjRefCount => 0,
     anonymousArrayCount => 0,
-    anonymousFunctionCount => 0,
 
     yamlFilePath => $yamlFilePath
   };
@@ -170,8 +173,7 @@ sub parseObject{
     my @optionalAttributeNames = ();
     my $wasAttributesAlreadyParsed = 0;
     my $attributeInitFunction = undef;
-    while ($initFunctionParams =~ m/$matchSingleNormalizedParam/g) {
-      my $param = $1;
+    foreach my $param (listAllParams($initFunctionParams)) {
       if ($wasAttributesAlreadyParsed) {
         die "Invalid parameter order. " .
           "Expected Attributes to be the last parameter for class \"${className}\" in yaml file \""
@@ -246,8 +248,7 @@ sub parseAsResource{
   $functionParams = normalizeParams($functionParams);
   my @paramsForCall = ();
 
-  while ($functionParams =~ m/$matchSingleNormalizedParam/g){
-    my $param = $1;
+  foreach my $param (listAllParams($functionParams)){
     if ($param =~ m/^$matchType\s*$matchName$/) {
       my $matchedName = $2;
       my $newYaml = $yaml->{$matchedName};
@@ -321,13 +322,27 @@ sub parseObjectWithFunctions{
 
   $self->privateAddInclude($className);
 
+  my $objectReference = undef;
+  my $objectReferenceName = "";
+  if (exists $yaml->{__ref__}) {
+    $objectReferenceName = $yaml->{__ref__};
+    $objectReference = ObjectReference->new($objectReferenceName, $className);
+    if (exists $self->{objectReferences}->{$objectReferenceName}) {
+      my $objectReferenceTemp = $self->{objectReferences}->{$objectReferenceName};
+      if (not $objectReferenceTemp->hasType($className)){
+        die "Different types for same reference detected: \"" . $objectReferenceTemp->getType() . "\" and \"$className\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\".";
+      }
+    }else{
+      $self->{objectReferences}->{$objectReferenceName} = $objectReference;
+    }
+  }
+
   my $attributeClassName = privateGetAttributeClassName($className);
   my $attributeClass = $self->{classProvider}->getClass($attributeClassName);
   my @selfInitLines = ();
   my @selfDeinitLines = ();
   my @paramsForNewFunction = ();
-  while ($initFunction->{params} =~ m/$matchSingleNormalizedParam/g) {
-    my $param = $1;
+  foreach my $param (listAllParams($initFunction->{params})) {
     my $isAttributes = 0;
     if ($param =~ m/^$matchType\s*$matchName$/) {
       my $matchedType = $1;
@@ -400,6 +415,10 @@ sub parseObjectWithFunctions{
             push @selfInitLines, "\t" . $setterFunction->getFunctionCallWithParams($attributeClassName, "&" . $attributeName, $result) . ";\n";
           }
         }
+        if (defined $objectReference) {
+          $objectReference->makeInjectable($self->{attributesClassName});
+          push @selfInitLines, sprintf("\t%s_onInject%s(attr, %s));\n", $self->{attributesClassName}, ucfirst $objectReferenceName, "&" . $attributeName);
+        }
       }
     }
     if ($isAttributes == 0) {
@@ -437,6 +456,14 @@ sub parseObjectWithFunctions{
     if ($initFunction->isInitFunction()) {
       push @$deinitLinesRef, "\t${className}_deinit($variableName);\n";
     }
+  }
+  if (defined $objectReference) {
+    my $tempVarName = "IA_objRef" . $self->{anonymousObjRefCount};
+    $self->{anonymousObjRefCount} += 1;
+    push @$initLinesRef, "\t$className ** $tempVarName = " . $self->{attributesClassName} . "_get" . ucfirst($objectReferenceName) . "Ref(attr);\n";
+    push @$initLinesRef, "\tif ($tempVarName != NULL) {\n";
+    push @$initLinesRef, "\t\t*$tempVarName = $variableName;\n";
+    push @$initLinesRef, "\t}\n";
   }
   return $variableName;
 }

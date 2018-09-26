@@ -164,7 +164,7 @@ IARect IAImage_getTrimmedRect(IAImage * this) {
 
 void IAImage_deactivateTrimmedRect(IAImage * this) {
 	if (this->hasTrimmedRect) {
-		IARect originalRect = IARect_makeWithLeftTopPointAndSize(IAPoint_ZERO, this->originalSize);
+		IARect originalRect = IARect_makeWithLeftTopPointAndSize(IAPoint_zero, this->originalSize);
 		IARect trimmedRect = IATrimmedRect_trimRect(&this->trimmedRect, originalRect);
 		this->originalSize = trimmedRect.size;
 	}

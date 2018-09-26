@@ -14,6 +14,7 @@ use Expressions;
 use Helper;
 use OutputYamlClassHelper;
 use OutputYamlClassParser;
+use OutputHeaderFile;
 
 sub printFromYamlToFile{
   my $class = shift;
@@ -24,76 +25,124 @@ sub printFromYamlToFile{
   die "Cannot printFromYamlToFile with not an yaml class \"" . $class->getClassName() . "\"." if (not $class->{yaml});
 
   my $className = $class->getClassName();
+  my $attributesClassName =  $className . "Attributes";
   my $yaml = $class->{yaml};
 
   return if (exists $yaml->{__template__});
 
-  my $parser = OutputYamlClassParser->new($classProvider, $resourceProviders, $class->{filePath});
+  my $parser = OutputYamlClassParser->new($classProvider, $resourceProviders, $attributesClassName, $class->{filePath});
 
   my $classnameToGenerate = $class->{yaml}->{__generate__};
   my @initLines = ();
   my @deinitLines = ();
-  my $result = $parser->parseObject($classnameToGenerate, $yaml, \@initLines, \@deinitLines);
+  my $result = $parser->parseObject($classnameToGenerate, $yaml, \@initLines, \@deinitLines, "this");
+  die "Expected \"this\" as a result, got \"$result\"." if ($result ne "this");
 
-  my $attributesName = ${className} . "Attributes";
-  my $referencesStructName = ${className} . "Ref";
+  my %objectReferences = %{$parser->{objectReferences}};
+  my $hasAttributes = 0;
+  if (keys %objectReferences > 0) {
+    $hasAttributes = 1;
+  }
 
   my $fileName = $outputDir . "/" . $className . ".h";
   open(my $fh, ">", $fileName) or die "Could not open file \"$fileName\".";
-
   print $fh $copyright;
-
   print $fh "\n";
   print $fh "\n";
   print $fh "#ifndef ${className}_h\n";
   print $fh "#define ${className}_h\n";
   print $fh "\n";
   print $fh "#include \"IALibrary.h\"\n";
-  foreach my $include (sort keys %{$parser->{includes}}){
-    print $fh "#include \"$include.h\"\n";
+  if ($hasAttributes) {
+    print $fh "#include \"$attributesClassName.h\"\n";
+  }else{
+    foreach my $include (sort keys %{$parser->{includes}}){
+      print $fh "#include \"$include.h\"\n";
+    }
   }
   print $fh "\n";
-  print $fh "typedef struct{\n";
-  foreach my $objectAttribute (@{$parser->{objectAttributes}}){
-    print $fh "\t" . $objectAttribute . "\n";
+  my $additionalParamsForInit = "";
+  my $additionalParamsForNew = "";
+  my $additionalParamsForInitCall = "";
+  if ($hasAttributes) {
+    $additionalParamsForInit = ", const $attributesClassName * attr";
+    $additionalParamsForNew = "const $attributesClassName * attr";
+    $additionalParamsForInitCall = ", attr";
   }
-  print $fh "} $attributesName;\n";
-  print $fh "\n";
-  print $fh "typedef struct{\n";
-  foreach my $objectReference (@{$parser->{objectReferences}}){
-    print $fh "\t" . $objectReference . "\n";
+  my $initMethodName = "initFromYaml";
+  my $deinitMethod = "${classnameToGenerate}_deinit";
+  if (@deinitLines == 0) {
+    $initMethodName = "makeFromYaml";
+    $deinitMethod = "NULL";
   }
-  print $fh "} $referencesStructName;\n";
-  print $fh "\n";
-  print $fh "\n";
-  print $fh "static $classnameToGenerate * ${className}_new${classnameToGenerate}FromYaml(const $attributesName * attr, $referencesStructName * refsOut) {\n";
+  print $fh "static inline void ${className}_$initMethodName($classnameToGenerate * this$additionalParamsForInit) {\n";
   foreach my $initLine (@initLines){
     print $fh $initLine;
   }
-  print $fh "\treturn $result;\n"; #don't use deinit lines to destroy result
   print $fh "}\n";
   print $fh "\n";
+  print $fh "static inline $classnameToGenerate * ${className}_newFromYaml($additionalParamsForNew) {\n";
+  print $fh "\t$classnameToGenerate * this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
+  print $fh "\t${className}_$initMethodName(this$additionalParamsForInitCall);\n";
+  print $fh "\treturn this;\n";
+  print $fh "}\n";
   print $fh "\n";
-  print $fh "\n";
+  print $fh "static inline $classnameToGenerate * ${className}_fromYaml($additionalParamsForNew) {\n";
+  print $fh "\t$classnameToGenerate * this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
+  print $fh "\t${className}_$initMethodName(this$additionalParamsForInitCall);\n";
+  print $fh "\tIA_autorelease(this);\n";
+  print $fh "\treturn this;\n";
+  print $fh "}\n";
   print $fh "\n";
   print $fh "#endif\n";
   print $fh "\n";
   close($fh);
-}
 
-sub parseYaml{
-  my $yaml = shift;
-  my $fh = shift;
-  my $context = shift;
-  my $contextParams = @_;
+  if ($hasAttributes) {
+    my $attributesFileName = $outputDir . "/" . $attributesClassName . ".h";
+    open($fh, ">", $attributesFileName) or die "Could not open file \"$attributesFileName\".";
+    print $fh $copyright;
+    print $fh "\n";
+    print $fh "\n";
+    print $fh "#ifndef ${attributesClassName}_h\n";
+    print $fh "#define ${attributesClassName}_h\n";
+    print $fh "\n";
+    foreach my $include (sort keys %{$parser->{includes}}){
+      print $fh "#include \"$include.h\"\n";
+    }
+    print $fh "\n";
+    print $fh "typedef struct{\n";
+    print $fh "\t//\@set+get\n";
+    print $fh "\tvoid * correspondingObject;\n";
+    foreach my $objectReferenceKey (sort keys %objectReferences){
+      my $objectReference = $objectReferences{$objectReferenceKey};
+      print $fh "\t//\@set+get\n";
+      print $fh "\t" . $objectReference->getType() . " ** " . $objectReference->getRefName() . "Ref;\n";
+      if ($objectReference->isInjectable()) {
+        print $fh "\t//\@set+exe\n";
+        print $fh "\tvoid (*" . $objectReference->getRefName() . ")(void * correspondingObject, "
+          . $objectReference->getAttributesClassNameForInjection() . " * attr);\n";
+      }
+    }
+    print $fh "} $attributesClassName;\n";
+    print $fh "\n";
+    print $fh "static inline void ${attributesClassName}_make(${attributesClassName} * this, void * correspondingObject){\n";
+    print $fh "\t*this = (${attributesClassName}){\n";
+    print $fh "\t\t.correspondingObject = correspondingObject\n";
+    print $fh "\t};\n";
+    print $fh "}\n";
+    print $fh "\n";
+    print $fh "#include \"${attributesClassName}+Generated.h\"\n";
+    print $fh "\n";
+    print $fh "#endif\n";
+    print $fh "\n";
+    print $fh "\n";
+    close($fh);
 
-#  if (ref $newYaml eq 'HASH'){
-    #dict
-  #  }elsif (ref $newYaml eq 'ARRAY'){
-    #array
-  #}elsif ($newYaml and not ref $newYaml){
-    #scalar
-  #}
+    $classProvider->addHeaderFile($attributesFileName);
+    $class = $classProvider->getClass($attributesClassName);
+    printHeaderFilesForClass($class, $classProvider, $outputDir);
+  }
 }
 
 1;

@@ -211,7 +211,11 @@ sub getFunctionCallWithParams{
 	my $className = shift;
 	my $variableName = shift;
 	my $params = shift // "";
-	return sprintf "%s_%s(%s, %s)", $className, $self->{name}, $variableName, $params;
+	if ($params eq "") {
+		return sprintf "%s_%s(%s)", $className, $self->{name}, $variableName;
+	}else{
+		return sprintf "%s_%s(%s, %s)", $className, $self->{name}, $variableName, $params;
+	}
 }
 
 sub getStaticFunctionCallWithParams{
