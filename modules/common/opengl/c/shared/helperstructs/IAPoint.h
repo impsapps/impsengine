@@ -9,8 +9,6 @@
 #ifndef ImpsEngineiOS_IAPoint_h
 #define ImpsEngineiOS_IAPoint_h
 
-#include <stdbool.h>
-
 typedef struct{
     float x;
     float y;

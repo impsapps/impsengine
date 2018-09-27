@@ -20,12 +20,11 @@ typedef struct IAButton IAButton;
 struct IAButton{
     //@extend
     IADrawableRect drawableRect;
-    IAImage * buttonImageNormal;
-    IAImage * buttonImageTouched;
+    IADrawableRect * normal;
+    IADrawableRect * touched;
     
     IATouchDelegate touchDelegate;
-    IAArrayList validTouchIds;
-    int touchCount;
+    IAStructArrayList_IATouch * validTouches;
     
     //@get
     float rectExtensionForTouchBeganLeft;

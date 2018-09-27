@@ -16,8 +16,8 @@
 
 #define CLASSNAME "IABuffer"
 
-static GLenum CURRENT_GL_ELEMENT_ARRAY_BUFFER = GL_NONE;
-static GLenum CURRENT_GL_ARRAY_BUFFER = GL_NONE;
+static GLenum currentGlElementArrayBuffer = GL_NONE;
+static GLenum currentGlArrayBuffer = GL_NONE;
 
 void IABuffer_makeOpenGLResourceDelegate(IABuffer * this);
 
@@ -28,8 +28,8 @@ void IABuffer_bufferData(IABuffer * this);
 
 
 void IABuffer_onNewOpenGLContext(){
-    CURRENT_GL_ELEMENT_ARRAY_BUFFER = GL_NONE;
-    CURRENT_GL_ARRAY_BUFFER = GL_NONE;
+    currentGlElementArrayBuffer = GL_NONE;
+    currentGlArrayBuffer = GL_NONE;
 }
 
 void IABuffer_init(IABuffer * this, GLenum target, size_t size, GLvoid * data, GLenum usage){
@@ -49,7 +49,7 @@ void IABuffer_init(IABuffer * this, GLenum target, size_t size, GLvoid * data, G
 
 void IABuffer_initCopy(IABuffer * this, const IABuffer * bufferToCopy){
     this->base = IAObject_make(this);
-    this->bufferId = 0;
+    this->bufferId = GL_NONE;
     this->target = bufferToCopy->target;
     this->size = bufferToCopy->size;
     this->data = IA_malloc(this->size);
@@ -80,8 +80,17 @@ void IABuffer_createOpenGLResource(IABuffer * this){
 }
 
 void IABuffer_destroyOpenGLResource(IABuffer * this){
+	if (this->target == GL_ARRAY_BUFFER) {
+		if (currentGlArrayBuffer == this->bufferId){
+			currentGlArrayBuffer = GL_NONE;
+		}
+	}else{
+		if (currentGlElementArrayBuffer == this->bufferId){
+			currentGlElementArrayBuffer = GL_NONE;
+		}
+	}
 	glDeleteBuffers(1, &(this->bufferId));
-	this->bufferId = 0;
+	this->bufferId = GL_NONE;
 }
 
 void IABuffer_updateData(IABuffer * this, size_t size, GLvoid * data, GLenum usage){
@@ -100,13 +109,13 @@ void IABuffer_updateData(IABuffer * this, size_t size, GLvoid * data, GLenum usa
 
 void IABuffer_use(const IABuffer * this){
     if (this->target == GL_ARRAY_BUFFER) {
-        if (this->bufferId != CURRENT_GL_ARRAY_BUFFER) {
-            CURRENT_GL_ARRAY_BUFFER = this->bufferId;
+        if (this->bufferId != currentGlArrayBuffer) {
+            currentGlArrayBuffer = this->bufferId;
             glBindBuffer(this->target, this->bufferId);
         }
     }else{
-        if (this->bufferId != CURRENT_GL_ELEMENT_ARRAY_BUFFER) {
-            CURRENT_GL_ELEMENT_ARRAY_BUFFER = this->bufferId;
+        if (this->bufferId != currentGlElementArrayBuffer) {
+            currentGlElementArrayBuffer = this->bufferId;
             glBindBuffer(this->target, this->bufferId);
         }
     }

@@ -62,7 +62,7 @@ IATouchHandler * IATouchManager_createNewTouchHandler(long touchId, IAPoint loca
     }
     
     IAArrayList_add(touchHandlers, handler);
-    IATouch * touch = IATouchHandler_getTouch(handler);
+    IATouch touch = IATouchHandler_getTouch(handler);
     IATouchDelegate * touchDelegate;
     foreach (touchDelegate in arrayList(registeredTouchDelegates)) {
         if(IATouchDelegate_wantToUseTouch(touchDelegate, touch) == true){
@@ -78,7 +78,8 @@ IATouchHandler * IATouchManager_createNewTouchHandler(long touchId, IAPoint loca
 IATouchHandler * IATouchManager_getTouchHandler(long touchId){
     IATouchHandler * handler = NULL;
     foreach (handler in arrayList(touchHandlers)){
-        if (IATouchHandler_getTouchId(handler) == touchId) {
+    	IATouch touch = IATouchHandler_getTouch(handler);
+        if (touch.identifier == touchId) {
             break;
         }
     }

@@ -42,6 +42,8 @@ sub printFromYamlToFile{
   my $hasAttributes = 0;
   if (keys %objectReferences > 0) {
     $hasAttributes = 1;
+  }elsif ($parser->{isCorrespondingObjectNeeded}){
+    $hasAttributes = 1;
   }
 
   my $fileName = $outputDir . "/" . $className . ".h";
@@ -111,7 +113,8 @@ sub printFromYamlToFile{
       print $fh "#include \"$include.h\"\n";
     }
     print $fh "\n";
-    print $fh "typedef struct{\n";
+    print $fh "typedef struct $attributesClassName $attributesClassName;\n";
+    print $fh "struct ${attributesClassName}{\n";
     print $fh "\t//\@set+get\n";
     print $fh "\tvoid * correspondingObject;\n";
     foreach my $objectReferenceKey (sort keys %objectReferences){
@@ -120,11 +123,13 @@ sub printFromYamlToFile{
       print $fh "\t" . $objectReference->getType() . " ** " . $objectReference->getRefName() . "Ref;\n";
       if ($objectReference->isInjectable()) {
         print $fh "\t//\@set+exe\n";
-        print $fh "\tvoid (*" . $objectReference->getRefName() . ")(void * correspondingObject, "
+        print $fh "\tvoid (*onInject" .  ucfirst($objectReference->getRefName()) . ")("
+          . "void * correspondingObject, "
+          . "$classnameToGenerate * " . lcfirst ($className) . ", "
           . $objectReference->getAttributesClassNameForInjection() . " * attr);\n";
       }
     }
-    print $fh "} $attributesClassName;\n";
+    print $fh "};\n";
     print $fh "\n";
     print $fh "static inline void ${attributesClassName}_make(${attributesClassName} * this, void * correspondingObject){\n";
     print $fh "\t*this = (${attributesClassName}){\n";

@@ -57,7 +57,7 @@ sub initWithHeader{
 		#This if clause is needed because otherwise returns on statements in inline functions will be detected as functions.
 		#Please note, that inline functions are not officially supported yet.
 		#It is to prevent of throwing "invalid function name" errors because of generated inline function in event classes.
-		if($returnType ne "return" and $returnType ne "define"){
+		if($returnType ne "return"){
 			if($functionName =~ m/${className}_$matchName/){
 				$functionName = $1;
 				if ($functionName =~ m/^deinit.+/){

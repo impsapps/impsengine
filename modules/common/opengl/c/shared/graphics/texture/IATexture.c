@@ -15,8 +15,6 @@
 
 void IATexture_createOpenGLResources(IATexture * this);
 
-
-
 void IATexture_transportToOpenGL(IATexture * this);
 
 void IATexture_activateIfNeeded(IATexture * this);

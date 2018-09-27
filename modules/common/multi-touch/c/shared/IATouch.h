@@ -13,14 +13,15 @@
 
 typedef struct{
     //@get
+    long identifier;
+    //@get
     IAPoint location;
 } IATouch;
 
 
-void IATouch_make(IATouch *, IAPoint location);
-void IATouch_makeCopy(IATouch *, const IATouch * toCopy);
+IATouch IATouch_make(long identifier, IAPoint location);
 
-bool IATouch_isInRect(const IATouch *, IARect rect);
+bool IATouch_hasSameIdentifier(IATouch t1, IATouch t2);
 
 #include "IATouch+Generated.h"
 

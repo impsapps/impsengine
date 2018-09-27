@@ -3,10 +3,11 @@ use strict;
 use warnings FATAL => 'all';
 
 use Expressions;
+use Helper;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getParamNamesForYamlNode canCompleteYamlNames);
+our @EXPORT = qw(getParamNamesForYamlNode canCompleteYamlNames canCompleteWithAttributes typecast);
 
 sub privateIsSpecialYamlKey{
   my $key = shift;
@@ -49,6 +50,7 @@ sub canCompleteYamlNames{
       }
     }
     if ($wasRequiredNameFound == 0) {
+
       return 0;
     }
   }
@@ -65,6 +67,53 @@ sub canCompleteYamlNames{
     }
   }
   return 1;
+}
+
+#Returns an attribute init function or undef
+sub canCompleteWithAttributes{
+  my $attributeClass = shift;
+  my $yamlNamesRef = shift;
+  my $requiredNamesRef = shift;
+
+  my @optionalAttributeNames = ();
+  foreach my $setterName ($attributeClass->getAllSetterAttributeNames()){
+    push @optionalAttributeNames, $setterName;
+  }
+  foreach my $attributeClassFunction ($attributeClass->getAllNonSpecialValidFunctions()){
+    my $functionName = $attributeClassFunction->{name};
+    if ($functionName =~ m/^set(.*?)(Function)?$/) {
+      my $attributeName = lcfirst $1;
+      push @optionalAttributeNames, $attributeName;
+    }
+  }
+
+  my @attributeInitFunctions = $attributeClass->getValidInitFunctions();
+  if (@attributeInitFunctions == 0) {
+    @attributeInitFunctions = $attributeClass->getValidMakeFunctions();
+  }
+  foreach my $localAttributeInitFunction (@attributeInitFunctions){
+    my $attributeInitFunctionParams = $localAttributeInitFunction->{params};
+    $attributeInitFunctionParams = removeFirstParamFromParams($attributeInitFunctionParams);
+    $attributeInitFunctionParams = normalizeParams($attributeInitFunctionParams);
+    my @params = listAllParams($attributeInitFunctionParams);
+    my @requiredAttributeNamesTemp = ();
+    foreach my $param(@params){
+      if (not $param =~ m/void\s*\*\s*correspondingObject$/) {
+        push @requiredAttributeNamesTemp, getParamName($param);
+      }
+    }
+    push @requiredAttributeNamesTemp, @$requiredNamesRef;
+    if (canCompleteYamlNames($yamlNamesRef, \@requiredAttributeNamesTemp, \@optionalAttributeNames)) {
+      return $localAttributeInitFunction;
+    }
+  }
+  return undef;
+}
+
+sub typecast{
+  my $fromClass = shift;
+  my $toClass = shift;
+
 }
 
 1;

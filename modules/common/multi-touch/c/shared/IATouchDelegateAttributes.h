@@ -16,16 +16,16 @@ typedef struct{
     //@set+get
     void * correspondingObject;
     //@set+get
-    bool (*wantToUseTouch)(void * correspondingObject, IATouch * touch);
+    bool (*wantToUseTouch)(void * correspondingObject, IATouch touch);
     //@set+get
-    bool (*wantToConsumeTouch)(void * correspondingObject, IATouch * touch);
+    bool (*wantToConsumeTouch)(void * correspondingObject, IATouch touch);
     
     //@set+get
-    void (*onTouchBegan)(void * correspondingObject, IAArrayList * touches);
+    void (*onTouchBegan)(void * correspondingObject, size_t numTouches, IATouch touches[numTouches]);
     //@set+get
-    void (*onTouchMoved)(void * correspondingObject, IAArrayList * touches);
+    void (*onTouchMoved)(void * correspondingObject, size_t numTouches, IATouch touches[numTouches]);
     //@set+get
-    void (*onTouchEnded)(void * correspondingObject, IAArrayList * touches);
+    void (*onTouchEnded)(void * correspondingObject, size_t numTouches, IATouch touches[numTouches]);
     //@set+get
     void (*onTouchCanceled)(void * correspondingObject);
     

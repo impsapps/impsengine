@@ -23,16 +23,17 @@ void IATouchDelegate_init(IATouchDelegate * this, const IATouchDelegateAttribute
         .touchCanceled = IATouchDelegateAttributes_getOnTouchCanceledFunction(attr),
         .zOrder = IATouchDelegateAttributes_getZOrder(attr)
     };
-    IAArrayList_init(&this->touchesForTouchEvent, 10);
+    IA_STRUCT_ARRAY_LIST_MALLOC_MAKE(this->touches, IATouch, 10);
     IA_incrementInitCount();
 }
 
-void IATouchDelegate_addTouchToTouchEvent(IATouchDelegate * this, IATouch * touch){
-    IAArrayList_add(&this->touchesForTouchEvent, touch);
+void IATouchDelegate_addTouchToTouchEvent(IATouchDelegate * this, IATouch touch){
+    IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IF_NEEDED(this->touches, IATouch);
+    IAStructArrayList_IATouch_add(this->touches, touch);
 }
 
 bool IATouchDelegate_isTouchEventNotEmpty(IATouchDelegate * this){
-    if (IAArrayList_isEmpty(&this->touchesForTouchEvent) == true) {
+    if (IAStructArrayList_IATouch_isEmpty(this->touches) == true) {
         return false;
     }else{
         return true;
@@ -40,24 +41,24 @@ bool IATouchDelegate_isTouchEventNotEmpty(IATouchDelegate * this){
 }
 
 void IATouchDelegate_resetCurrentTouchEvent(IATouchDelegate * this){
-    IAArrayList_clear(&this->touchesForTouchEvent);
+    IAStructArrayList_IATouch_clear(this->touches);
 }
 
 void IATouchDelegate_touchBegan(IATouchDelegate * this){
     if (this->touchBegan != NULL) {
-        this->touchBegan(this->correspondingObject, &this->touchesForTouchEvent);
+        this->touchBegan(this->correspondingObject, this->touches->currentSize, this->touches->buffer);
     }
 }
 
 void IATouchDelegate_touchMoved(IATouchDelegate * this){
     if (this->touchMoved != NULL) {
-        this->touchMoved(this->correspondingObject, &this->touchesForTouchEvent);
+        this->touchMoved(this->correspondingObject, this->touches->currentSize, this->touches->buffer);
     }
 }
 
 void IATouchDelegate_touchEnded(IATouchDelegate * this){
     if (this->touchEnded != NULL) {
-        this->touchEnded(this->correspondingObject, &this->touchesForTouchEvent);
+        this->touchEnded(this->correspondingObject, this->touches->currentSize, this->touches->buffer);
     }
 }
 
@@ -68,7 +69,7 @@ void IATouchDelegate_touchCanceled(IATouchDelegate * this){
 }
 
 void IATouchDelegate_deinit(IATouchDelegate * this){
-    IAArrayList_deinit(&this->touchesForTouchEvent);
+    IA_STRUCT_ARRAY_LIST_FREE(this->touches);
     IA_decrementInitCount();
 }
 

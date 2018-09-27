@@ -12,8 +12,8 @@
 #define CLASSNAME "IATouchDelegateAttributes"
 
 
-bool IATouchDelegateAttributes_returnTrue(void * object, IATouch * touch);
-bool IATouchDelegateAttributes_returnFalse(void * object, IATouch * touch);
+bool IATouchDelegateAttributes_returnTrue(void * object, IATouch touch);
+bool IATouchDelegateAttributes_returnFalse(void * object, IATouch touch);
 
 void IATouchDelegateAttributes_make(IATouchDelegateAttributes * this, void * correspondingObject){
     *this = (IATouchDelegateAttributes){
@@ -31,11 +31,11 @@ void IATouchDelegateAttributes_setAlwaysWantToConsumeTouch(IATouchDelegateAttrib
     }
 }
 
-bool IATouchDelegateAttributes_returnTrue(void * object, IATouch * touch){
+bool IATouchDelegateAttributes_returnTrue(void * object, IATouch touch){
     return true;
 }
 
-bool IATouchDelegateAttributes_returnFalse(void * object, IATouch * touch){
+bool IATouchDelegateAttributes_returnFalse(void * object, IATouch touch){
     return false;
 }
 

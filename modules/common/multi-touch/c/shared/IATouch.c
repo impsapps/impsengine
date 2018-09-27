@@ -7,34 +7,22 @@
 //
 
 #include "IALibrary.h"
-#include "IATouch+Internal.h"
-#include "IAAllocationTracking.h"
+#include "IATouch.h"
 
 #define CLASSNAME "IATouch"
 
 
-void IATouch_make(IATouch * this, IAPoint location){
-    this->location = location;
+IATouch IATouch_make(long identifier, IAPoint location){
+    return (IATouch){
+            .identifier = identifier,
+            .location = location
+    };
 }
 
-void IATouch_makeCopy(IATouch * this, const IATouch * toCopy){
-    *this = *toCopy;
-}
-
-void IATouch_setLocation(IATouch * this, IAPoint location){
-    this->location = location;
-}
-
-bool IATouch_isInRect(const IATouch * this, IARect rect){
-    IAPoint location = this->location;
-    if (rect.origin.x <= location.x
-        && rect.origin.y <= location.y
-        && rect.origin.x + rect.size.width >= location.x
-        && rect.origin.y + rect.size.height >= location.y) {
+bool IATouch_hasSameIdentifier(IATouch t1, IATouch t2){
+    if (t1.identifier == t2.identifier){
         return true;
     }else{
         return false;
     }
 }
-
-

@@ -1,35 +1,36 @@
+
 #include "IALibrary.h"
 #include "IAWinTouchHandler.h"
 #include "IATouchManager.h"
 
 #undef in
 
-#define CLASSNAME "TouchHandler"
-
-static const int mouseTouchId = 1;
-
-static void onTouchBegan(IAPoint point);
-static void onTouchMoved(IAPoint point);
-static void onTouchEnded(IAPoint point);
-
-static float primaryWidthOfScreen;
-static float primaryHeightOfScreen;
-static void (*acquireApplicationLock)(void);
-static void (*releaseApplicationLock)(void);
-
 #pragma comment( lib, "user32.lib" )
 
 #include <windows.h>
 #include <stdio.h>
 
+#define CLASSNAME "TouchHandler"
+
+static void onTouchBegan(IAPoint point);
+static void onTouchMoved(IAPoint point);
+static void onTouchEnded(IAPoint point);
+
+static void (*acquireApplicationLock)(void);
+static void (*releaseApplicationLock)(void);
+
+static const int mouseTouchId = 1;
+
+
 HHOOK hMouseHook;
+static float offsetX, offsetY;
 
 static LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 	MOUSEHOOKSTRUCT * pMouseStruct = (MOUSEHOOKSTRUCT *)lParam;
 	if (pMouseStruct != NULL) {
 		IAPoint point = IAPoint_make(pMouseStruct->pt.x, pMouseStruct->pt.y);
-		point.x = point.x / primaryWidthOfScreen * 3840.0f;
-		point.y = point.y / primaryHeightOfScreen * 2160.0f;
+		point.x -= offsetX;
+		point.y -= offsetY;
 		if (wParam == WM_LBUTTONDOWN) {
 			acquireApplicationLock();
 			onTouchBegan(point);
@@ -62,16 +63,17 @@ static DWORD WINAPI MyMouseLogger(LPVOID lpParm) {
 	return 0;
 }
 
-void IAWinTouchHandler_start(float primaryWidthOfScreenTemp, float primaryHeightOfScreenTemp, void(*acquireApplicationLockTemp)(void), void(*releaseApplicationLockTemp)(void)){
-	primaryWidthOfScreen = primaryWidthOfScreenTemp;
-	primaryHeightOfScreen = primaryHeightOfScreenTemp;
+void IAWinTouchHandler_start(void(*acquireApplicationLockTemp)(void), void(*releaseApplicationLockTemp)(void)){
 	acquireApplicationLock = acquireApplicationLockTemp;
 	releaseApplicationLock = releaseApplicationLockTemp;
 
-	HANDLE hThread;
 	DWORD dwThread;
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MyMouseLogger, NULL, 0, &dwThread);
+}
 
-	hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MyMouseLogger, NULL, 0, &dwThread);
+void IAWinTouchHandler_setWindowOffset(float offsetXTemp, float offsetYTemp){
+	offsetX = offsetXTemp;
+	offsetY = offsetYTemp;
 }
 
 static void onTouchBegan(IAPoint point) {

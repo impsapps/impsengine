@@ -21,8 +21,6 @@ typedef struct{
     //@extend
     IAObject base;
     //@get
-    long touchId;
-    //@getAsRef
     IATouch touch;
     IAArrayList touchDelegates;
 } IATouchHandler;

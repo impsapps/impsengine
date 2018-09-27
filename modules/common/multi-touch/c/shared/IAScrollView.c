@@ -15,44 +15,41 @@
 #define CLASSNAME "IAScrollView"
 
 
-static void IAScrollView_startScrolling(IAScrollView * this, IATouch * touch);
-static void IAScrollView_doScroll(IAScrollView * this, IATouch * touch);
+static void IAScrollView_startScrolling(IAScrollView * this, IATouch touch);
+static void IAScrollView_doScroll(IAScrollView * this, IATouch touch);
 static void IAScrollView_endCurrentScolling(IAScrollView * this);
 
 
-static bool IAScrollView_wantToUseTouch(IAScrollView * this, IATouch * touch) {
-	return IATouch_isInRect(touch, this->viewPosition);
+static bool IAScrollView_wantToUseTouch(IAScrollView * this, IATouch touch) {
+	return IARect_isPointWithin(this->viewPosition, touch.location);
 }
 
-static bool IAScrollView_wantToConsumeTouch(IAScrollView * this, IATouch * touch) {
+static bool IAScrollView_wantToConsumeTouch(IAScrollView * this, IATouch touch) {
 	return false;
 }
 
-static void IAScrollView_onTouchBegan(IAScrollView * this, IAArrayList * touches) {
-	IATouch * touch;
-	foreach(touch in arrayList(touches)) {
+static void IAScrollView_onTouchBegan(IAScrollView * this, size_t numTouches, IATouch touches[numTouches]) {
+	for(size_t i = 0; i < numTouches; i++) {
 		if (IAScrollView_isScrolling(this)) {
 			IAScrollView_endCurrentScolling(this);
 		}
-		IAScrollView_startScrolling(this, touch);
+		IAScrollView_startScrolling(this, touches[i]);
 	}
 }
 
-static void IAScrollView_onTouchMoved(IAScrollView * this, IAArrayList * touches) {
-	IATouch * touch;
-	foreach(touch in arrayList(touches)) {
-		if (IAScrollingData_isCurrentTouch(this->scrollingData, touch)) {
-			IAScrollView_doScroll(this, touch);
+static void IAScrollView_onTouchMoved(IAScrollView * this, size_t numTouches, IATouch touches[numTouches]) {
+	for(size_t i = 0; i < numTouches; i++) {
+		if (IAScrollingData_isCurrentTouch(this->scrollingData, touches[i])) {
+			IAScrollView_doScroll(this, touches[i]);
 		}
 	}
 }
 
-static void IAScrollView_onTouchEnded(IAScrollView * this, IAArrayList * touches) {
-	IATouch * touch;
-	foreach(touch in arrayList(touches)) {
-		if (IAScrollingData_isCurrentTouch(this->scrollingData, touch)) {
+static void IAScrollView_onTouchEnded(IAScrollView * this, size_t numTouches, IATouch touches[numTouches]) {
+	for(size_t i = 0; i < numTouches; i++) {
+		if (IAScrollingData_isCurrentTouch(this->scrollingData, touches[i])) {
 			IAScrollingData_removeAllOldTouchEvents(this->scrollingData, this->getTime());
-			IAScrollView_doScroll(this, touch);
+			IAScrollView_doScroll(this, touches[i]);
 			IAScrollView_endCurrentScolling(this);
 		}
 	}
@@ -85,11 +82,11 @@ void IAScrollView_init(IAScrollView * this, const IAScrollViewAttributes * attr)
 
 	IATouchDelegateAttributes touchDelegateAttr;
 	IATouchDelegateAttributes_make(&touchDelegateAttr, this);
-	IATouchDelegateAttributes_setWantToUseTouchFunction(&touchDelegateAttr, (bool(*)(void *, IATouch *)) IAScrollView_wantToUseTouch);
-	IATouchDelegateAttributes_setWantToConsumeTouchFunction(&touchDelegateAttr, (bool(*)(void *, IATouch *)) IAScrollView_wantToConsumeTouch);
-	IATouchDelegateAttributes_setOnTouchBeganFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchBegan);
-	IATouchDelegateAttributes_setOnTouchMovedFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchMoved);
-	IATouchDelegateAttributes_setOnTouchEndedFunction(&touchDelegateAttr, (void(*)(void *, IAArrayList *)) IAScrollView_onTouchEnded);
+	IATouchDelegateAttributes_setWantToUseTouchFunction(&touchDelegateAttr, (bool(*)(void *, IATouch)) IAScrollView_wantToUseTouch);
+	IATouchDelegateAttributes_setWantToConsumeTouchFunction(&touchDelegateAttr, (bool(*)(void *, IATouch)) IAScrollView_wantToConsumeTouch);
+	IATouchDelegateAttributes_setOnTouchBeganFunction(&touchDelegateAttr, (void(*)(void *, size_t, IATouch[])) IAScrollView_onTouchBegan);
+	IATouchDelegateAttributes_setOnTouchMovedFunction(&touchDelegateAttr, (void(*)(void *, size_t, IATouch[])) IAScrollView_onTouchMoved);
+	IATouchDelegateAttributes_setOnTouchEndedFunction(&touchDelegateAttr, (void(*)(void *, size_t, IATouch[])) IAScrollView_onTouchEnded);
     IATouchDelegateAttributes_setOnTouchCanceledFunction(&touchDelegateAttr, (void(*)(void *)) IAScrollView_onTouchCanceled);
 	IATouchDelegateAttributes_setZOrder(&touchDelegateAttr, IAScrollViewAttributes_getZOrder(attr));
     IATouchDelegate_init(&this->touchDelegate, &touchDelegateAttr);
@@ -100,17 +97,17 @@ bool IAScrollView_isScrolling(const IAScrollView * this) {
 	return IAScrollingData_isScrolling(this->scrollingData);
 }
 
-static void IAScrollView_startScrolling(IAScrollView * this, IATouch * touch) {
+static void IAScrollView_startScrolling(IAScrollView * this, IATouch touch) {
 	debugAssert(IAScrollView_isScrolling(this) == false);
 	this->startTime = this->getTime();
 	this->startScrollPos = this->currentScrollPos;
-	this->last = IATouch_getLocation(touch);
+	this->last = touch.location;
 	IAScrollingData_startScrolling(this->scrollingData, touch);
 	IAScrollingData_appendNewTouchEvent(this->scrollingData, this->currentScrollPos, this->startTime);
 }
 
-static void IAScrollView_doScroll(IAScrollView * this, IATouch * touch) {
-	IAPoint current = IATouch_getLocation(touch);
+static void IAScrollView_doScroll(IAScrollView * this, IATouch touch) {
+	IAPoint current = touch.location;
 	float scrollPosChange = this->getScrollPosChange(current, this->last);
 	IAOverscrollingHandler_modifyCurrentDragLengthIfNeeded(this->overscrollingHandler, &scrollPosChange);
 	this->last = current;

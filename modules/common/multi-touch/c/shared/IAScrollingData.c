@@ -17,53 +17,39 @@
 static const int IAScrollingData_numberOfLatestTouches = 10;
 static const uint64_t IAScrollingData_timeDiffWhenAnEventCountsAsOld = 200;
 
-typedef struct {
-	float scrollPos;
-	uint64_t time;
-} IAScrollingData_TouchEvent;
-
 
 void IAScrollingData_init(IAScrollingData * this, float decelerationForScrollingInPixelPerTimeUnitSquared) {
     this->base = IAObject_make(this);
-	this->touch = NULL;
-	this->latestTouches = IAArrayList_new(10);
-	IAScrollingData_TouchEvent * latestTouchesData = IA_malloc(IAScrollingData_numberOfLatestTouches * sizeof(IAScrollingData_TouchEvent));
-	this->latestTouchesData = latestTouchesData;
-	for (size_t i = 0; i < IAScrollingData_numberOfLatestTouches; i++) {
-		IAArrayList_add(this->latestTouches, latestTouchesData);
-		latestTouchesData++;
-	};
-	this->numLatestTouchesSet = 0;
+	this->isTouchSet = false;
+	IA_STRUCT_ARRAY_LIST_MALLOC_MAKE(this->latestTouchesData, IAScrollingData_TouchEvent, IAScrollingData_numberOfLatestTouches);
 	this->decelerationForScrollingInPixelPerTimeUnitSquared = decelerationForScrollingInPixelPerTimeUnitSquared;
+	IA_incrementInitCount();
 }
 
-void IAScrollingData_startScrolling(IAScrollingData * this, const IATouch * touch) {
+void IAScrollingData_startScrolling(IAScrollingData * this, const IATouch touch) {
 	this->touch = touch;
-	this->numLatestTouchesSet = 0;
+	this->isTouchSet = true;
 }
 
 void IAScrollingData_appendNewTouchEvent(IAScrollingData * this, float scrollPos, uint64_t time) {
-	IAScrollingData_TouchEvent * touchEvent;
-	if (this->numLatestTouchesSet == IAScrollingData_numberOfLatestTouches) {
-		touchEvent = IAArrayList_removeFirst(this->latestTouches);
-		IAArrayList_add(this->latestTouches, touchEvent);
-	} else {
-		touchEvent = IAArrayList_get(this->latestTouches, this->numLatestTouchesSet);
-		this->numLatestTouchesSet++;
+	if (IAStructArrayList_IAScrollingData_TouchEvent_getCurrentSize(this->latestTouchesData) == IAScrollingData_numberOfLatestTouches) {
+		IAStructArrayList_IAScrollingData_TouchEvent_removeFirst(this->latestTouchesData);
+
 	}
-	*touchEvent = (IAScrollingData_TouchEvent) {
+	IAScrollingData_TouchEvent touchEvent = (IAScrollingData_TouchEvent) {
 		.scrollPos = scrollPos,
 		.time = time
 	};
+	IAStructArrayList_IAScrollingData_TouchEvent_add(this->latestTouchesData, touchEvent);
 }
 
 static void IAScrollingData_removeAllTouchEventsOlderThen(IAScrollingData * this, uint64_t time) {
-	for (int i = this->numLatestTouchesSet - 1; i >= 0; i--) {
-		IAScrollingData_TouchEvent * touchEvent = IAArrayList_get(this->latestTouches, i);
-		if (touchEvent->time < time) {
-			IAArrayList_removeAtIndex(this->latestTouches, i);
-			this->numLatestTouchesSet--;
-			IAArrayList_add(this->latestTouches, touchEvent);
+	size_t i = IAStructArrayList_IAScrollingData_TouchEvent_getCurrentSize(this->latestTouchesData);
+	while (i > 0){
+		i--;
+		IAScrollingData_TouchEvent touchEvent = IAStructArrayList_IAScrollingData_TouchEvent_get(this->latestTouchesData, i);
+		if (touchEvent.time < time) {
+			IAStructArrayList_IAScrollingData_TouchEvent_removeAtIndex(this->latestTouchesData, i);
 		}
 	}
 }
@@ -76,7 +62,7 @@ void IAScrollingData_removeAllOldTouchEvents(IAScrollingData * this, uint64_t ti
 }
 
 void IAScrollingData_endScrolling(IAScrollingData * this) {
-	this->touch = NULL;
+	this->isTouchSet = false;
 }
 
 static float IAScrollingData_getWayOfScrolling(float way, float animationBeginTime, float animationEndTime, float currentTime) {
@@ -94,14 +80,14 @@ static float IAScrollingData_getWayOfScrolling(float way, float animationBeginTi
 }
 
 float IAScrollingData_getScrollPosDiffInTimeInterval(IAScrollingData * this, uint64_t timeStart, uint64_t timeEnd) {
-	if (this->numLatestTouchesSet != IAScrollingData_numberOfLatestTouches) {
+	if (IAStructArrayList_IAScrollingData_TouchEvent_getCurrentSize(this->latestTouchesData) != IAScrollingData_numberOfLatestTouches) {
 		return 0.0f;
 	}
-	IAScrollingData_TouchEvent * firstTouch = IAArrayList_getFirst(this->latestTouches);
-	IAScrollingData_TouchEvent * lastTouch = IAArrayList_getLast(this->latestTouches);
+	IAScrollingData_TouchEvent firstTouch = IAStructArrayList_IAScrollingData_TouchEvent_getFirst(this->latestTouchesData);
+	IAScrollingData_TouchEvent lastTouch = IAStructArrayList_IAScrollingData_TouchEvent_getLast(this->latestTouchesData);
 
 	//speed in pixel per time unit
-	float currentSpeed = (lastTouch->scrollPos - firstTouch->scrollPos) / (lastTouch->time - firstTouch->time);
+	float currentSpeed = (lastTouch.scrollPos - firstTouch.scrollPos) / (lastTouch.time - firstTouch.time);
 	
 	float deceleration = this->decelerationForScrollingInPixelPerTimeUnitSquared;
 	if (currentSpeed < 0) {
@@ -109,8 +95,8 @@ float IAScrollingData_getScrollPosDiffInTimeInterval(IAScrollingData * this, uin
 	}
 	float duration = IAAcceleration_getDuration(currentSpeed, deceleration);
 	float way = IAAcceleration_getWay(currentSpeed, deceleration);
-	float animationBeginTime = lastTouch->time;
-	float animationEndTime = lastTouch->time + duration;
+	float animationBeginTime = lastTouch.time;
+	float animationEndTime = lastTouch.time + duration;
 	float wayIntervalBegin = IAScrollingData_getWayOfScrolling(way, animationBeginTime, animationEndTime, timeStart);
 	float wayIntervalEnd = IAScrollingData_getWayOfScrolling(way, animationBeginTime, animationEndTime, timeEnd);
 	float wayDifference = wayIntervalEnd - wayIntervalBegin;
@@ -118,15 +104,22 @@ float IAScrollingData_getScrollPosDiffInTimeInterval(IAScrollingData * this, uin
 }
 
 bool IAScrollingData_isScrolling(const IAScrollingData * this) {
-	return this->touch != NULL;
+	if (this->isTouchSet == false){
+		return false;
+	}else{
+		return true;
+	}
 }
 
-bool IAScrollingData_isCurrentTouch(const IAScrollingData * this, const IATouch * touch) {
-	return this->touch == touch;
+bool IAScrollingData_isCurrentTouch(const IAScrollingData * this, IATouch touch) {
+	if (this->isTouchSet == false){
+		return false;
+	}
+	return IATouch_hasSameIdentifier(this->touch, touch);
 }
 
 void IAScrollingData_deinit(IAScrollingData * this) {
-	IAArrayList_release(this->latestTouches);
-	IA_free(this->latestTouchesData);
+	IA_STRUCT_ARRAY_LIST_FREE(this->latestTouchesData);
+	IA_decrementInitCount();
 }
 

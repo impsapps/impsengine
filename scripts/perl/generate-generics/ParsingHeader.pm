@@ -114,6 +114,7 @@ sub parseHeaderFile {
 					}
 				}
 			}
+			$command = privateRemovePreprocessorDirectives($command);
 
 			my $tempFunction = Function->new();
 			my $returnCode = $tempFunction->initWithHeader($className, $command, $comment);
@@ -232,6 +233,8 @@ sub parseHeaderFile {
 				}
 			}
 		}
+
+		$command = privateRemovePreprocessorDirectives($command);
 
 		if($isScanningClassAttributes == 0 && $class->{attributes} != 0){
 			my $shouldContinue = 0;
@@ -383,6 +386,12 @@ sub parseHeaderFile {
 	}
 	close FILE;
 	return $class;
+}
+
+sub privateRemovePreprocessorDirectives{
+	my $command = shift;
+	$command =~ s/#(ifndef|define)[^\n\\]*|#endif|\\[^\n\\]*\n[^\n\\]*//gs;
+	return $command;
 }
 
 1;

@@ -22,6 +22,7 @@ sub new{
     includes => {},
     attributesClassName => $attributesClassName,
 
+    isCorrespondingObjectNeeded => 0,
     objectReferences => {},
 
     anonymousAttrCount => 0,
@@ -61,7 +62,7 @@ sub parseExpression{
         if (canCompleteYamlNames($yaml, \@paramNames)) {
           my %paramExpressions = ();
           foreach my $param (@params){
-            my $paramName = convertParamToValue($param);
+            my $paramName = getParamName($param);
             $paramExpressions{$paramName} = $self->parseExpressionForStruct($param, $yaml->{$paramName}, $class->getClassName());
           }
           my $expr = $class->getClassName() . "_" . $structMakeFunction->{name} . "(";
@@ -173,6 +174,7 @@ sub parseObject{
     my @optionalAttributeNames = ();
     my $wasAttributesAlreadyParsed = 0;
     my $attributeInitFunction = undef;
+    my $canCompleteParams = 0;
     foreach my $param (listAllParams($initFunctionParams)) {
       if ($wasAttributesAlreadyParsed) {
         die "Invalid parameter order. " .
@@ -188,6 +190,9 @@ sub parseObject{
           }
           $attributeInitFunction = canCompleteWithAttributes($attributeClass, \@yamlNames, \@requiredAttributeNames);
           $wasAttributesAlreadyParsed = 1;
+          if (defined $attributeInitFunction) {
+            $canCompleteParams = 1;
+          }
         }else{
           push @requiredAttributeNames, $paramName;
         }
@@ -199,7 +204,12 @@ sub parseObject{
         push @requiredAttributeNames, $2;
       }
     }
-    if (defined $attributeInitFunction || canCompleteYamlNames(\@yamlNames, \@requiredAttributeNames, \@optionalAttributeNames)){
+    if ($canCompleteParams == 0) {
+      if ($wasAttributesAlreadyParsed == 0 && canCompleteYamlNames(\@yamlNames, \@requiredAttributeNames, \@optionalAttributeNames)) {
+        $canCompleteParams = 1;
+      }
+    }
+    if ($canCompleteParams){
       $result = $self->parseObjectWithFunctions(
         $className,
         $yaml,
@@ -226,7 +236,12 @@ sub parseObject{
         $params = $param;
       }
     }
-    die "Cannot generate object of type \"$className\" with parameters $params in yaml file \""
+    if ($params eq "") {
+      $params = "no parameters";
+    }else{
+      $params = "parameters " . $params;
+    }
+    die "Cannot generate object of type \"$className\" with $params in yaml file \""
       . $self->{yamlFilePath} . "\".";
   }
   return $result;
@@ -275,41 +290,6 @@ sub privateGetAttributeClassName{
   return $className . "Attributes";
 }
 
-#Returns an attribute init function or undef
-sub canCompleteWithAttributes{
-  my $attributeClass = shift;
-  my $yamlNamesRef = shift;
-  my $requiredNamesRef = shift;
-
-  my @optionalAttributeNames = ();
-  foreach my $setterName ($attributeClass->getAllSetterAttributeNames()){
-    push @optionalAttributeNames, $setterName;
-  }
-  foreach my $attributeClassFunction ($attributeClass->getAllNonSpecialValidFunctions()){
-    my $functionName = $attributeClassFunction->{name};
-    if ($functionName =~ m/^set(.*?)(Function)?$/) {
-      my $attributeName = lcfirst $1;
-      push @optionalAttributeNames, $attributeName;
-    }
-  }
-
-  my @attributeInitFunctions = $attributeClass->getValidInitFunctions();
-  if (@attributeInitFunctions == 0) {
-    @attributeInitFunctions = $attributeClass->getValidMakeFunctions();
-  }
-  foreach my $localAttributeInitFunction (@attributeInitFunctions){
-    my $attributeInitFunctionParams = $localAttributeInitFunction->{params};
-    $attributeInitFunctionParams = removeFirstParamFromParams($attributeInitFunctionParams);
-    $attributeInitFunctionParams = normalizeParams($attributeInitFunctionParams);
-    my @requiredAttributeNamesTemp = listAllParamNames($attributeInitFunctionParams);
-    push @requiredAttributeNamesTemp, @$requiredNamesRef;
-    if (canCompleteYamlNames($yamlNamesRef, \@requiredAttributeNamesTemp, \@optionalAttributeNames)) {
-      return $localAttributeInitFunction;
-    }
-  }
-  return undef;
-}
-
 sub parseObjectWithFunctions{
   my $self = shift;
   my $className = shift;
@@ -351,7 +331,36 @@ sub parseObjectWithFunctions{
         my $attributeName = "IA_attr" . $self->{anonymousAttrCount};
         $self->{anonymousAttrCount} += 1;
         push @selfInitLines, "\t$attributeClassName $attributeName;\n";
-        push @selfInitLines, "\t" . $attributeInitFunction->getFunctionCallWithParams($attributeClassName, "&" . $attributeName) . ";\n";
+        my @paramsForInitAttributesFunction = ("&" . $attributeName);
+        my $attributeInitParams = $attributeInitFunction->{params};
+        $attributeInitParams = removeFirstParamFromParams($attributeInitParams);
+        $attributeInitParams = normalizeParams($attributeInitParams);
+        foreach my $attributeInitParam (listAllParams($attributeInitParams)){
+          if ($attributeInitParam =~ m/^$matchType\s*$matchName$/) {
+            my $attributeParamMatchedType = $1;
+            my $attributeParamMatchedName = $2;
+            if (exists $yaml->{$attributeParamMatchedName}) {
+              my $newYaml = $yaml->{$attributeParamMatchedName};
+              my $context = getContextForParams($attributeInitParam);
+              my $result = $self->parseContextForObject(
+                $context,
+                $newYaml,
+                \@selfInitLines,
+                \@selfDeinitLines,
+                $className,
+                $attributeInitParam);
+              push @paramsForInitAttributesFunction, $result;
+            }elsif ($attributeParamMatchedType =~ m/void\s*\*$/ and $attributeParamMatchedName eq "correspondingObject"){
+              $self->{isCorrespondingObjectNeeded} = 1;
+              push @paramsForInitAttributesFunction, $self->{attributesClassName}. "_getCorrespondingObject(attr)";
+            }else{
+              die "Cannot parse type and name as params for attributes init function. Error in yaml file \"" . $self->{yamlFilePath} . "\".";
+            }
+          }else{
+            die "Expected type and name as params. Error in yaml file \"" . $self->{yamlFilePath} . "\".";
+          }
+        }
+        push @selfInitLines, "\t" . $attributeInitFunction->getFunctionCallWithParams($attributeClassName, join(", ", @paramsForInitAttributesFunction)) . ";\n";
         push @paramsForNewFunction, "&" . $attributeName;
         if ($attributeInitFunction->isInitFunction()) {
           my $attributeDeinitFunction = $attributeClass->getDeinitFunction();
@@ -416,8 +425,8 @@ sub parseObjectWithFunctions{
           }
         }
         if (defined $objectReference) {
-          $objectReference->makeInjectable($self->{attributesClassName});
-          push @selfInitLines, sprintf("\t%s_onInject%s(attr, %s));\n", $self->{attributesClassName}, ucfirst $objectReferenceName, "&" . $attributeName);
+          $objectReference->makeInjectable($attributeClassName);
+          push @selfInitLines, sprintf("\t%s_onInject%s(attr, this, %s);\n", $self->{attributesClassName}, ucfirst $objectReferenceName, "&" . $attributeName);
         }
       }
     }

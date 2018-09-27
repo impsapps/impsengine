@@ -9,7 +9,7 @@ use Expressions;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(normalizeParams removeFirstParamFromParams listAllParams listAllParamNames convertParamToValue convertParamsToValues inheritFunction);
+our @EXPORT = qw(normalizeParams removeFirstParamFromParams listAllParams listAllParamNames getParamName convertParamsToValues inheritFunction);
 
 our $matchUnnamedParamRaw = qr/$matchTypeRaw|$matchTypeRaw\s*\(\s*\*\s*\)\s*\($matchParamsRaw\)/;
 
@@ -53,12 +53,12 @@ sub listAllParamNames{
 	my $params = shift;
 	my @result = ();
 	foreach my $nextParam(listAllParams($params)){
-		push @result, convertParamToValue($nextParam);
+		push @result, getParamName($nextParam);
 	}
 	return @result;
 }
 
-sub convertParamToValue{
+sub getParamName{
 	my $param = shift;
 	if($param =~ m/^$matchType\s*$matchName$/){
 		$param = $2;

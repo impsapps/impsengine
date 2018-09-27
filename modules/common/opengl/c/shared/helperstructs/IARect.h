@@ -34,4 +34,6 @@ bool IARect_areOverlapping(IARect rect1, IARect rect2);
 
 bool IARect_isTouchingCircle(IARect rect, IAPoint circleOrigin, float circleRadius);
 
+bool IARect_isPointWithin(IARect rect, IAPoint p);
+
 #endif

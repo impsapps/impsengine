@@ -15,9 +15,9 @@ typedef struct IAButton IAButton;
 
 typedef struct{
     //@set+get
-    IAImage * buttonImageNormal;
+    IADrawableRect * normal;
     //@set+get
-    IAImage * buttonImageTouched;
+    IADrawableRect * touched;
     
     //@set+get
     IARect rect;

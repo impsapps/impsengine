@@ -286,3 +286,14 @@ bool IARect_isPointInRadius(IAPoint point, IAPoint origin, float radius){
     }
 }
 
+bool IARect_isPointWithin(IARect rect, IAPoint p){
+    if (rect.origin.x <= p.x
+        && rect.origin.y <= p.y
+        && rect.origin.x + rect.size.width >= p.x
+        && rect.origin.y + rect.size.height >= p.y) {
+        return true;
+    }else{
+        return false;
+    }
+}
+

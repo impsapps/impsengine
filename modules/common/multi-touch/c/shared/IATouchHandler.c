@@ -8,7 +8,6 @@
 
 #include "IALibrary.h"
 #include "IATouchHandler.h"
-#include "IATouch+Internal.h"
 #include "IAArrayListIterator.h"
 
 #define CLASSNAME "IATouchHandler"
@@ -16,20 +15,18 @@
 
 void IATouchHandler_init(IATouchHandler * this, long touchId, IAPoint location){
     this->base = IAObject_make(this);
-    this->touchId = touchId;
-    IATouch_make(&this->touch, location);
+    this->touch = IATouch_make(touchId, location);
     IAArrayList_init(&this->touchDelegates, 5);
     IA_incrementInitCount();
 }
 
 void IATouchHandler_reinit(IATouchHandler * this, long touchId, IAPoint location){
-    this->touchId = touchId;
-    IATouch_make(&this->touch, location);
+    this->touch = IATouch_make(touchId, location);
     IAArrayList_clear(&this->touchDelegates);
 }
 
 void IATouchHandler_setTouchLocation(IATouchHandler * this, IAPoint newLocation){
-    IATouch_setLocation(&this->touch, newLocation);
+    this->touch.location = newLocation;
 }
 
 void IATouchHandler_registerTouchDelegate(IATouchHandler * this, IATouchDelegate * touchDelegate){
@@ -39,7 +36,7 @@ void IATouchHandler_registerTouchDelegate(IATouchHandler * this, IATouchDelegate
 void IATouchHandler_prepareTouchDelegates(IATouchHandler * this){
     IATouchDelegate * delegate;
     foreach (delegate in arrayList(&this->touchDelegates)) {
-        IATouchDelegate_addTouchToTouchEvent(delegate, &this->touch);
+        IATouchDelegate_addTouchToTouchEvent(delegate, this->touch);
     }
 }
 
