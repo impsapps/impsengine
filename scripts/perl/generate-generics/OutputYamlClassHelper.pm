@@ -111,9 +111,32 @@ sub canCompleteWithAttributes{
 }
 
 sub typecast{
-  my $fromClass = shift;
-  my $toClass = shift;
-
+  my $expression = shift;
+  my $fromClassName = shift;
+  my $toClassName = shift;
+  my $classProvider = shift;
+  my $yamlFileForLogging = shift;
+  my $currentClass = $classProvider->getClass($fromClassName);
+  if (not defined $currentClass) {
+    die sprintf("Cannot cast from \"%s\" to \"%s\". Reason: Cannot find class \"%s\". Error parsing yaml file \"%s\".", $fromClassName, $toClassName, $fromClassName, $yamlFileForLogging);
+  }
+  my $count = 0;
+  while($currentClass->isObject()){
+    my $className = $currentClass->getClassName();
+    if ($className eq $toClassName) {
+      return "($toClassName *) $expression";
+    }
+    $count += 1;
+    if ($count > 1000){
+      die sprintf("Cannot cast from \"%s\" to \"%s\". Reason: max hierarchy length reached. Error parsing yaml file \"%s\".", $fromClassName, $toClassName, $yamlFileForLogging);
+    }
+    my $superClassName = $currentClass->getSuperClassName();
+    if ($superClassName eq "IAObject") {
+      last;
+    }
+    $currentClass = $classProvider->getClass($superClassName);
+  }
+  die sprintf("Cannot cast from \"%s\" to \"%s\". Class \"%s\" is not a child of \"%s\" . Error parsing yaml file \"%s\".", $fromClassName, $toClassName, $fromClassName, $toClassName, $yamlFileForLogging);
 }
 
 1;

@@ -312,7 +312,7 @@ sub printHeaderFilesForClass{
   while($class->isObject()){
     $count += 1;
     if ($count > 1000){
-      die sprintf("Max view hierarchy length reached for class %s!", $className);
+      die sprintf("Max hierarchy length reached for class %s!", $className);
     }
     if ($superClassName eq "IAObject") {
       last;

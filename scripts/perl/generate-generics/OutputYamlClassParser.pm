@@ -146,13 +146,6 @@ sub parseObject{
   }
 
   my $classProvider = $self->{classProvider};
-  if (exists $yaml->{__resource__}) {
-    if ($variableName ne "") {
-      die "Key \"__resource__\" is invalid here. Error parsing yaml file \"" . $self->{yamlFilePath} . "\".";
-    }
-    return $self->parseAsResource($yaml, $initLinesRef, $deinitLinesRef);
-  }
-
   my $class = $classProvider->getClass($className);
   my $attributeClassName = privateGetAttributeClassName($className);
   my $attributeClass = $classProvider->getClass($attributeClassName);
@@ -517,17 +510,13 @@ sub parseContextForObject{
   my $deinitLinesRef = shift;
   my $classNameForLogging = shift;
   my @params = @_;
-  
-  my $forceType = "";
-  if (ref $yaml eq "HASH" and exists $yaml->{__type__}) {
-    $forceType = $yaml->{__type__};
-  }
-
-  if ($forceType ne "" and $context ne "OBJECT") {
-    die "Type casting is only allowed in an OBJECT-context. Error in yaml file \"" . $self->{yamlFilePath} . "\".";
-  }
 
   if ($context eq "OBJECT") {
+    my $forceType = "";
+    if (ref $yaml eq "HASH" and exists $yaml->{__type__}) {
+      $forceType = $yaml->{__type__};
+    }
+
     my $isValid = 0;
     my $orgType = undef;
     my $expectedType = undef;
@@ -543,11 +532,20 @@ sub parseContextForObject{
       }
     }
     if ($isValid) {
-      my $result = $self->parseObject($expectedType, $yaml, $initLinesRef, $deinitLinesRef);
-      if ($forceType ne "") {
-        $result = "($orgType *) " . $result;
+      if (exists $yaml->{__resource__}) {
+        my $result = $self->parseAsResource($yaml, $initLinesRef, $deinitLinesRef);
+        my $resourceProvider = $self->{resourceProviders}->{$yaml->{__resource__}};
+        my $function = $resourceProvider->getFunction();
+        my $returnType = $function->{returnType};
+        $returnType =~ m/$matchName/;
+        my $className = $1;
+        $result = typecast($result, $className, $orgType, $self->{classProvider}, $self->{yamlFilePath});
+        return $result;
+      }else{
+        my $result = $self->parseObject($expectedType, $yaml, $initLinesRef, $deinitLinesRef);
+        $result = typecast($result, $expectedType, $orgType, $self->{classProvider}, $self->{yamlFilePath});
+        return $result;
       }
-      return $result;
     }else {
       die "Unsupported type \"$expectedType\" for \"OBJECT\"-context in class \"$classNameForLogging\" parsing yaml file \"" . $self->{yamlFilePath} . "\".";
     }
