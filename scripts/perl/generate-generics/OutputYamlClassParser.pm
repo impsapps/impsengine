@@ -426,7 +426,7 @@ sub parseObjectWithFunctions{
         }
         if (defined $objectReference) {
           $objectReference->makeInjectable($attributeClassName);
-          push @selfInitLines, sprintf("\t%s_onInject%s(attr, this, %s);\n", $self->{attributesClassName}, ucfirst $objectReferenceName, "&" . $attributeName);
+          push @selfInitLines, sprintf("\t%s_onInject%s(attr, %s);\n", $self->{attributesClassName}, ucfirst $objectReferenceName, "&" . $attributeName);
         }
       }
     }

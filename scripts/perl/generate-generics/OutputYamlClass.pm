@@ -125,7 +125,6 @@ sub printFromYamlToFile{
         print $fh "\t//\@set+exe\n";
         print $fh "\tvoid (*onInject" .  ucfirst($objectReference->getRefName()) . ")("
           . "void * correspondingObject, "
-          . "$classnameToGenerate * " . lcfirst ($className) . ", "
           . $objectReference->getAttributesClassNameForInjection() . " * attr);\n";
       }
     }
