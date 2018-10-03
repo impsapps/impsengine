@@ -7,7 +7,7 @@ use warnings;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getAbsolutePathToRootDir getPathRelativeToRootDir getModuleWithName getAllModuleGroupNamesInValidOrder getAllModuleNamesForGroupNameInValidOrder);
+our @EXPORT = qw(getAbsolutePathToRootDir getPathRelativeToRootDir getModuleWithName getAllModuleGroupNamesInValidOrder getAllModuleNamesForGroupNameInValidOrder getAllDoxygenModuleNamesInValidOrder);
 
 
 use Cwd;
@@ -165,6 +165,10 @@ sub getAllModuleNamesForGroupNameInValidOrder{
   } else {
     return ();
   }
+}
+
+sub getAllDoxygenModuleNamesInValidOrder{
+  return ("clib", "mathlib", "input-output", "opengl", "multi-touch", "opengl-renderer", "bundle-info", "date", "url", "random-number-generator");
 }
 
 1;

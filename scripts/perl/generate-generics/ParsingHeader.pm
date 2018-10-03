@@ -50,9 +50,9 @@ sub getHeaderFilesForDir {
 	my $dir = shift;
 	my @files = ();
 
-	opendir(DH, $dir) or die "Could not read from dir $dir.";
-	my @names = readdir(DH);
-	closedir(DH);
+	opendir(my $dh, $dir) or die "Could not read from dir \"$dir\".";
+	my @names = readdir($dh);
+	closedir($dh);
 
 	foreach my $name (@names){
 		my $newName = $dir . '/' . $name;

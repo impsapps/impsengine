@@ -95,6 +95,15 @@ sub isDelegate{
 	return $self->{isDelegate};
 }
 
+sub isEvent{
+	my $self = shift;
+	if ($self->{isEvent} == 1 || $self->{isEventWithoutRetain} == 1){
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
 sub getResourceProviders{
 	my $self = shift;
 	return @{$self->{resourceProviders}};

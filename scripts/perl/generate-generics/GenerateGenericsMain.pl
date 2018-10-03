@@ -96,36 +96,49 @@ if (not -d $genDir) {
   make_path $genDir or die "Cannot create dir \"$genDir\".";
 }
 
+my @doxygenClassNames = ();
+my @doxygenHeaderFiles = ();
 foreach my $className (sort @sourceClassNames){
   my $class = $classProvider->getClass($className);
   if (defined $class) {
     printHeaderFilesForClass($class, $classProvider, $genDir);
+    if($class->isValidClass()){
+      push @doxygenClassNames, $className;
+      if ($class->isEvent()) {
+        my $eventClassName = getEventNameForClassName($className);
+        push @doxygenClassNames, $eventClassName;
+        push @doxygenHeaderFiles, $genDir . "/$eventClassName.h";
+      }
+    }
   }
 }
 
 my $moduleGenericsPath = $genDir . "/" . $moduleName . $genericsModuleExtension;
 open HEADER, ">", $moduleGenericsPath or die "unable to open header file $moduleGenericsPath for writing!";
 
-print HEADER "/**\n";
-print HEADER " * \\addtogroup $moduleGroup\n";
-print HEADER " */\n\n";
-
+if ($moduleGroup ne "") {
+  print HEADER "/**\n";
+  print HEADER " * \\addtogroup $moduleGroup\n";
+  print HEADER " */\n\n";
+}
 
 print HEADER "/**\n";
 print HEADER " * \\addtogroup $moduleName\n";
-print HEADER " * \\ingroup $moduleGroup\n";
+if ($moduleGroup ne "") {
+  print HEADER " * \\ingroup $moduleGroup\n";
+}
 print HEADER " * \@{\n";
 print HEADER " */\n";
 
-foreach my $className (sort @sourceClassNames){
-  my $class = $classProvider->getClass($className);
-  if($class && $class->isValidClass()){
-    print HEADER "/// \\class $className\n";
-  }
+
+foreach my $className (sort @doxygenClassNames){
+  print HEADER "/// \\class $className\n";
 }
 
-foreach my $headerFile (@sourceHeaderFiles){
-  print HEADER "/// \\file $headerFile\n";
+push @doxygenHeaderFiles, @sourceHeaderFiles;
+@doxygenHeaderFiles = map {$_ =~ s/.*\///; $_} @doxygenHeaderFiles;
+foreach my $doxygenHeaderFile (sort @doxygenHeaderFiles){
+  print HEADER "/// \\file $doxygenHeaderFile\n";
 }
 
 print HEADER "/**\n";

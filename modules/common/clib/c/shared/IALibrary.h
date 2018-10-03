@@ -16,6 +16,9 @@
 /// this macro marks a constructor function
 #define IA_CONSTRUCTOR
 
+/// this macro marks a destructor function
+#define IA_DESTRUCTOR
+
 #include "IAAssert.h"
 #include "IAOperatingSystem.h"
 

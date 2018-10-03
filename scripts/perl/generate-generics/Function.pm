@@ -160,10 +160,14 @@ sub getPureFunction{
 sub getDoxygenComment{
 	my $self = shift;
 	my $className = shift;
+	my $functionPrefix = shift // "";
+	if ($functionPrefix ne "") {
+		$functionPrefix = $functionPrefix . " ";
+	}
 	my $result = "";
 	if($self->isValidFunction($className)){
 		$result .= "/**\n";
-		$result .= " * \\fn " . $self->getPureFunction($className) . "\n";
+		$result .= " * \\fn " . $functionPrefix . $self->getPureFunction($className) . "\n";
 		$result .= " * \\memberof $className\n";
 		$result .= " " . $self->getComment();
 		$result .= "*/\n\n";

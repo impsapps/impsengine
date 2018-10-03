@@ -11,7 +11,7 @@ use Function;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(printHeaderFilesForClass);
+our @EXPORT = qw(getEventNameForClassName printHeaderFilesForClass);
 
 
 my $genericsClassExtension = "+Generated.h";
@@ -38,6 +38,12 @@ my $doxygenExtendComment = "// Link super class for doxygen:\n";
 my $memberOfFormat = "/// \\memberof %s\n";
 my $functionPrefix = "static inline ";
 
+
+sub getEventNameForClassName{
+  my $className = shift;
+  $className =~ s/(Delegate)?$/Event/;
+  return $className;
+}
 
 sub printHeaderFilesForClass{
   my $class = shift;
@@ -93,8 +99,7 @@ sub printHeaderFilesForClass{
         $deinitFunction = "(void (*)(void *)) " . $className . "_deinit";
       }
 
-      printf HEADER $memberOfFormat, $className;
-      printf HEADER $constructorPrefix . $functionPrefix;
+      printf HEADER $functionPrefix;
       printf HEADER "%s(%s){\n", $definitionForNew, $params;
       printf HEADER "\t%s * this = IA_newWithClassName(sizeof(%s), %s, \"%s\");\n", $className, $className, $deinitFunction, $className;
       if(length $valueParams == 0){
@@ -127,6 +132,23 @@ sub printHeaderFilesForClass{
   }
 
   if($isCommented){
+    print HEADER "\n";
+  }
+
+  #link functions for doxygen
+  $isCommented = 0;
+  foreach my $function (@{$class->{functions}}){
+    if($isCommented == 0){
+      $isCommented = 1;
+      print HEADER $doxygenLinkComment;
+    }
+    if($function->isMakeFunction() || $function->isInitFunction()){
+      print HEADER $function->getDoxygenComment($className, $constructorMacro);
+    }elsif(not $function->isDeinitFunction()){
+      print HEADER $function->getDoxygenComment($className);
+    }
+  }
+  if($isCommented == 1){
     print HEADER "\n";
   }
 
@@ -171,6 +193,7 @@ sub printHeaderFilesForClass{
       print HEADER $getterComment;
     }
     my $attribute = $class->{attributes}->{$getterAsCharArray};
+    printf HEADER $memberOfFormat, $className;
     print HEADER $functionPrefix . $attribute->getGetterAsCharArrayImplPrintable($className, $objectVariableName);
   }
   foreach my $getter(@{$class->{getters}}){
@@ -276,21 +299,6 @@ sub printHeaderFilesForClass{
   if($isCommented == 1){
     print HEADER "\n";
   }
-
-  $isCommented = 0;
-  foreach my $function (@{$class->{functions}}){
-    if(not $function->isSpecialFunction()){
-      if($isCommented == 0){
-        $isCommented = 1;
-        print HEADER $doxygenLinkComment;
-      }
-      print HEADER $function->getDoxygenComment($className);
-    }
-  }
-  if($isCommented == 1){
-    print HEADER "\n";
-  }
-
 
   if($class->isObject() || $class->isDelegate()){
     printf HEADER $functionPrefix;
@@ -543,17 +551,30 @@ sub printHeaderFilesForClass{
   if($superClassName ne ""){
     print HEADER $doxygenExtendComment;
     print HEADER "/**\n";
-    print HEADER " * \@struct $className\n";
+    print HEADER " * \@class $className\n";
     print HEADER " * \@extends $superClassName\n";
     print HEADER " */\n\n\n";
+  }
+
+  $isCommented = 0;
+  foreach my $function (@{$class->{functions}}){
+    if($isCommented == 0){
+      $isCommented = 1;
+      print HEADER $doxygenLinkComment;
+    }
+    if($function->isDeinitFunction()){
+      print HEADER $function->getDoxygenComment($className, $destructorMacro);
+    }
+  }
+  if($isCommented == 1){
+    print HEADER "\n";
   }
 
   close HEADER;
 
   #generate event class
-  if($class->{isEvent} == 1 || $class->{isEventWithoutRetain} == 1){
-    my $eventClassName = $className;
-    $eventClassName =~ s/(Delegate)?$/Event/;
+  if($class->isEvent()){
+    my $eventClassName = getEventNameForClassName($className);
     my $listName = "delegates";
     my $eventFileName = $eventClassName . ".h";
     my $eventPath = $genDir . "/" . $eventFileName;
@@ -582,13 +603,14 @@ sub printHeaderFilesForClass{
     print HEADER "\tIAStructArrayList * $listName;\n";
     print HEADER "} $eventClassName;\n";
     print HEADER "\n";
-    print HEADER $constructorPrefix . $functionPrefix . "void ${eventClassName}_init($eventClassName * this){\n";
+    printf HEADER $memberOfFormat, $eventClassName;
+    print HEADER $functionPrefix . " $constructorMacro void ${eventClassName}_init($eventClassName * this){\n";
     print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(this->$listName, 8, \"${eventClassName}\");\n";
     printf HEADER "\tIA_incrementInitCountForClass(\"%s\");\n", $eventClassName;
     print HEADER "}\n";
     print HEADER "\n";
-    print HEADER $functionPrefix . "void ${eventClassName}_deinit($eventClassName * this);\n";
-    print HEADER $constructorPrefix . $functionPrefix . "$eventClassName * ${eventClassName}_new(){\n";
+    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * this);\n";
+    print HEADER $functionPrefix . "$eventClassName * ${eventClassName}_new(){\n";
     print HEADER "\t${eventClassName} * this = IA_newWithClassName(sizeof(${eventClassName}), (void (*)(void *)) ${eventClassName}_deinit, \"${eventClassName}\");\n";
     print HEADER "\t${eventClassName}_init(this);\n";
     print HEADER "\treturn this;\n";
@@ -600,12 +622,11 @@ sub printHeaderFilesForClass{
     print HEADER "\treturn this;\n";
     print HEADER "}\n";
     print HEADER "\n";
-    printf HEADER $memberOfFormat, $className;
     print HEADER $functionPrefix . "void ${eventClassName}_retain($eventClassName * this){\n";
     print HEADER "\tIA_retain(this);\n";
     print HEADER "}\n";
     print HEADER "\n";
-    printf HEADER $memberOfFormat, $className;
+    printf HEADER $memberOfFormat, $eventClassName;
     print HEADER $functionPrefix . "void ${eventClassName}_register($eventClassName * this, $className * delegate){\n";
     if ($class->{isEvent}) {
       print HEADER "\tIA_retain(delegate);\n";
@@ -614,7 +635,7 @@ sub printHeaderFilesForClass{
     print HEADER "\tIAStructArrayList_add(this->$listName, delegate);\n";
     print HEADER "}\n";
     print HEADER "\n";
-    printf HEADER $memberOfFormat, $className;
+    printf HEADER $memberOfFormat, $eventClassName;
     print HEADER $functionPrefix . "void ${eventClassName}_unregister($eventClassName * this, $className * delegate){\n";
     print HEADER "\tdebugOnly(bool isFound = false;)\n";
     print HEADER "\tfor (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->$listName); i++) {\n";
@@ -633,11 +654,12 @@ sub printHeaderFilesForClass{
     print HEADER "\n";
     foreach my $function (@executeableFunctions){
       if($function->isVoidFunction() == 1){
-        printf HEADER $memberOfFormat, $className;
+        printf HEADER $memberOfFormat, $eventClassName;
         print HEADER $functionPrefix . $function->getExeEventImplementationPrintable($eventClassName, $className, $listName, "this");
       }
     }
-    print HEADER $functionPrefix . "void ${eventClassName}_deinit($eventClassName * this){\n";
+    printf HEADER $memberOfFormat, $eventClassName;
+    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * this){\n";
     print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(this->$listName, \"${eventClassName}\");\n";
     print HEADER "\tIA_decrementInitCountForClass(\"${eventClassName}\");\n";
     print HEADER "}\n";
