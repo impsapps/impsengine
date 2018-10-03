@@ -1,7 +1,6 @@
 var searchData=
 [
   ['c',['c',['../de/d39/struct_i_a_string.html#a7998e42879d545224265353ca07ba886',1,'IAString']]],
-  ['changearraysize',['changeArraySize',['../df/dd4/struct_i_a_array_list.html#a985cb77060459984c4a08e01f0b79415',1,'IAArrayList']]],
   ['color',['color',['../dc/d71/struct_i_a_colorable_font_atlas.html#a37bff960212ce4754cf33bf1fcf2b637',1,'IAColorableFontAtlas']]],
   ['colorformat',['colorFormat',['../da/d9d/struct_i_a_app.html#ad1cd8e712387470d3438170d54b06707',1,'IAApp::colorFormat()'],['../d6/d64/struct_i_a_app_attributes.html#a8fe0627712134b83266de1b213401629',1,'IAAppAttributes::colorFormat()']]],
   ['colorlocation',['colorLocation',['../df/dc3/struct_i_a_color_rect_program.html#af33887f47c881259d1e7ad5379422d2a',1,'IAColorRectProgram']]],
@@ -17,7 +16,6 @@ var searchData=
   ['currentcountofglyphs',['currentCountOfGlyphs',['../db/d38/struct_i_a_font_atlas.html#a215873524fb1fe6c8308b16d40357c7d',1,'IAFontAtlas']]],
   ['currentcountofkernings',['currentCountOfKernings',['../db/d38/struct_i_a_font_atlas.html#a4a9290de68505b7e9ac6905229226d69',1,'IAFontAtlas']]],
   ['currentdraglength',['currentDragLength',['../df/d83/struct_i_a_overscrolling_handler.html#a9efe826c29e6edbc867e6d9e184c52dc',1,'IAOverscrollingHandler']]],
-  ['currentelementinstructarray',['currentElementInStructArray',['../d4/dac/struct_i_a_struct_memory_handler.html#a6bf62fdb1c3169fa7e774121329328f8',1,'IAStructMemoryHandler']]],
   ['currentelementkey',['currentElementKey',['../d3/da5/struct_i_a___x_m_l___strings.html#abf47c0814a5a2bd5c87d7c2e6da4e12c',1,'IA_XML_Strings']]],
   ['currentfontsize',['currentFontSize',['../da/d40/struct_i_a_glyph.html#abd8a8bb7752e284e5df6d66c7215b7d0',1,'IAGlyph']]],
   ['currenthashmap',['currentHashMap',['../d8/d9a/struct_i_a_auto_expanding_hash_map.html#a727fb494a8c438e828dedbad2b2f1ddd',1,'IAAutoExpandingHashMap']]],
@@ -27,7 +25,6 @@ var searchData=
   ['currentscrollpos',['currentScrollPos',['../d7/da5/struct_i_a_scroll_view.html#abd58501efe1009231c8b2b107bdaed84',1,'IAScrollView']]],
   ['currentsize',['currentSize',['../df/dd4/struct_i_a_array_list.html#a83b7f00f24d15933b78787e9d5d47f77',1,'IAArrayList']]],
   ['currentsizeoffont',['currentSizeOfFont',['../db/d38/struct_i_a_font_atlas.html#a5472c8547385e7def11c54080a780daa',1,'IAFontAtlas']]],
-  ['currentstructarrayindex',['currentStructArrayIndex',['../d4/dac/struct_i_a_struct_memory_handler.html#ab2d69447ef3fd90da331d1f508ae5aa1',1,'IAStructMemoryHandler']]],
   ['currenttime',['currentTime',['../d7/da5/struct_i_a_scroll_view.html#a43172d92db2a93ac92b0833c6e556d2a',1,'IAScrollView::currentTime()'],['../de/d06/struct_i_a_acceleration_animation.html#a7e8695eadaaa8b8f60d8c9ca6bf82642',1,'IAAccelerationAnimation::currentTime()'],['../da/d3b/struct_i_a_composited_animation.html#a79926f882901bc36513b30002a5fc28b',1,'IACompositedAnimation::currentTime()'],['../d2/d0f/struct_i_a_frame_animation.html#a693359f7e646056d5d8d4124d089bb2b',1,'IAFrameAnimation::currentTime()']]],
   ['currentview',['currentView',['../de/de3/struct_i_a_view_holder.html#a6f41ce21e7fa5368cb09d75092b0dd46',1,'IAViewHolder']]],
   ['currentxadvance',['currentXAdvance',['../da/d40/struct_i_a_glyph.html#a75c0bd41682140f2fa58c0e4724fdfa1',1,'IAGlyph']]],

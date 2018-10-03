@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['radianstodegrees',['radiansToDegrees',['../db/d16/_i_a_math_8h.html#ac3f44432f53fce4bee400633d013ef4c',1,'IAMath.h']]],
-  ['random_2dnumber_2dgenerator',['Random-number-generator',['../dc/d8f/group__random-number-generator.html',1,'']]],
   ['rect',['rect',['../d1/d98/struct_i_a_button_attributes.html#aa493b4447e03526faa2ab3356d5a32b8',1,'IAButtonAttributes::rect()'],['../dc/d4f/struct_i_a_drawable_rect.html#a3893a47fa7c433b06595380874d080b2',1,'IADrawableRect::rect()'],['../d9/d48/struct_i_a_graphic_rect.html#a050836d96b5286a12d07282e5002de22',1,'IAGraphicRect::rect()']]],
   ['rectextensionfortouchbeganbottom',['rectExtensionForTouchBeganBottom',['../d1/dd0/struct_i_a_button.html#a9fdb43b6a8fa26ec2d63533bfeffa798',1,'IAButton::rectExtensionForTouchBeganBottom()'],['../d1/d98/struct_i_a_button_attributes.html#aa64e623bfc702b06bd2f73eb9e84c5af',1,'IAButtonAttributes::rectExtensionForTouchBeganBottom()']]],
   ['rectextensionfortouchbeganleft',['rectExtensionForTouchBeganLeft',['../d1/dd0/struct_i_a_button.html#a6f265b10c007150790037377800f68a9',1,'IAButton::rectExtensionForTouchBeganLeft()'],['../d1/d98/struct_i_a_button_attributes.html#a612f7d1c79ef6c1e6c170193a478dc80',1,'IAButtonAttributes::rectExtensionForTouchBeganLeft()']]],
@@ -13,7 +11,6 @@ var searchData=
   ['rectextensionfortouchmovedoutsidetop',['rectExtensionForTouchMovedOutsideTop',['../d1/dd0/struct_i_a_button.html#aa5ea8318e95a3885ee47ca1d3038e0cd',1,'IAButton::rectExtensionForTouchMovedOutsideTop()'],['../d1/d98/struct_i_a_button_attributes.html#a02331f981e8a6a50098b199f3fdb4df9',1,'IAButtonAttributes::rectExtensionForTouchMovedOutsideTop()']]],
   ['red',['red',['../de/d85/struct_i_a_color_rect.html#abfbab3c151d31e785166c7c4de5c17cf',1,'IAColorRect::red()'],['../db/d44/struct_i_a_color.html#a2af82f6b579802c69f1cfc3442fe46b9',1,'IAColor::red()']]],
   ['releasecorrespondinganimation',['releaseCorrespondingAnimation',['../dd/d03/struct_i_a_composited_animation_delegate.html#a82b5d8b21320dc59881f5f59de1619ce',1,'IACompositedAnimationDelegate::releaseCorrespondingAnimation()'],['../d4/d11/struct_i_a_composited_animation_delegate_attributes.html#a28a7dcd5168e5a5c7f8aec1c2e40bc25',1,'IACompositedAnimationDelegateAttributes::releaseCorrespondingAnimation()']]],
-  ['render',['render',['../da/d9d/struct_i_a_app.html#a07da2aeddaf60bcd7bdd5c833a15ea00',1,'IAApp::render()'],['../d6/d64/struct_i_a_app_attributes.html#a6fbdea6af19b4593a5e82c833a78cac0',1,'IAAppAttributes::render()']]],
   ['returnresult',['returnResult',['../dd/d0b/struct_i_a_hash_map_iterator.html#a7208aca6362b05a44ba481a577140b55',1,'IAHashMapIterator']]],
   ['roundcount',['roundCount',['../de/d79/struct_i_a_stopwatch.html#aaf5f33f23a3c69e36bb4d27112e70f71',1,'IAStopwatch']]]
 ];

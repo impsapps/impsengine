@@ -11,7 +11,6 @@ var searchData=
   ['rectextensionfortouchmovedoutsidetop',['rectExtensionForTouchMovedOutsideTop',['../d1/dd0/struct_i_a_button.html#aa5ea8318e95a3885ee47ca1d3038e0cd',1,'IAButton::rectExtensionForTouchMovedOutsideTop()'],['../d1/d98/struct_i_a_button_attributes.html#a02331f981e8a6a50098b199f3fdb4df9',1,'IAButtonAttributes::rectExtensionForTouchMovedOutsideTop()']]],
   ['red',['red',['../de/d85/struct_i_a_color_rect.html#abfbab3c151d31e785166c7c4de5c17cf',1,'IAColorRect::red()'],['../db/d44/struct_i_a_color.html#a2af82f6b579802c69f1cfc3442fe46b9',1,'IAColor::red()']]],
   ['releasecorrespondinganimation',['releaseCorrespondingAnimation',['../dd/d03/struct_i_a_composited_animation_delegate.html#a82b5d8b21320dc59881f5f59de1619ce',1,'IACompositedAnimationDelegate::releaseCorrespondingAnimation()'],['../d4/d11/struct_i_a_composited_animation_delegate_attributes.html#a28a7dcd5168e5a5c7f8aec1c2e40bc25',1,'IACompositedAnimationDelegateAttributes::releaseCorrespondingAnimation()']]],
-  ['render',['render',['../da/d9d/struct_i_a_app.html#a07da2aeddaf60bcd7bdd5c833a15ea00',1,'IAApp::render()'],['../d6/d64/struct_i_a_app_attributes.html#a6fbdea6af19b4593a5e82c833a78cac0',1,'IAAppAttributes::render()']]],
   ['returnresult',['returnResult',['../dd/d0b/struct_i_a_hash_map_iterator.html#a7208aca6362b05a44ba481a577140b55',1,'IAHashMapIterator']]],
   ['roundcount',['roundCount',['../de/d79/struct_i_a_stopwatch.html#aaf5f33f23a3c69e36bb4d27112e70f71',1,'IAStopwatch']]]
 ];

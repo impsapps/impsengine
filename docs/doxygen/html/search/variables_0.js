@@ -2,9 +2,11 @@ var searchData=
 [
   ['accelerationfunction',['accelerationFunction',['../de/d06/struct_i_a_acceleration_animation.html#abdd6cddcd1f4621dfac766058eeec64b',1,'IAAccelerationAnimation::accelerationFunction()'],['../da/d89/struct_i_a_acceleration_animation_attributes.html#a118559fffdcea320fc2ce9dced647292',1,'IAAccelerationAnimationAttributes::accelerationFunction()']]],
   ['accelerationinpixelperdraglengthsquared',['accelerationInPixelPerDragLengthSquared',['../df/d83/struct_i_a_overscrolling_handler.html#a5b2f438782ffc45401da409e4c338319',1,'IAOverscrollingHandler']]],
+  ['allocationcount',['allocationCount',['../d8/d7f/struct_i_a_object_information.html#a730431d727075e4fae70ee56c4e5f1c4',1,'IAObjectInformation']]],
   ['alpha',['alpha',['../de/d85/struct_i_a_color_rect.html#a200275a5d02248d98fd0849901ec7c56',1,'IAColorRect::alpha()'],['../dd/de1/struct_i_a_image.html#afc10a3bb8ef4011b47db5ba26899884a',1,'IAImage::alpha()'],['../db/d44/struct_i_a_color.html#a30beea09e18ffe17bc9a6d10684e1bd3',1,'IAColor::alpha()']]],
+  ['amount',['amount',['../d6/d5c/struct_i_a_kerning_amount.html#ac786fdab9d2b266275b29acf0d4b75d6',1,'IAKerningAmount']]],
   ['animationdelegate',['animationDelegate',['../de/d06/struct_i_a_acceleration_animation.html#a0ece3dbc97ceb61da0f49029a5e518bd',1,'IAAccelerationAnimation::animationDelegate()'],['../d2/d0f/struct_i_a_frame_animation.html#aa18d7bffc523b003dbe7971e423f5722',1,'IAFrameAnimation::animationDelegate()'],['../df/d77/struct_i_a_pause_animation.html#a28bfbc46b0050d1ffc39127862417c9c',1,'IAPauseAnimation::animationDelegate()']]],
-  ['applystringtovalue',['applyStringToValue',['../df/d40/struct_i_a_key_value_delegate.html#affbb04244c243a4409113a9f41ffc410',1,'IAKeyValueDelegate::applyStringToValue()'],['../d5/d8e/struct_i_a_key_value_delegate_attributes.html#ad5eb56af42528cb5e922a5dc24480887',1,'IAKeyValueDelegateAttributes::applyStringToValue()']]],
+  ['applystringtovalue',['applyStringToValue',['../d4/d0a/struct_i_a_key_value_element.html#a1dde5547b5562f5c10c4cc09c496420d',1,'IAKeyValueElement::applyStringToValue()'],['../df/d52/struct_i_a_key_value_element_attributes.html#a4ed897d9ff5735d33ba27d0a6c031385',1,'IAKeyValueElementAttributes::applyStringToValue()']]],
   ['areimagescopied',['areImagesCopied',['../d2/d0f/struct_i_a_frame_animation.html#a384d58839b1fc6f5f9e2ab1b4fa94761',1,'IAFrameAnimation']]],
   ['array',['array',['../d0/d88/struct_i_a_array_iterator.html#ad6ae0210aa44c64a20f36c0b85dde7cf',1,'IAArrayIterator']]],
   ['arraybuffer',['arrayBuffer',['../de/d85/struct_i_a_color_rect.html#a35a08fc3f9c0c0538a309a19fd292b44',1,'IAColorRect::arrayBuffer()'],['../dd/de1/struct_i_a_image.html#ae5db284b828b96e774b6194c7fd74ab5',1,'IAImage::arrayBuffer()']]],
@@ -15,5 +17,5 @@ var searchData=
   ['assetnametemp',['assetNameTemp',['../d5/d39/struct_i_a_atlas_assets.html#ac7ede381f3c571258cbd2c2f314df05a',1,'IAAtlasAssets::assetNameTemp()'],['../d1/da1/struct_i_a_image_context.html#a575ebb29acc00fb0fa8de25d3b649a44',1,'IAImageContext::assetNameTemp()']]],
   ['asynctask',['asyncTask',['../de/d51/struct_i_a_parallel_thread.html#afaca6bf1143eb6b27ca0c8dd77b5536a',1,'IAParallelThread']]],
   ['attributelocation',['attributeLocation',['../d1/d35/struct_i_a_program_attribute.html#a9a08bf0c9803c964f99030e3da332387',1,'IAProgramAttribute']]],
-  ['attributes',['attributes',['../d9/d5b/struct_i_a_program.html#a73af807eb5680925647068f9ee9705f3',1,'IAProgram']]]
+  ['attributes',['attributes',['../d9/d5b/struct_i_a_program.html#a4827afb8238c0641d0245077d086cb1d',1,'IAProgram']]]
 ];
