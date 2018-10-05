@@ -1,13 +1,5 @@
-//
-//  IAArrayList.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 25.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineCLibrary_IAArrayList_h
-#define ImpsEngineCLibrary_IAArrayList_h
+#ifndef IAArrayList_h
+#define IAArrayList_h
 
 #include <stddef.h>
 #include <stdbool.h>

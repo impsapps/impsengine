@@ -1,13 +1,5 @@
-//
-//  IAKeyValueHashMap.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 05/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAKeyValueHashMap_h
-#define Hit_Verto_IAKeyValueHashMap_h
+#ifndef IAKeyValueHashMap_h
+#define IAKeyValueHashMap_h
 
 #include "IAHashMap.h"
 #include "IAKeyValueElement.h"

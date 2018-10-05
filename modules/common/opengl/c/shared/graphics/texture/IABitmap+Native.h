@@ -1,11 +1,3 @@
-//
-//  IABitmap+Native.h
-//  OpenGL
-//
-//  Created by Konstantin Merker on 22/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IABitmap_Native_h
 #define IABitmap_Native_h
 

@@ -1,11 +1,3 @@
-//
-//  IAThreadPool.c
-//  ConcurrentLib
-//
-//  Created by Konstantin Merker on 17/09/16.
-//
-//
-
 #include "IALibrary.h"
 #include "IAThreadPool.h"
 #include "IAThreadPoolWaitingQueueItem.h"

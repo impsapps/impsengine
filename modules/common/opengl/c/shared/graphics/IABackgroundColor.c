@@ -1,11 +1,3 @@
-//
-//  IABackgroundColor.c
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 30.08.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IABackgroundColor.h"
 #include "IAOpenGLHeaders.h"

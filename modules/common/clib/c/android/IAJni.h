@@ -1,14 +1,5 @@
-//
-//  IAJni.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 23.04.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_IAJniEnv_h
-#define ImpsEngineAndroid_IAJniEnv_h
+#ifndef IAJni_h
+#define IAJni_h
 
 #include <jni.h>
 

@@ -1,12 +1,3 @@
-//
-//  IARandomNumberGenerator.c
-//  RandomNumberGenerator
-//
-//  Created by Konstantin Merker on 15/09/16.
-//
-//
-
-
 #include "IARandomNumberGenerator.h"
 #include "SFMT.h"
 #include "IALibrary.h"

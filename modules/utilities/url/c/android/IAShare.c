@@ -1,11 +1,3 @@
-//
-//  
-//  ImpsEngine
-//
-//  Created by Konstantin Merker on 13.12.17.
-//  Copyright (c) 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAShare.h"
 #include "JNIEnv+HelperMethods.h"

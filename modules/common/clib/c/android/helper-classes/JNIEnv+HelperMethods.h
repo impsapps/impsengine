@@ -1,14 +1,5 @@
-//
-//  JNIEnv+HelperMethods.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on ${date}.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_JNIEnvHelperExt_h
-#define ImpsEngineAndroid_JNIEnvHelperExt_h
+#ifndef JNIEnv_HelperMethods_h
+#define JNIEnv_HelperMethods_h
 
 #include <jni.h>
 #include <stdbool.h>

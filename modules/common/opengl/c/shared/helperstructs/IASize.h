@@ -1,13 +1,5 @@
-//
-//  Size.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 06.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IASize_h
-#define ImpsEngineiOS_IASize_h
+#ifndef IASize_h
+#define IASize_h
 
 #include <stdbool.h>
 

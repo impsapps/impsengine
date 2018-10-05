@@ -1,13 +1,5 @@
-//
-//  IAGlyph.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 21/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAGlyph_h
-#define Hit_Verto_IAGlyph_h
+#ifndef IAGlyph_h
+#define IAGlyph_h
 
 #include "IAImage.h"
 #include "IAGlyphInformation.h"

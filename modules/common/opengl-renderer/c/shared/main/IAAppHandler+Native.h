@@ -1,13 +1,5 @@
-//
-//  BaseApplication+Native.h
-//  ImpsEngine
-//
-//  Created by Konstantin Merker on 01/04/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngine_IAAppHandler_Native_h
-#define ImpsEngine_IAAppHandler_Native_h
+#ifndef IAAppHandler_Native_h
+#define IAAppHandler_Native_h
 
 #include "IAApp.h"
 #include "IASize.h"

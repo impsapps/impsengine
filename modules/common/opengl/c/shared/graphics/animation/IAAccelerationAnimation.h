@@ -1,13 +1,5 @@
-//
-//  IAAccelerationAnimation.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 24.09.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAAccelerationAnimation_h
-#define Hit_Verto_IAAccelerationAnimation_h
+#ifndef IAAccelerationAnimation_h
+#define IAAccelerationAnimation_h
 
 #include "IAAccelerationAnimationAttributes.h"
 #include "IACompositedAnimationDelegate.h"

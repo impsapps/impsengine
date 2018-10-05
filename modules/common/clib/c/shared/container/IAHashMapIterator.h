@@ -1,14 +1,5 @@
-//
-//  IAHashMapIterator.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 31.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineCLibrary_IAHashMapIterator_h
-#define ImpsEngineCLibrary_IAHashMapIterator_h
+#ifndef IAHashMapIterator_h
+#define IAHashMapIterator_h
 
 #include "IAHashMap.h"
 

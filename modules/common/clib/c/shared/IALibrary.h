@@ -1,13 +1,5 @@
-//
-//  IALibrary.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 24.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineCLibrary_IALibrary_h
-#define ImpsEngineCLibrary_IALibrary_h
+#ifndef IALibrary_h
+#define IALibrary_h
 
 #include <stddef.h>
 #include <stdbool.h>

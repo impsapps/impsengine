@@ -1,4 +1,3 @@
-
 #include "IALibrary.h"
 #include "IAWinTouchHandler.h"
 #include "IATouchManager.h"

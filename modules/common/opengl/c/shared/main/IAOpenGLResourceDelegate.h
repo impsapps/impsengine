@@ -1,14 +1,5 @@
-//
-//  IAOpenGLResourceDelegate.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 01.08.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_IAOpenGLResourceDelegate_h
-#define ImpsEngineAndroid_IAOpenGLResourceDelegate_h
+#ifndef IAOpenGLResourceDelegate_h
+#define IAOpenGLResourceDelegate_h
 
 #include "IAOpenGLResourceDelegateAttributes.h"
 

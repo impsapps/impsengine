@@ -1,13 +1,5 @@
-//
-//  IARandomNumberGenerator.h
-//  RandomNumberGenerator
-//
-//  Created by Konstantin Merker on 15/09/16.
-//
-//
-
-#ifndef RandomNumberGenerator_IARandomNumberGenerator_h
-#define RandomNumberGenerator_IARandomNumberGenerator_h
+#ifndef IARandomNumberGenerator_h
+#define IARandomNumberGenerator_h
 
 #include <stdint.h>
 #include <stdbool.h>

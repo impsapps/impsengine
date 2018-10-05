@@ -1,13 +1,5 @@
-//
-//  IAAsyncTask.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 02.09.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAAsyncTask_h
-#define Hit_Verto_IAAsyncTask_h
+#ifndef IAAsyncTask_h
+#define IAAsyncTask_h
 
 #include <pthread.h>
 #include "IAObject.h"

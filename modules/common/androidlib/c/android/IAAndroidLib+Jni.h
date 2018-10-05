@@ -1,14 +1,5 @@
-//
-//  IAAndroidLib.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 04.05.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_IAAndroidLib_h
-#define ImpsEngineAndroid_IAAndroidLib_h
+#ifndef IAAndroidLib_h
+#define IAAndroidLib_h
 
 #include "IAJni.h"
 

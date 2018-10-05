@@ -1,13 +1,5 @@
-//
-//  IAAcceleration.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 25.06.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IAAcceleration_h
-#define ImpsEngineiOS_IAAcceleration_h
+#ifndef IAAcceleration_h
+#define IAAcceleration_h
 
 #include "IARect.h"
 #include "IAPoint.h"

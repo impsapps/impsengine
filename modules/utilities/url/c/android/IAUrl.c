@@ -1,12 +1,3 @@
-//
-//  Url.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on Mar 25, 2016.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IALibrary.h"
 #include "IAUrl.h"
 #include "JNIEnv+HelperMethods.h"

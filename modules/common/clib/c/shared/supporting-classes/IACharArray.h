@@ -1,12 +1,3 @@
-//
-//  IACharArray.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 04.04.18.
-//  Copyright (c) 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #ifndef IACharArray_h
 #define IACharArray_h
 

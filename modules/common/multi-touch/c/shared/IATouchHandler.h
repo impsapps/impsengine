@@ -1,13 +1,5 @@
-//
-//  IATouchHandler.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 28.05.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IATouchHandler_h
-#define ImpsEngineiOS_IATouchHandler_h
+#ifndef IATouchHandler_h
+#define IATouchHandler_h
 
 #include <stdbool.h>
 

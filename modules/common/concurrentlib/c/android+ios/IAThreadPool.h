@@ -1,13 +1,5 @@
-//
-//  IAThreadPool.h
-//  ConcurrentLib
-//
-//  Created by Konstantin Merker on 17/09/16.
-//
-//
-
-#ifndef ConcurrentLib_IAThreadPool_h
-#define ConcurrentLib_IAThreadPool_h
+#ifndef IAThreadPool_h
+#define IAThreadPool_h
 
 #include "IAThreadPoolInstance.h"
 #include "IAArrayList.h"

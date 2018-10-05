@@ -1,11 +1,3 @@
-//
-//  IAButtonAttributes.c
-//  MultiTouch
-//
-//  Created by Konstantin on 23/09/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAButtonAttributes.h"
 #include "IAViewPort.h"

@@ -1,12 +1,3 @@
-//
-//  IABundleInfo.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on May 7, 2018.
-//  Copyright (c) 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include <string.h>
 #include "IALibrary.h"
 #include "IABundleInfo.h"

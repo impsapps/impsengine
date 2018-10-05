@@ -1,11 +1,3 @@
-//
-//  IAViewPort.h
-//  OpenGL
-//
-//  Created by Konstantin Merker on 03/11/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAViewPort_h
 #define IAViewPort_h
 

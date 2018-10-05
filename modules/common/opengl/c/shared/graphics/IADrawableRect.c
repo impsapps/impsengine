@@ -1,11 +1,3 @@
-//
-//  IADrawableRect.c
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 11.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IADrawableRect.h"
 #include "IAViewPort.h"

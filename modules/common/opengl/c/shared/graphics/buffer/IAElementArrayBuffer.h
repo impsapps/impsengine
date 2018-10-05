@@ -1,14 +1,5 @@
-//
-//  IAElementArrayBuffer.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 18.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineiOS_IAElementArrayBuffer_h
-#define ImpsEngineiOS_IAElementArrayBuffer_h
+#ifndef IAElementArrayBuffer_h
+#define IAElementArrayBuffer_h
 
 #include "IAOpenGLHeaders.h"
 #include "IABuffer.h"

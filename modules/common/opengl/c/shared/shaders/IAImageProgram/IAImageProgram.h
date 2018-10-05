@@ -1,13 +1,5 @@
-//
-//  IAImageProgram.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 14.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IAImageProgram_h
-#define ImpsEngineiOS_IAImageProgram_h
+#ifndef IAImageProgram_h
+#define IAImageProgram_h
 
 #include "IAProgram.h"
 

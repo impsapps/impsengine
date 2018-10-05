@@ -1,11 +1,3 @@
-//
-//  IAGraphicRect.c
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 18/02/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAGraphicRect.h"
 #include "IAOpenGLHeaders.h"

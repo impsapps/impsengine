@@ -1,14 +1,5 @@
-//
-//  IAMath.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 06.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineCLibrary_IAMath_h
-#define ImpsEngineCLibrary_IAMath_h
+#ifndef IAMath_h
+#define IAMath_h
 
 #include <math.h>
 #include <stdbool.h>

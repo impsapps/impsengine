@@ -1,13 +1,5 @@
-//
-//  IAMatrix44.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 26/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAMatrix44_h
-#define Hit_Verto_IAMatrix44_h
+#ifndef IAMatrix44_h
+#define IAMatrix44_h
 
 #include "IAOpenGLHeaders.h"
 #include "IARect.h"

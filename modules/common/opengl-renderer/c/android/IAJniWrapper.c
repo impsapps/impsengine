@@ -1,11 +1,3 @@
-//
-//  IAJniWrapper.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 23.04.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "com_impsapps_impsengine_common_openglrenderer_BaseActivity.h"
 #include "com_impsapps_impsengine_common_openglrenderer_IASurfaceRenderer.h"
 

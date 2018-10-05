@@ -1,11 +1,3 @@
-//
-//  IACharArray+Internal.h
-//  CLib
-//
-//  Created by Konstantin Merker on 04.04.18.
-//  Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IACharArray_Internal_h
 #define IACharArray_Internal_h
 

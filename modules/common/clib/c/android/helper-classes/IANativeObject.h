@@ -1,14 +1,5 @@
-//
-//  IANativeObject.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 07.06.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_IANativeObject_h
-#define ImpsEngineAndroid_IANativeObject_h
+#ifndef IANativeObject_h
+#define IANativeObject_h
 
 #include <jni.h>
 

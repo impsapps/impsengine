@@ -1,11 +1,3 @@
-//
-//  IAAllocationTrackingDelegate.h
-//  CLib
-//
-//  Created by Konstantin Merker on 27.05.18.
-//Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAAllocationTrackingDelegate_h
 #define IAAllocationTrackingDelegate_h
 

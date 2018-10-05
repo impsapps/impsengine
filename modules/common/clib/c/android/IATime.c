@@ -1,12 +1,3 @@
-//
-//  IATime.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 07.06.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include <assert.h>
 #include <time.h>
 #include <unistd.h>

@@ -1,14 +1,5 @@
-//
-//  IABuffer.h
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 08.08.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineAndroid_IABuffer_h
-#define ImpsEngineAndroid_IABuffer_h
+#ifndef IABuffer_h
+#define IABuffer_h
 
 #include "IAOpenGLHeaders.h"
 #include "IAOpenGLResourceDelegate.h"

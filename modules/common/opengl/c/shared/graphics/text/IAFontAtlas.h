@@ -1,13 +1,5 @@
-//
-//  IAFontAtlas.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 30/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAFontAtlas_h
-#define Hit_Verto_IAFontAtlas_h
+#ifndef IAFontAtlas_h
+#define IAFontAtlas_h
 
 #include "IAGlyph.h"
 #include "IAHashMap.h"

@@ -1,11 +1,3 @@
-//
-//  IA_XML_Atlas.h
-//  InputOutput
-//
-//  Created by Konstantin Merker on 01/11/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IA_XML_Atlas_h
 #define IA_XML_Atlas_h
 

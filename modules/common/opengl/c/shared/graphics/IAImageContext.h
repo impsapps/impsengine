@@ -1,13 +1,5 @@
-//
-//  IAImageContext.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 10.05.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IAImageContext_h
-#define ImpsEngineiOS_IAImageContext_h
+#ifndef IAImageContext_h
+#define IAImageContext_h
 
 #include "IAImage.h"
 #include "IAAutoExpandingHashMap.h"

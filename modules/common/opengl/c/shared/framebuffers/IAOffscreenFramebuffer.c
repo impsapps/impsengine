@@ -1,11 +1,3 @@
-//
-//  IAOffscreenFramebuffer.c
-//  OpenGL
-//
-//  Created by Konstantin Merker on 13.12.17.
-//Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAOffscreenFramebuffer.h"
 #include "IAOpenGLAssert.h"

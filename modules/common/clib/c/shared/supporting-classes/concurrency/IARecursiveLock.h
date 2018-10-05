@@ -1,11 +1,3 @@
-//
-//  IARecursiveLock.h
-//  ConcurrentLib
-//
-//  Created by Konstantin Merker on 02/10/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IARecursiveLock_h
 #define IARecursiveLock_h
 

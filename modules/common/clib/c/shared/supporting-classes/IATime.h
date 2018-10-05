@@ -1,13 +1,5 @@
-//
-//  IATime.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 24.05.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IATime_h
-#define ImpsEngineiOS_IATime_h
+#ifndef IATime_h
+#define IATime_h
 
 #include <stdint.h>
 

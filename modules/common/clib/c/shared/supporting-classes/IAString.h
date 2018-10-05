@@ -1,13 +1,5 @@
-//
-//  IAString.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 25.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineCLibrary_IAString_h
-#define ImpsEngineCLibrary_IAString_h
+#ifndef IAString_h
+#define IAString_h
 
 
 #include <stdbool.h>

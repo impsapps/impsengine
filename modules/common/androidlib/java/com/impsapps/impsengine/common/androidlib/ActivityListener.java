@@ -1,6 +1,5 @@
 package com.impsapps.impsengine.common.androidlib;
 
-
 import android.os.Bundle;
 
 public interface ActivityListener {

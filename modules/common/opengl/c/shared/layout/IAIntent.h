@@ -1,11 +1,3 @@
-//
-//  IAIntent.h
-//  OpenGL
-//
-//  Created by Konstantin Merker on 03/12/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAIntent_h
 #define IAIntent_h
 

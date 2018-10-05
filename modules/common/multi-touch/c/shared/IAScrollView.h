@@ -1,11 +1,3 @@
-//
-//  IAScrollView.h
-//  MultiTouch
-//
-//  Created by Konstantin Merker on 26.03.18.
-//Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAScrollView_h
 #define IAScrollView_h
 

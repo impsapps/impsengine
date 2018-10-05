@@ -1,11 +1,3 @@
-//
-//  IAFrameAnimationCalculation.h
-//  OpenGL
-//
-//  Created by Konstantin Merker on 18/11/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAFrameAnimationCalculation_h
 #define IAFrameAnimationCalculation_h
 

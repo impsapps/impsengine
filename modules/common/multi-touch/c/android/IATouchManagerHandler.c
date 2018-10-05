@@ -1,12 +1,3 @@
-//
-//  IATouchManagerJniExt.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on Nov 11, 2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IALibrary.h"
 #include "com_impsapps_impsengine_common_multitouch_TouchListener.h"
 #include "IATouchManagerHandler+Jni.h"

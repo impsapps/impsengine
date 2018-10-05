@@ -1,11 +1,3 @@
-//
-//  IAUTF8Helper.c
-//  OpenGL
-//
-//  Created by Konstantin Merker on 25/10/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IAUTF8Helper.h"
 
 

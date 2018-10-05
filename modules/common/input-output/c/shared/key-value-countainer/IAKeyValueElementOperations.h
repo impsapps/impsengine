@@ -1,13 +1,5 @@
-//
-//  IAKeyValueElementOperations.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 05/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAKeyValueElementOperations_h
-#define Hit_Verto_IAKeyValueElementOperations_h
+#ifndef IAKeyValueElementOperations_h
+#define IAKeyValueElementOperations_h
 
 #include "IAString.h"
 

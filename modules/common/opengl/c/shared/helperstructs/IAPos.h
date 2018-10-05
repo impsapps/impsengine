@@ -1,13 +1,5 @@
-//
-//  IAPos.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 11.07.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAPos_h
-#define Hit_Verto_IAPos_h
+#ifndef IAPos_h
+#define IAPos_h
 
 #include <stdbool.h>
 

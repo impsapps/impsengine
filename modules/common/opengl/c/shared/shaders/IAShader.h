@@ -1,13 +1,5 @@
-//
-//  IAShader.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 31.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IAShader_h
-#define ImpsEngineiOS_IAShader_h
+#ifndef IAShader_h
+#define IAShader_h
 
 #include "IAOpenGLHeaders.h"
 #include "IAString.h"

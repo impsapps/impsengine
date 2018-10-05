@@ -1,11 +1,3 @@
-//
-//  IAAtlasAssets.h
-//  InputOutput
-//
-//  Created by Konstantin Merker on 01/11/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAAtlasAssets_h
 #define IAAtlasAssets_h
 

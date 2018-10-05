@@ -1,13 +1,5 @@
-//
-//  IAMeassure.h
-//  ImpsEngine
-//
-//  Created by Konstantin Merker on 26/04/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngine_IAMeassure_h
-#define ImpsEngine_IAMeassure_h
+#ifndef IAMeassure_h
+#define IAMeassure_h
 
 #include <stdint.h>
 

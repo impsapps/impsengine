@@ -1,13 +1,5 @@
-//
-//  IAString+Assets.h
-//  InputOutput
-//
-//  Created by Konstantin Merker on 18/09/16.
-//
-//
-
-#ifndef InputOutput_IAString_Assets_h
-#define InputOutput_IAString_Assets_h
+#ifndef IAString_Assets_h
+#define IAString_Assets_h
 
 #include "IAString.h"
 

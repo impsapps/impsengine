@@ -1,11 +1,3 @@
-//
-//  IADefaultFramebuffer.c
-//  OpenGL
-//
-//  Created by Konstantin Merker on 13.12.17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IADefaultFramebuffer.h"
 #include "IADefaultFramebuffer+Internal.h"
 #include "IAOpenGLHeaders.h"

@@ -1,13 +1,5 @@
-//
-//  IAParallelThread.h
-//  ConcurrentLib
-//
-//  Created by Konstantin Merker on 17/09/16.
-//
-//
-
-#ifndef ConcurrentLib_IAParallelThread_h
-#define ConcurrentLib_IAParallelThread_h
+#ifndef IAParallelThread_h
+#define IAParallelThread_h
 
 #include "IAAsyncTask.h"
 #include "IANotificationEvent.h"

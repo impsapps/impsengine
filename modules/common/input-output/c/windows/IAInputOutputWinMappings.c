@@ -1,11 +1,3 @@
-//
-//  IAInputOutputWinMappings.c
-//  InputOutput
-//
-//  Created by Konstantin Merker on 16.03.18.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAInputOutputWinMappings.h"
 #include "IALocalisation.h"

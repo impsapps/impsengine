@@ -1,11 +1,3 @@
-//
-//  IAArrayListIterator.h
-//  CLib
-//
-//  Created by Konstantin Merker on 30/11/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAArrayListIterator_h
 #define IAArrayListIterator_h
 

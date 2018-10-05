@@ -1,11 +1,3 @@
-//
-//  IAString+Assets.c
-//  InputOutput
-//
-//  Created by Konstantin Merker on 18/09/16.
-//
-//
-
 #include "IALibrary.h"
 #include "IAString.h"
 #include "IAString+Assets.h"

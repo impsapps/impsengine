@@ -1,11 +1,3 @@
-//
-//  IAAllocationTrackerElement.h
-//  CLib
-//
-//  Created by Konstantin Merker on 18.07.18.
-//Copyright © 2018 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAAllocationTrackerElement_h
 #define IAAllocationTrackerElement_h
 

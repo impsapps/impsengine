@@ -1,11 +1,3 @@
-//
-//  IAFrameAnimationGroup.c
-//  OpenGL
-//
-//  Created by Konstantin Merker on 11/11/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAFrameAnimationGroup.h"
 

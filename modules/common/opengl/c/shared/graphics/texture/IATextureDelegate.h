@@ -1,11 +1,3 @@
-//
-//  IATextureDelegate.h
-//  OpenGL
-//
-//  Created by Konstantin Merker on 01/10/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IATextureDelegate_h
 #define IATextureDelegate_h
 

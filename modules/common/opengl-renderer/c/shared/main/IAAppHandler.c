@@ -1,12 +1,3 @@
-//
-//  IAAppHandler.c
-//  core
-//
-//  Created by Konstantin Merker on 11.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IALibrary.h"
 #include "IALibrary+SendOnMemoryWarningNotification.h"
 #include "IAAppHandler.h"

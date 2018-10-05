@@ -1,13 +1,5 @@
-//
-//  IAViewHolder.h
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 28.06.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef ImpsEngineiOS_IAViewHolder_h
-#define ImpsEngineiOS_IAViewHolder_h
+#ifndef IAViewHolder_h
+#define IAViewHolder_h
 
 #include "IADrawable.h"
 #include "IAView.h"

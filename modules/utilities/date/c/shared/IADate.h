@@ -1,14 +1,5 @@
-//
-//  Date.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 26.03.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
-#ifndef ImpsEngineCLibrary_IADate_h
-#define ImpsEngineCLibrary_IADate_h
+#ifndef IADate_h
+#define IADate_h
 
 #include "IAObject.h"
 

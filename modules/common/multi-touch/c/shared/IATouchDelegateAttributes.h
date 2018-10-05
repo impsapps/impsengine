@@ -1,11 +1,3 @@
-//
-//  IATouchDelegateAttributes.h
-//  MultiTouch
-//
-//  Created by Konstantin on 23/09/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IATouchDelegateAttributes_h
 #define IATouchDelegateAttributes_h
 

@@ -1,11 +1,3 @@
-//
-//  IAKeyValueElementAttributes.c
-//  InputOutput
-//
-//  Created by Konstantin Merker on 12/01/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAKeyValueElementAttributes.h"
 

@@ -1,11 +1,3 @@
-//
-//  IAParallelThread.c
-//  ConcurrentLib
-//
-//  Created by Konstantin Merker on 17/09/16.
-//
-//
-
 #include "IALibrary.h"
 #include "IAParallelThread.h"
 

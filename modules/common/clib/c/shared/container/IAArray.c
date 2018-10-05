@@ -1,11 +1,3 @@
-//
-//  IAArray.c
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 23/03/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAArray.h"
 #include <stdarg.h>

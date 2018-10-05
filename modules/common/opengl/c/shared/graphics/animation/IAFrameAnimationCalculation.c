@@ -1,16 +1,5 @@
-//
-//  IAFrameAnimationCalculation.c
-//  OpenGL
-//
-//  Created by Konstantin Merker on 18/11/17.
-//  Copyright © 2017 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include <assert.h>
 #include "IAFrameAnimationCalculation.h"
-
-
 
 
 size_t IAFrameAnimationCalculation_calculateFrame(size_t numberOfFrames,

@@ -1,12 +1,3 @@
-//
-//  IAImage.c
-//  ImpsEngineiOS
-//
-//  Created by Konstantin Merker on 16.04.15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IATextureSelection.h"
 #include "IALibrary.h"
 #include "IAImage.h"

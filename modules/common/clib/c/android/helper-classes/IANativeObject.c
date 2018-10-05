@@ -1,12 +1,3 @@
-//
-//  IANativeObject.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on 07.06.2015.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IANativeObject.h"
 #include "IALibrary.h"
 #include "IAAllocationTracker.h"

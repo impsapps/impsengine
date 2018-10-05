@@ -1,11 +1,3 @@
-//
-//  IACLibWinMappings.h
-//  ImpsEngineCLibrary
-//
-//  Created by Konstantin Merker on 15.03.18.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IACLibWinMappings_h
 #define IACLibWinMappings_h
 

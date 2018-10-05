@@ -1,11 +1,3 @@
-//
-//  IAAppAttributes.h
-//  Core
-//
-//  Created by Konstantin Merker on 02/10/16.
-//  Copyright © 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #ifndef IAAppAttributes_h
 #define IAAppAttributes_h
 

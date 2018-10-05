@@ -1,11 +1,3 @@
-//
-//  IAKeyValueElement.c
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 05/01/16.
-//  Copyright (c) 2016 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
 #include "IALibrary.h"
 #include "IAKeyValueElement.h"
 #include "IAKeyValueElementOperations.h"

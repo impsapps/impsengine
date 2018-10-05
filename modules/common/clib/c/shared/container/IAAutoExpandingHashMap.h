@@ -1,13 +1,5 @@
-//
-//  IAAutoExpandingHashMap.h
-//  Hit Verto
-//
-//  Created by Konstantin Merker on 12/10/15.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-#ifndef Hit_Verto_IAAutoExpandingHashMap_h
-#define Hit_Verto_IAAutoExpandingHashMap_h
+#ifndef IAAutoExpandingHashMap_h
+#define IAAutoExpandingHashMap_h
 
 #include "IAHashMap.h"
 

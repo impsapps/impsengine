@@ -1,12 +1,3 @@
-//
-//  JNIEnv.c
-//  ImpsEngineAndroid
-//
-//  Created by Konstantin Merker on ${date}.
-//  Copyright (c) 2015 Konstantin Merker, Paul Wallrabe und Martin Krautschick GbR (Imps Apps). All rights reserved.
-//
-
-
 #include "IALibrary.h"
 #include "JNIEnv+HelperMethods.h"
 #include "IAJni.h"
