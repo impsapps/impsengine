@@ -4,3 +4,6 @@
 [submodule "sfmt"]
 	path = dependencies/sfmt
 	url = https://github.com/MersenneTwister-Lab/SFMT
+[submodule "impsengine-docs"]
+	path = docs/generated/html
+	url = git@github.com:impsapps/impsengine-doc.git

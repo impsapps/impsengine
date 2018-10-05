@@ -14,7 +14,6 @@ xcuserdata/
 # Generated
 *+Generated.h
 *_generated.h
-docs/generated/
 include/
 
 #built application files
