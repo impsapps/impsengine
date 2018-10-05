@@ -1,0 +1,6 @@
+[submodule "expat"]
+	path = dependencies/expat
+	url = https://github.com/libexpat/libexpat
+[submodule "sfmt"]
+	path = dependencies/sfmt
+	url = https://github.com/MersenneTwister-Lab/SFMT

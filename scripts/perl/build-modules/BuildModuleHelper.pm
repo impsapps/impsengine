@@ -23,8 +23,8 @@ my $engineStructure = {
         "dep" => ["clib", "sfmt"]
       },
       "#sfmt" => {
-        "external-include-dirs" => ["dependencies/SFMT-src-1.5.1"],
-        "external-src-files" => ["dependencies/SFMT-src-1.5.1/SFMT.c"],
+        "external-include-dirs" => ["dependencies/sfmt"],
+        "external-src-files" => ["dependencies/sfmt/SFMT.c"],
         "no-generics" => 1
       }
     },
@@ -43,12 +43,12 @@ my $engineStructure = {
         "dep" => ["clib"]
       },
       "#expat" => {
-        "external-include-dirs" => ["dependencies/expat-2.2.1/lib"],
+        "external-include-dirs" => ["dependencies/expat/expat/lib"],
         "external-src-files" => [
-        "dependencies/expat-2.2.1/lib/xmlparse.c",
-        "dependencies/expat-2.2.1/lib/xmlrole.c",
-        "dependencies/expat-2.2.1/lib/xmltok_ns.c",
-        "dependencies/expat-2.2.1/lib/xmltok.c"
+        "dependencies/expat/expat/lib/xmlparse.c",
+        "dependencies/expat/expat/lib/xmlrole.c",
+        "dependencies/expat/expat/lib/xmltok_ns.c",
+        "dependencies/expat/expat/lib/xmltok.c"
         ],
         "no-generics" => 1
       },
