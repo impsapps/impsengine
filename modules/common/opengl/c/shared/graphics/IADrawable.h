@@ -6,16 +6,18 @@
 
 typedef struct IADrawable IADrawable;
 
+typedef void (*IADrawable_drawFunction)(const IADrawable *);
+
 struct IADrawable{
     //@extend
     IAObject base;
-    void (*drawFunction)(const IADrawable *);
+    IADrawable_drawFunction draw;
     //@set+get
     bool isVisible;
 };
 
 
-void IADrawable_make(IADrawable *, void (*drawFunction)(const IADrawable*));
+void IADrawable_make(IADrawable *, IADrawable_drawFunction draw);
 void IADrawable_makeCopy(IADrawable *, const IADrawable * drawableToCopy);
 
 void IADrawable_draw(const IADrawable *);

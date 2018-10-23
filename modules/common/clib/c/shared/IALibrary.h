@@ -33,15 +33,15 @@ void IALibrary_release(void * object);
 #define IA_mallocWithClassName(size, className) IALibrary_malloc(size, className)
 #define IA_calloc(count, size) IALibrary_calloc(count, size, CLASSNAME)
 #define IA_callocWithClassName(count, size, className) IALibrary_calloc(count, size, className)
-#define IA_realloc(object, size) IALibrary_realloc(object, size, CLASSNAME)
-#define IA_reallocWithClassName(object, size, className) IALibrary_realloc(object, size, className)
-#define IA_free(object) IALibrary_free(object, CLASSNAME);
-#define IA_freeWithClassName(object, className) IALibrary_free(object, className);
+#define IA_realloc(data, size) IALibrary_realloc(data, size, CLASSNAME)
+#define IA_reallocWithClassName(data, size, className) IALibrary_realloc(data, size, className)
+#define IA_free(data) IALibrary_free(data, CLASSNAME);
+#define IA_freeWithClassName(data, className) IALibrary_free(data, className);
 
 void * IALibrary_malloc(size_t size, const char * className);
 void * IALibrary_calloc(size_t count, size_t size, const char * className);
-void * IALibrary_realloc(void * object, size_t size, const char * className);
-void IALibrary_free(void * object, const char * className);
+void * IALibrary_realloc(void * data, size_t size, const char * className);
+void IALibrary_free(void * data, const char * className);
 
 #else
 
@@ -60,15 +60,15 @@ void IALibrary_release(void * object);
 #define IA_mallocWithClassName(size, className) IALibrary_malloc(size)
 #define IA_calloc(count, size) IALibrary_calloc(count, size)
 #define IA_callocWithClassName(count, className) IALibrary_calloc(count, size)
-#define IA_realloc(object, size) IALibrary_realloc(object, size)
-#define IA_reallocWithClassName(object, size, className) IALibrary_realloc(object, size)
-#define IA_free(object) IALibrary_free(object);
-#define IA_freeWithClassName(object, className) IALibrary_free(object);
+#define IA_realloc(data, size) IALibrary_realloc(data, size)
+#define IA_reallocWithClassName(data, size, className) IALibrary_realloc(data, size)
+#define IA_free(data) IALibrary_free(data);
+#define IA_freeWithClassName(data, className) IALibrary_free(data);
 
 void * IALibrary_malloc(size_t size);
 void * IALibrary_calloc(size_t count, size_t size);
-void * IALibrary_realloc(void * object, size_t size);
-void IALibrary_free(void* object);
+void * IALibrary_realloc(void * data, size_t size);
+void IALibrary_free(void * data);
 
 #endif
 

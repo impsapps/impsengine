@@ -5,8 +5,8 @@
 #define CLASSNAME "IADrawableRect"
 
 
-void IADrawableRect_make(IADrawableRect * this, void (*drawFunction)(const IADrawable*), void (*setRect)(IADrawableRect *, IARect), IASize(*getMinSizeNeededNullable)(IADrawableRect *)){
-    IADrawable_make((IADrawable *) this, drawFunction);
+void IADrawableRect_make(IADrawableRect * this, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect, IADrawableRect_getMinSizeNeededNullableFunction getMinSizeNeededNullable){
+    IADrawable_make((IADrawable *) this, draw);
     this->setRect = setRect;
 	this->getMinSizeNeededNullable = getMinSizeNeededNullable;
     this->rect = IAViewPort_defaultRectForContent;

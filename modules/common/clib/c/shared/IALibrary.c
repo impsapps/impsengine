@@ -116,41 +116,41 @@ void IALibrary_release(void * object){
 
 void * IALibrary_malloc(size_t size, const char * className){
     IALibrary_checkIfLibraryIsCommenced();
-    void * object = malloc(size);
-    while (object == NULL) {
+    void * data = malloc(size);
+    while (data == NULL) {
         IALibrary_onMemoryWarning();
-        object = malloc(size);
+	    data = malloc(size);
     }
-    IAAllocationTracking_dataAllocated(object, size, className);
-    return object;
+    IAAllocationTracking_dataAllocated(data, size, className);
+    return data;
 }
 
 void * IALibrary_calloc(size_t count, size_t size, const char * className){
     IALibrary_checkIfLibraryIsCommenced();
-    void* object = calloc(count, size);
-    while (object == NULL) {
+    void * data = calloc(count, size);
+    while (data == NULL) {
         IALibrary_onMemoryWarning();
-        object = calloc(count, size);
+	    data = calloc(count, size);
     }
-    IAAllocationTracking_dataAllocated(object, size, className);
-    return object;
+    IAAllocationTracking_dataAllocated(data, size, className);
+    return data;
 }
 
-void * IALibrary_realloc(void * object, size_t size, const char * className){
+void * IALibrary_realloc(void * data, size_t size, const char * className){
     IALibrary_checkIfLibraryIsCommenced();
-    void* newObject = realloc(object, size);
-    while (newObject == NULL) {
+    void * newData = realloc(data, size);
+    while (newData == NULL) {
         IALibrary_onMemoryWarning();
-        newObject = realloc(object, size);
+	    newData = realloc(data, size);
     }
-    IAAllocationTracking_dataReallocated(object, newObject, size);
-    return newObject;
+    IAAllocationTracking_dataReallocated(data, newData, size);
+    return newData;
 }
 
-void IALibrary_free(void * object, const char * className){
+void IALibrary_free(void * data, const char * className){
     IALibrary_checkIfLibraryIsCommenced();
-    free(object);
-    IAAllocationTracking_dataDeallocated(object);
+    free(data);
+    IAAllocationTracking_dataDeallocated(data);
 }
 
 #else
@@ -170,6 +170,7 @@ void * IALibrary_new(size_t size, void (*deinit)(void * object)){
 }
 
 void IALibrary_retain(void * object){
+	object = *(void **)object;
     IAObjectInformation * information = object;
     information -= 1;
     information->allocationCount++;
@@ -180,6 +181,7 @@ void IALibrary_autorelease(void * object){
 }
 
 void IALibrary_release(void * object){
+	object = *(void **)object;
     IAObjectInformation * information = object;
     information -= 1;
     information->allocationCount--;
@@ -194,34 +196,34 @@ void IALibrary_release(void * object){
 }
 
 void * IALibrary_malloc(size_t size){
-    void* object = malloc(size);
-    while (object == NULL) {
+    void * data = malloc(size);
+    while (data == NULL) {
         IALibrary_onMemoryWarning();
-        object = malloc(size);
+        data = malloc(size);
     }
-    return object;
+    return data;
 }
 
 void * IALibrary_calloc(size_t count, size_t size){
-    void* object = calloc(count, size);
-    while (object == NULL) {
+    void * data = calloc(count, size);
+    while (data == NULL) {
         IALibrary_onMemoryWarning();
-        object = calloc(count, size);
+        data = calloc(count, size);
     }
-    return object;
+    return data;
 }
 
-void * IALibrary_realloc(void * object, size_t size){
-    void* newObject = realloc(object, size);
-    while (newObject == NULL) {
+void * IALibrary_realloc(void * data, size_t size){
+    void * newData = realloc(data, size);
+    while (newData == NULL) {
         IALibrary_onMemoryWarning();
-        newObject = realloc(object, size);
+        newData = realloc(data, size);
     }
-    return newObject;
+    return newData;
 }
 
-void IALibrary_free(void* object){
-    free(object);
+void IALibrary_free(void * data){
+    free(data);
 }
 
 #endif

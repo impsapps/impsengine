@@ -10,16 +10,19 @@
 
 typedef struct IADrawableRect IADrawableRect;
 
+typedef void (*IADrawableRect_setRectFunction)(IADrawableRect *, IARect);
+typedef IASize (*IADrawableRect_getMinSizeNeededNullableFunction)(const IADrawableRect *);
+
 struct IADrawableRect{
     //@extend
     IADrawable drawable;
-    void (*setRect)(IADrawableRect *, IARect);
-	IASize(*getMinSizeNeededNullable)(IADrawableRect *);
+	IADrawableRect_setRectFunction setRect;
+	IADrawableRect_getMinSizeNeededNullableFunction getMinSizeNeededNullable;
     IARect rect;
 };
 
 
-void IADrawableRect_make(IADrawableRect *, void (*drawFunction)(const IADrawable*), void (*setRect)(IADrawableRect *, IARect), IASize(*getMinSizeNeededNullable)(IADrawableRect *));
+void IADrawableRect_make(IADrawableRect *, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect, IADrawableRect_getMinSizeNeededNullableFunction getMinSizeNeededNullable);
 void IADrawableRect_makeCopy(IADrawableRect *, const IADrawableRect * drawableRectToCopy);
 
 void IADrawableRect_setLeftTopPoint(IADrawableRect *, IAPoint point);

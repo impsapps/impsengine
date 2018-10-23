@@ -118,6 +118,8 @@ print $fh "endif()\n";
 print $fh "\n";
 print $fh "set(CMAKE_C_FLAGS_DEBUG \"\${CMAKE_C_FLAGS_DEBUG} -DDEBUG -UNDEBUG\")\n";
 print $fh "set(CMAKE_CXX_FLAGS_DEBUG \"\${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG -UNDEBUG\")\n";
+print $fh "set(CMAKE_C_FLAGS_RELEASE \"\${CMAKE_C_FLAGS_RELEASE} -UDEBUG -DNDEBUG\")\n";
+print $fh "set(CMAKE_CXX_FLAGS_RELEASE \"\${CMAKE_CXX_FLAGS_RELEASE} -UDEBUG -DNDEBUG\")\n";
 print $fh "list(APPEND CMAKE_MODULE_PATH \${CMAKE_CURRENT_SOURCE_DIR}/scripts/cmake)\n";
 print $fh "\n";
 print $fh "add_definitions(-DHAVE_MEMMOVE)\n";
