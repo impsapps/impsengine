@@ -6,17 +6,13 @@
 #include "IATouch.h"
 #include "IAStructArrayList.h"
 
-#ifndef IAStructArrayList_IATouch_h
-#define IAStructArrayList_IATouch_h
-
-#endif
-
 typedef struct {
 	float scrollPos;
 	uint64_t time;
 } IAScrollingData_TouchEvent;
 
 IA_STRUCT_ARRAY_LIST(IAScrollingData_TouchEvent);
+
 
 typedef struct{
     //@extend
@@ -30,7 +26,7 @@ typedef struct{
 
 void IAScrollingData_init(IAScrollingData *, float decelerationForScrollingInPixelPerTimeUnitSquared);
 
-void IAScrollingData_startScrolling(IAScrollingData *, const IATouch touch);
+void IAScrollingData_startScrolling(IAScrollingData *, IATouch touch);
 
 void IAScrollingData_appendNewTouchEvent(IAScrollingData *, float scrollPos, uint64_t time);
 void IAScrollingData_removeAllOldTouchEvents(IAScrollingData *, uint64_t time);

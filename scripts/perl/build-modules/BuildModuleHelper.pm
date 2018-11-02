@@ -45,10 +45,11 @@ my $engineStructure = {
       "#expat" => {
         "external-include-dirs" => ["dependencies/expat/expat/lib"],
         "external-src-files" => [
-        "dependencies/expat/expat/lib/xmlparse.c",
-        "dependencies/expat/expat/lib/xmlrole.c",
-        "dependencies/expat/expat/lib/xmltok_ns.c",
-        "dependencies/expat/expat/lib/xmltok.c"
+          "dependencies/expat/expat/lib/loadlibrary.c",
+          "dependencies/expat/expat/lib/xmlparse.c",
+          "dependencies/expat/expat/lib/xmlrole.c",
+          "dependencies/expat/expat/lib/xmltok_ns.c",
+          "dependencies/expat/expat/lib/xmltok.c"
         ],
         "no-generics" => 1
       },

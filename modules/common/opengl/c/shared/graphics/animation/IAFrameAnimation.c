@@ -15,7 +15,7 @@ void IAFrameAnimation_iterateOverImages(const IAFrameAnimation * this, void * da
 
 
 void IAFrameAnimation_init(IAFrameAnimation * this, const IAFrameAnimationAttributes * animationAttributes){
-    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAFrameAnimation_drawFunction, (void (*)(IADrawableRect *, IARect)) IAFrameAnimation_setRectFunction, NULL);
+    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAFrameAnimation_drawFunction, (void (*)(IADrawableRect *, IARect)) IAFrameAnimation_setRectFunction);
     this->numberOfFrames = IAFrameAnimationAttributes_getNumberOfFrames(animationAttributes);
     this->duration = IAFrameAnimationAttributes_getDuration(animationAttributes);
     

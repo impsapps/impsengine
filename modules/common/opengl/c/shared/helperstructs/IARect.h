@@ -23,6 +23,7 @@ IAPoint IARect_getCenterPoint(IARect rect);
 
 bool IARect_isEqual(IARect rect1, IARect rect2);
 bool IARect_areOverlapping(IARect rect1, IARect rect2);
+bool IARect_isAreaFullyCovered(IARect rect, IARect area);
 
 bool IARect_isTouchingCircle(IARect rect, IAPoint circleOrigin, float circleRadius);
 

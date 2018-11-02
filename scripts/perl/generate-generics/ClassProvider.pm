@@ -65,4 +65,35 @@ sub getClass{
   return undef;
 }
 
+sub getAllSuperClassesOfClass{
+  my $self = shift;
+  my $class = shift;
+  my $className = $class->getClassName();
+  my @superClasses = ();
+  my $count = 0;
+  if ($class->isObject()) {
+    while(1) {
+      my $superClassName = $class->getSuperClassName();
+      $count += 1;
+      if ($count > 1000) {
+        die sprintf("Max hierarchy length reached for class %s!", $className);
+      }
+      if ($superClassName eq "IAObject") {
+        return @superClasses;
+      }
+      my $superClass = $self->getClass($superClassName);
+      if (not defined $superClass){
+        die sprintf("Super class \"%s\" in class \"%s\" not found!", $superClassName, $className);
+      }
+      if ($superClass->getSuperClassName() eq "") {
+        die sprintf("Invalid class hierarchy of \"%s\": Cannot extend \"%s\" because it is not a class.", $className, $superClassName)
+      }
+      push @superClasses, $superClass;
+      $class = $superClass;
+    }
+  }else{
+    return ();
+  }
+}
+
 1;

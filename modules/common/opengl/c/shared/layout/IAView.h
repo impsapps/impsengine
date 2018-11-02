@@ -1,9 +1,12 @@
 #ifndef IAView_h
 #define IAView_h
 
+#include "IAObject.h"
 #include "IAViewAttributes.h"
 
 typedef struct{
+    //@extend
+    IAObject base;
     void * correspondingView;
     void (*setArgs)(void * correspondingView, const void * args);
     void (*onFadeInStart)(void * correspondingView, uint64_t startTime, uint64_t duration);

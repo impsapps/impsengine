@@ -64,7 +64,6 @@ void IAOpenGL_onRenderBegin(){
 }
 
 void IAOpenGL_onRenderEnd(){
-    IADrawingBounds_disableBounds();
     glAssert();
 }
 

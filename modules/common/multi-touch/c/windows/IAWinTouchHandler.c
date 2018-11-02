@@ -33,21 +33,27 @@ static LRESULT CALLBACK mouseProc(int nCode, WPARAM wParam, LPARAM lParam) {
 		if (wParam == WM_LBUTTONDOWN) {
 			acquireApplicationLock();
 			onTouchBegan(point);
+			IAAutoreleasePool_run();
 			releaseApplicationLock();
 		} else if (wParam == WM_LBUTTONUP) {
 			acquireApplicationLock();
 			onTouchEnded(point);
+			IAAutoreleasePool_run();
 			releaseApplicationLock();
 		} else if (wParam == WM_MOUSEMOVE) {
 			acquireApplicationLock();
 			onTouchMoved(point);
+			IAAutoreleasePool_run();
 			releaseApplicationLock();
 		}
 	}
 	return CallNextHookEx(hMouseHook, nCode, wParam, lParam);
 }
 
-static DWORD WINAPI MyMouseLogger(LPVOID lpParm) {
+static DWORD WINAPI MouseStartRoutine(LPVOID lpParm) {
+	acquireApplicationLock();
+	IAAutoreleasePool_begin();
+	releaseApplicationLock();
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 
 	hMouseHook = SetWindowsHookEx(WH_MOUSE_LL, mouseProc, hInstance, 0);
@@ -59,6 +65,9 @@ static DWORD WINAPI MyMouseLogger(LPVOID lpParm) {
 	}
 
 	UnhookWindowsHookEx(hMouseHook);
+	acquireApplicationLock();
+	IAAutoreleasePool_end();
+	releaseApplicationLock();
 	return 0;
 }
 
@@ -67,7 +76,7 @@ void IAWinTouchHandler_start(void(*acquireApplicationLockTemp)(void), void(*rele
 	releaseApplicationLock = releaseApplicationLockTemp;
 
 	DWORD dwThread;
-	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MyMouseLogger, NULL, 0, &dwThread);
+	CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)MouseStartRoutine, NULL, 0, &dwThread);
 }
 
 void IAWinTouchHandler_setWindowOffset(float offsetXTemp, float offsetYTemp){

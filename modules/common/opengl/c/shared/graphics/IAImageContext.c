@@ -25,6 +25,7 @@ void IAImageContext_onBitmapUsageEndFunction(IAImageContext * this, IABitmap * b
 
 
 void IAImageContext_init(IAImageContext * this, IABitmapManager * bitmapManager){
+    this->base = IAObject_make(this);
     this->images = IAAutoExpandingHashMap_new();
     this->textures = IAArrayList_new(20);
     IATextureDelegateAttributes attributes;
@@ -37,6 +38,25 @@ void IAImageContext_init(IAImageContext * this, IABitmapManager * bitmapManager)
     IAArrayList_init(&this->bitmaps, 10);
     IAString_init(&this->assetNameTemp, "");
     IA_incrementInitCount();
+}
+
+void IAImageContext_addImage(IAImageContext * this, const char * imageName, const char * filePath){
+    IABitmap * bitmap = IABitmap_newWithAsset(filePath);
+    IABitmapManager_addBitmap(this->bitmapManager, bitmap);
+    IAArrayList_add(&this->bitmaps, bitmap);
+
+    IATexture * texture = IATexture_new(bitmap);
+    IATexture_setTextureDelegate(texture, &this->textureDelegate);
+
+    IATexture_use(texture);
+    IAArrayList_add(this->textures, texture);
+
+    this->sizeOfLastTexture = IABitmap_getSize(bitmap);
+    IATextureSelection selection = IATextureSelection_make(IARect_makeWithLeftTopPointAndSize(IAPoint_zero, this->sizeOfLastTexture), false, this->sizeOfLastTexture);
+    IAImageAttributes imageAttributes;
+    IAImageAttributes_make(&imageAttributes, texture, selection);
+    IAImage * image = IAImage_new(&imageAttributes);
+    IAAutoExpandingHashMap_add(this->images, imageName, image);
 }
 
 void IAImageContext_addAtlas(IAImageContext * this, const char * assetName){

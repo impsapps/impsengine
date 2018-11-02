@@ -8,7 +8,7 @@ void IAPauseAnimation_drawFunction(const IAPauseAnimation * this);
 void IAPauseAnimation_setRectFunction(IAPauseAnimation * this, IARect rect);
 
 void IAPauseAnimation_make(IAPauseAnimation * this, IADrawableRect * drawableRectToAnimate, uint64_t duration){
-    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAPauseAnimation_drawFunction, (void (*)(IADrawableRect *, IARect)) IAPauseAnimation_setRectFunction, NULL);
+    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAPauseAnimation_drawFunction, (void (*)(IADrawableRect *, IARect)) IAPauseAnimation_setRectFunction);
     this->drawableRectToAnimate = drawableRectToAnimate;
     this->duration = duration;
     

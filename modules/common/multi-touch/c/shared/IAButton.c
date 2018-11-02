@@ -23,7 +23,7 @@ void IAButton_drawFunction(const IAButton * this);
 
 
 void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
-    IADrawableRect_make(&this->drawableRect, (void (*)(const IADrawable *)) IAButton_drawFunction, (void (*)(IADrawableRect *, IARect)) IAButton_setRectFunction, NULL);
+    IADrawableRect_make(&this->drawableRect, (void (*)(const IADrawable *)) IAButton_drawFunction, (void (*)(IADrawableRect *, IARect)) IAButton_setRectFunction);
     IADrawableRect * normal = IAButtonAttributes_getNormal(attributes);
     if (normal != NULL){
         IADrawableRect_retain(normal);
@@ -67,8 +67,6 @@ void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
     this->onIsTouchedChanged = IAButtonAttributes_getOnIsTouchedChangedFunction(attributes);
     
     this->tag = IAButtonAttributes_getTag(attributes);
-    
-    IAButton_setRect(this, IAButtonAttributes_getRect(attributes));
     IA_incrementInitCount();
 }
 

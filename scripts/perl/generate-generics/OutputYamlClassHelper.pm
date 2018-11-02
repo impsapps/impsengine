@@ -50,7 +50,6 @@ sub canCompleteYamlNames{
       }
     }
     if ($wasRequiredNameFound == 0) {
-
       return 0;
     }
   }
@@ -71,19 +70,25 @@ sub canCompleteYamlNames{
 
 #Returns an attribute init function or undef
 sub canCompleteWithAttributes{
+  my $classProvider = shift;
   my $attributeClass = shift;
   my $yamlNamesRef = shift;
   my $requiredNamesRef = shift;
 
   my @optionalAttributeNames = ();
-  foreach my $setterName ($attributeClass->getAllSetterAttributeNames()){
-    push @optionalAttributeNames, $setterName;
+  foreach my $class ($attributeClass, $classProvider->getAllSuperClassesOfClass($attributeClass)){
+    foreach my $setterName ($class->getAllSetterAttributeNames()){
+      push @optionalAttributeNames, $setterName;
+    }
   }
-  foreach my $attributeClassFunction ($attributeClass->getAllNonSpecialValidFunctions()){
-    my $functionName = $attributeClassFunction->{name};
-    if ($functionName =~ m/^set(.*?)(Function)?$/) {
-      my $attributeName = lcfirst $1;
-      push @optionalAttributeNames, $attributeName;
+
+  foreach my $class ($attributeClass, $classProvider->getAllSuperClassesOfClass($attributeClass)){
+    foreach my $attributeClassFunction ($class->getAllNonSpecialValidFunctions()){
+      my $functionName = $attributeClassFunction->{name};
+      if ($functionName =~ m/^set(.*?)(Function)?$/) {
+        my $attributeName = lcfirst $1;
+        push @optionalAttributeNames, $attributeName;
+      }
     }
   }
 

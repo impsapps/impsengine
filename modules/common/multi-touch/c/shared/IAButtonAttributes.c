@@ -7,8 +7,7 @@
 
 void IAButtonAttributes_make(IAButtonAttributes * this, void * correspondingObject){
     *this = (IAButtonAttributes){
-        .correspondingObject = correspondingObject,
-		.rect = IAViewPort_defaultRectForContent
+        .correspondingObject = correspondingObject
     };
 }
 

@@ -19,7 +19,7 @@ static void IAFrameAnimationGroup_setRectFunction(IAFrameAnimationGroup * this, 
 }
 
 void IAFrameAnimationGroup_init(IAFrameAnimationGroup * this, const IAFrameAnimationGroupAttributes * attr){
-    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAFrameAnimationGroup_drawFunction, (void (*)(IADrawableRect *, IARect)) IAFrameAnimationGroup_setRectFunction, NULL);
+    IADrawableRect_make((IADrawableRect *) this, (void (*)(const IADrawable *)) IAFrameAnimationGroup_drawFunction, (void (*)(IADrawableRect *, IARect)) IAFrameAnimationGroup_setRectFunction);
     size_t numberOfAnimations = IAFrameAnimationGroupAttributes_getNumberOfAnimations(attr);
     IAArray_init(&this->frameAnimations, numberOfAnimations);
     

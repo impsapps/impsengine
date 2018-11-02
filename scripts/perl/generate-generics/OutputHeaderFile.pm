@@ -101,33 +101,33 @@ sub printHeaderFilesForClass{
 
       printf HEADER $functionPrefix;
       printf HEADER "%s(%s){\n", $definitionForNew, $params;
-      printf HEADER "\t%s * this = IA_newWithClassName(sizeof(%s), %s, \"%s\");\n", $className, $className, $deinitFunction, $className;
+      printf HEADER "\t%s * IA_this = IA_newWithClassName(sizeof(%s), %s, \"%s\");\n", $className, $className, $deinitFunction, $className;
       if(length $valueParams == 0){
-        printf HEADER "\t%s_%s(this);\n", $className, $function->{name};
+        printf HEADER "\t%s_%s(IA_this);\n", $className, $function->{name};
       }else{
-        printf HEADER "\t%s_%s(this, %s);\n", $className, $function->{name}, $valueParams;
+        printf HEADER "\t%s_%s(IA_this, %s);\n", $className, $function->{name}, $valueParams;
       }
-      print HEADER "\treturn this;\n";
+      print HEADER "\treturn IA_this;\n";
       print HEADER "}\n\n";
 
       printf HEADER $functionPrefix;
       printf HEADER "%s(%s){\n", $definitionForWith, $params;
-      printf HEADER "\t%s * this = IA_newWithClassName(sizeof(%s), %s, \"%s\");\n", $className, $className, $deinitFunction, $className;
+      printf HEADER "\t%s * IA_this = IA_newWithClassName(sizeof(%s), %s, \"%s\");\n", $className, $className, $deinitFunction, $className;
       if(length $valueParams == 0){
-        printf HEADER "\t%s_%s(this);\n", $className, $function->{name};
+        printf HEADER "\t%s_%s(IA_this);\n", $className, $function->{name};
       }else{
-        printf HEADER "\t%s_%s(this, %s);\n", $className, $function->{name}, $valueParams;
+        printf HEADER "\t%s_%s(IA_this, %s);\n", $className, $function->{name}, $valueParams;
       }
-      print HEADER "\tIA_autorelease(this);\n";
-      print HEADER "\treturn this;\n";
+      print HEADER "\tIA_autorelease(IA_this);\n";
+      print HEADER "\treturn IA_this;\n";
       print HEADER "}\n\n";
     }
   }
 
   if ($class->isObject() || $class->isDelegate()) {
     printf HEADER $functionPrefix;
-    printf HEADER "void %s_retain(%s * this){\n", $className, $className;
-    printf HEADER "\tIA_retain(this);\n";
+    printf HEADER "void %s_retain(%s * IA_this){\n", $className, $className;
+    printf HEADER "\tIA_retain(IA_this);\n";
     print HEADER "}\n\n";
   }
 
@@ -315,22 +315,9 @@ sub printHeaderFilesForClass{
     print HEADER "\n";
   }
 
-  my $superClassName = $class->getSuperClassName();
-  my $count = 0;
-  while($class->isObject()){
-    $count += 1;
-    if ($count > 1000){
-      die sprintf("Max hierarchy length reached for class %s!", $className);
-    }
-    if ($superClassName eq "IAObject") {
-      last;
-    }
 
-    if (not $classProvider->getClass($superClassName)){
-      die sprintf("Super class %s in class %s not found!", $superClassName, $className);
-    }
-
-    my $superClass = $classProvider->getClass($superClassName);
+  foreach my $superClass($classProvider->getAllSuperClassesOfClass($class)){
+    my $superClassName = $superClass->getClassName();
 
     #inherit setter functions
     $isCommented = 0;
@@ -539,15 +526,9 @@ sub printHeaderFilesForClass{
     if($isCommented == 1){
       print HEADER "\n";
     }
-
-    if ($superClass->getSuperClassName() eq "") {
-      die sprintf("Invalid class hierarchy of \"%s\": Cannot extend \"%s\" because it is not a class.", $className, $superClassName)
-    }
-
-    $superClassName = $superClass->getSuperClassName();
   }
 
-  $superClassName = $class->getSuperClassName();
+  my $superClassName = $class->getSuperClassName();
   if($superClassName ne ""){
     print HEADER $doxygenExtendComment;
     print HEADER "/**\n";
@@ -604,44 +585,44 @@ sub printHeaderFilesForClass{
     print HEADER "} $eventClassName;\n";
     print HEADER "\n";
     printf HEADER $memberOfFormat, $eventClassName;
-    print HEADER $functionPrefix . " $constructorMacro void ${eventClassName}_init($eventClassName * this){\n";
-    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(this->$listName, 8, \"${eventClassName}\");\n";
+    print HEADER $functionPrefix . " $constructorMacro void ${eventClassName}_init($eventClassName * IA_this){\n";
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_MALLOC_MAKE_WITH_CLASSNAME(IA_this->$listName, 8, \"${eventClassName}\");\n";
     printf HEADER "\tIA_incrementInitCountForClass(\"%s\");\n", $eventClassName;
     print HEADER "}\n";
     print HEADER "\n";
-    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * this);\n";
+    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * IA_this);\n";
     print HEADER $functionPrefix . "$eventClassName * ${eventClassName}_new(){\n";
-    print HEADER "\t${eventClassName} * this = IA_newWithClassName(sizeof(${eventClassName}), (void (*)(void *)) ${eventClassName}_deinit, \"${eventClassName}\");\n";
-    print HEADER "\t${eventClassName}_init(this);\n";
-    print HEADER "\treturn this;\n";
+    print HEADER "\t${eventClassName} * IA_this = IA_newWithClassName(sizeof(${eventClassName}), (void (*)(void *)) ${eventClassName}_deinit, \"${eventClassName}\");\n";
+    print HEADER "\t${eventClassName}_init(IA_this);\n";
+    print HEADER "\treturn IA_this;\n";
     print HEADER "}\n";
     print HEADER "\n";
     print HEADER $functionPrefix . "$eventClassName * ${eventClassName}_with(){\n";
-    print HEADER "\t${eventClassName} * this = ${eventClassName}_new();\n";
-    print HEADER "\tIA_autorelease(this);\n";
-    print HEADER "\treturn this;\n";
+    print HEADER "\t${eventClassName} * IA_this = ${eventClassName}_new();\n";
+    print HEADER "\tIA_autorelease(IA_this);\n";
+    print HEADER "\treturn IA_this;\n";
     print HEADER "}\n";
     print HEADER "\n";
-    print HEADER $functionPrefix . "void ${eventClassName}_retain($eventClassName * this){\n";
-    print HEADER "\tIA_retain(this);\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_retain($eventClassName * IA_this){\n";
+    print HEADER "\tIA_retain(IA_this);\n";
     print HEADER "}\n";
     print HEADER "\n";
     printf HEADER $memberOfFormat, $eventClassName;
-    print HEADER $functionPrefix . "void ${eventClassName}_register($eventClassName * this, $className * delegate){\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_register($eventClassName * IA_this, $className * delegate){\n";
     if ($class->{isEvent}) {
       print HEADER "\tIA_retain(delegate);\n";
     }
-    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(this->$listName, \"${eventClassName}\");\n";
-    print HEADER "\tIAStructArrayList_add(this->$listName, delegate);\n";
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(IA_this->$listName, \"${eventClassName}\");\n";
+    print HEADER "\tIAStructArrayList_add(IA_this->$listName, delegate);\n";
     print HEADER "}\n";
     print HEADER "\n";
     printf HEADER $memberOfFormat, $eventClassName;
-    print HEADER $functionPrefix . "void ${eventClassName}_unregister($eventClassName * this, $className * delegate){\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_unregister($eventClassName * IA_this, $className * delegate){\n";
     print HEADER "\tdebugOnly(bool isFound = false;)\n";
-    print HEADER "\tfor (size_t i = 0; i < IAStructArrayList_getCurrentSize(this->$listName); i++) {\n";
-    print HEADER "\t\t$className * delegateInList = ($className *) IAStructArrayList_get(this->$listName, i);\n";
+    print HEADER "\tfor (size_t i = 0; i < IAStructArrayList_getCurrentSize(IA_this->$listName); i++) {\n";
+    print HEADER "\t\t$className * delegateInList = ($className *) IAStructArrayList_get(IA_this->$listName, i);\n";
     print HEADER "\t\tif (delegateInList == delegate) {\n";
-    print HEADER "\t\t\tIAStructArrayList_removeAtIndex(this->$listName, i);\n";
+    print HEADER "\t\t\tIAStructArrayList_removeAtIndex(IA_this->$listName, i);\n";
     if ($class->{isEvent}) {
       print HEADER "\t\t\tIA_release(delegateInList);\n";
     }
@@ -655,21 +636,21 @@ sub printHeaderFilesForClass{
     foreach my $function (@executeableFunctions){
       if($function->isVoidFunction() == 1){
         printf HEADER $memberOfFormat, $eventClassName;
-        print HEADER $functionPrefix . $function->getExeEventImplementationPrintable($eventClassName, $className, $listName, "this");
+        print HEADER $functionPrefix . $function->getExeEventImplementationPrintable($eventClassName, $className, $listName, "IA_this");
       }
     }
     printf HEADER $memberOfFormat, $eventClassName;
-    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * this){\n";
-    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(this->$listName, \"${eventClassName}\");\n";
+    print HEADER $functionPrefix . " $destructorMacro void ${eventClassName}_deinit($eventClassName * IA_this){\n";
+    print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_FREE_WITH_CLASSNAME(IA_this->$listName, \"${eventClassName}\");\n";
     print HEADER "\tIA_decrementInitCountForClass(\"${eventClassName}\");\n";
     print HEADER "}\n";
     print HEADER "\n";
-    print HEADER $functionPrefix . "void ${eventClassName}_autorelease($eventClassName * this){\n";
-    print HEADER "\tIA_autorelease(this);\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_autorelease($eventClassName * IA_this){\n";
+    print HEADER "\tIA_autorelease(IA_this);\n";
     print HEADER "}\n";
     print HEADER "\n";
-    print HEADER $functionPrefix . "void ${eventClassName}_release($eventClassName * this){\n";
-    print HEADER "\tIA_release(this);\n";
+    print HEADER $functionPrefix . "void ${eventClassName}_release($eventClassName * IA_this){\n";
+    print HEADER "\tIA_release(IA_this);\n";
     print HEADER "}\n";
     print HEADER "\n";
     print HEADER "\n";

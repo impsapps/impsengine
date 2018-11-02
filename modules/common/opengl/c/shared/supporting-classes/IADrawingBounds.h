@@ -3,7 +3,7 @@
 
 #include "IARect.h"
 
-void IADrawingBounds_setBounds(IARect bounds);
-void IADrawingBounds_disableBounds();
+void IADrawingBounds_pushBounds(IARect bounds);
+void IADrawingBounds_popBounds();
 
 #endif

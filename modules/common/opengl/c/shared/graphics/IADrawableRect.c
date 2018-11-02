@@ -5,17 +5,15 @@
 #define CLASSNAME "IADrawableRect"
 
 
-void IADrawableRect_make(IADrawableRect * this, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect, IADrawableRect_getMinSizeNeededNullableFunction getMinSizeNeededNullable){
+void IADrawableRect_make(IADrawableRect * this, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect){
     IADrawable_make((IADrawable *) this, draw);
     this->setRect = setRect;
-	this->getMinSizeNeededNullable = getMinSizeNeededNullable;
     this->rect = IAViewPort_defaultRectForContent;
 }
 
 void IADrawableRect_makeCopy(IADrawableRect * this, const IADrawableRect * drawableRectToCopy){			
     IADrawable_makeCopy((IADrawable *) this, (const IADrawable *) drawableRectToCopy);
     this->setRect = drawableRectToCopy->setRect;
-	this->getMinSizeNeededNullable = drawableRectToCopy->getMinSizeNeededNullable;
     this->rect = drawableRectToCopy->rect;
 }
 
@@ -63,13 +61,4 @@ IASize IADrawableRect_getSize(const IADrawableRect * this){
 IARect IADrawableRect_getRect(const IADrawableRect * this){
     return this->rect;
 }
-
-IASize IADrawableRect_getMinSizeNeeded(const IADrawableRect * this) {
-	if (this->getMinSizeNeededNullable) {
-		return this->getMinSizeNeededNullable(this);
-	} else {
-		return IASize_ZERO;
-	}
-}
-
 

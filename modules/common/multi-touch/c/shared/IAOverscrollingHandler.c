@@ -9,6 +9,10 @@
 
 
 void IAOverscrollingHandler_make(IAOverscrollingHandler * this, IAOverscrollingBehavior behavior) {
+	debugAssert(behavior.maximumOverscrollingInPixel > 0.0f);
+	debugAssert(behavior.dragLengthToReachMaximumOverscrolling > 0.0f);
+	debugAssert(behavior.decelerationInPixelPerTimeUnitSquared > 0.0f);
+
 	*this = (IAOverscrollingHandler) {
         .base = IAObject_make(this),
 		.behavior = behavior

@@ -35,8 +35,8 @@ sub printFromYamlToFile{
   my $classnameToGenerate = $class->{yaml}->{__generate__};
   my @initLines = ();
   my @deinitLines = ();
-  my $result = $parser->parseObject($classnameToGenerate, $yaml, \@initLines, \@deinitLines, "this");
-  die "Expected \"this\" as a result, got \"$result\"." if ($result ne "this");
+  my $result = $parser->parseObject($classnameToGenerate, $yaml, \@initLines, \@deinitLines, "IA_this");
+  die "Expected \"IA_this\" as a result, got \"$result\"." if ($result ne "IA_this");
 
   my %objectReferences = %{$parser->{objectReferences}};
   my $hasAttributes = 0;
@@ -77,23 +77,23 @@ sub printFromYamlToFile{
     $initMethodName = "makeFromYaml";
     $deinitMethod = "NULL";
   }
-  print $fh "static inline void ${className}_$initMethodName($classnameToGenerate * this$additionalParamsForInit) {\n";
+  print $fh "static inline void ${className}_$initMethodName($classnameToGenerate * IA_this$additionalParamsForInit) {\n";
   foreach my $initLine (@initLines){
     print $fh $initLine;
   }
   print $fh "}\n";
   print $fh "\n";
   print $fh "static inline $classnameToGenerate * ${className}_newFromYaml($additionalParamsForNew) {\n";
-  print $fh "\t$classnameToGenerate * this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
-  print $fh "\t${className}_$initMethodName(this$additionalParamsForInitCall);\n";
-  print $fh "\treturn this;\n";
+  print $fh "\t$classnameToGenerate * IA_this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
+  print $fh "\t${className}_$initMethodName(IA_this$additionalParamsForInitCall);\n";
+  print $fh "\treturn IA_this;\n";
   print $fh "}\n";
   print $fh "\n";
   print $fh "static inline $classnameToGenerate * ${className}_fromYaml($additionalParamsForNew) {\n";
-  print $fh "\t$classnameToGenerate * this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
-  print $fh "\t${className}_$initMethodName(this$additionalParamsForInitCall);\n";
-  print $fh "\tIA_autorelease(this);\n";
-  print $fh "\treturn this;\n";
+  print $fh "\t$classnameToGenerate * IA_this = IA_newWithClassName(sizeof($classnameToGenerate), (void (*)(void *)) $deinitMethod, \"$classnameToGenerate\");\n";
+  print $fh "\t${className}_$initMethodName(IA_this$additionalParamsForInitCall);\n";
+  print $fh "\tIA_autorelease(IA_this);\n";
+  print $fh "\treturn IA_this;\n";
   print $fh "}\n";
   print $fh "\n";
   print $fh "#endif\n";
@@ -130,8 +130,8 @@ sub printFromYamlToFile{
     }
     print $fh "};\n";
     print $fh "\n";
-    print $fh "static inline void ${attributesClassName}_make(${attributesClassName} * this, void * correspondingObject){\n";
-    print $fh "\t*this = (${attributesClassName}){\n";
+    print $fh "static inline void ${attributesClassName}_make(${attributesClassName} * IA_this, void * correspondingObject){\n";
+    print $fh "\t*IA_this = (${attributesClassName}){\n";
     print $fh "\t\t.correspondingObject = correspondingObject\n";
     print $fh "\t};\n";
     print $fh "}\n";

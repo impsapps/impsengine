@@ -7,6 +7,7 @@
 
 void IAView_make(IAView * this, const char * viewName, const IAViewAttributes * attributes){
     *this = (IAView){
+        .base = IAObject_make(this),
         .correspondingView = IAViewAttributes_getCorrespondingView(attributes),
         .setArgs = IAViewAttributes_getSetArgsFunction(attributes),
         .onFadeInStart = IAViewAttributes_getOnFadeInStartFunction(attributes),

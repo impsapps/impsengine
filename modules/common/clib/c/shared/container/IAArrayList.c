@@ -14,6 +14,7 @@ void IAArrayList_changeArraySize(IAArrayList * this, size_t newArraySize);
 
 
 void IAArrayList_init(IAArrayList * this, size_t initialArraySize){
+    debugAssert(initialArraySize > 0 && "Initial array size must be greater than 0");
     this->base = IAObject_make(this);
     this->objects = IA_calloc(initialArraySize, sizeof(void *));
     this->offset = 0;

@@ -128,7 +128,7 @@ unset(ia_source_h_files)
 unset(ia_source_c_files)
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/modules/common/expat/c FILES ${ia_source_h_files} ${ia_source_c_files})
 list(APPEND ia_include_dirs dependencies/expat/expat/lib)
-list(APPEND ia_source_c_files dependencies/expat/expat/lib/xmlparse.c dependencies/expat/expat/lib/xmlrole.c dependencies/expat/expat/lib/xmltok_ns.c dependencies/expat/expat/lib/xmltok.c)
+list(APPEND ia_source_c_files dependencies/expat/expat/lib/loadlibrary.c dependencies/expat/expat/lib/xmlparse.c dependencies/expat/expat/lib/xmlrole.c dependencies/expat/expat/lib/xmltok_ns.c dependencies/expat/expat/lib/xmltok.c)
 list(APPEND ia_include_dirs include/${IA_PLATFORM}/generated)
 
 if (ia_source_c_files)

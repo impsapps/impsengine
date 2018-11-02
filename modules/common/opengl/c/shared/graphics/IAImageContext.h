@@ -8,6 +8,8 @@
 #include "IAAtlasAssets.h"
 
 typedef struct{
+	//@extend
+	IAObject base;
 	IAAutoExpandingHashMap * images;
     IAArrayList * textures;
     IATextureDelegate textureDelegate;
@@ -19,6 +21,8 @@ typedef struct{
 
 
 void IAImageContext_init(IAImageContext *, IABitmapManager * bitmapManager);
+
+void IAImageContext_addImage(IAImageContext *, const char * imageName, const char * filePath);
 
 void IAImageContext_addAtlas(IAImageContext *, const char * assetName);
 void IAImageContext_addAtlasAssets(IAImageContext *, IAAtlasAssets * assets);

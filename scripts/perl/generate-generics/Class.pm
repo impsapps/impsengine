@@ -144,11 +144,11 @@ sub getObjectVariableName{
 		if($objectVariableName =~ m/^\s*$className\s*\*\s*$matchName/){
 			return $1;
 		}elsif($objectVariableName =~ m/^\s*$className\s*\*/){
-			return "this";
+			return "IA_this";
 		}
 	}
 	if($self->hasAnnotations()){
-		return "this";
+		return "IA_this";
 	}else{
 		return "";
 	}

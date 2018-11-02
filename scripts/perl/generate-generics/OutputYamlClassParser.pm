@@ -181,7 +181,7 @@ sub parseObject{
           if (not defined $attributeClass) {
             die "Cannot find attribute class \"$attributeClassName\" for class \"$className\".";
           }
-          $attributeInitFunction = canCompleteWithAttributes($attributeClass, \@yamlNames, \@requiredAttributeNames);
+          $attributeInitFunction = canCompleteWithAttributes($classProvider, $attributeClass, \@yamlNames, \@requiredAttributeNames);
           $wasAttributesAlreadyParsed = 1;
           if (defined $attributeInitFunction) {
             $canCompleteParams = 1;
@@ -362,35 +362,38 @@ sub parseObjectWithFunctions{
         }
 
         my @setterFunctions = ();
-        foreach my $function ($attributeClass->getAllNonSpecialValidFunctions()){
-          my $functionName = $function->{name};
-          if ($functionName =~ m/^set/) {
+
+        foreach my $class ($attributeClass, $self->{classProvider}->getAllSuperClassesOfClass($attributeClass)){
+          foreach my $function ($class->getAllNonSpecialValidFunctions()){
+            my $functionName = $function->{name};
+            if ($functionName =~ m/^set/) {
+              push @setterFunctions, $function;
+            }
+          }
+
+          foreach my $setterName(@{$class->{setters}}){
+            my $attribute = $class->getAttribute($setterName);
+            my $printable = $attribute->getSetterPrintable($attributeClassName, "IA_this");
+            my $function = Function->new();
+            $function->initWithHeader($attributeClassName, $printable, "");
+            push @setterFunctions, $function;
+
+          }
+          foreach my $setterName(@{$class->{settersAsRef}}){
+            my $attribute = $class->getAttribute($setterName);
+            my $printable = $attribute->getSetterAsRefPrintable($attributeClassName, "IA_this");
+            my $function = Function->new();
+            $function->initWithHeader($attributeClassName, $printable, "");
+            push @setterFunctions, $function;
+
+          }
+          foreach my $setterName(@{$class->{settersAsCharArray}}){
+            my $attribute = $class->getAttribute($setterName);
+            my $printable = $attribute->getSetterAsCharArrayPrintable($attributeClassName, "IA_this");
+            my $function = Function->new();
+            $function->initWithHeader($attributeClassName, $printable, "");
             push @setterFunctions, $function;
           }
-        }
-
-        foreach my $setterName(@{$attributeClass->{setters}}){
-          my $attribute = $attributeClass->getAttribute($setterName);
-          my $printable = $attribute->getSetterPrintable($attributeClassName, "this");
-          my $function = Function->new();
-          $function->initWithHeader($attributeClassName, $printable, "");
-          push @setterFunctions, $function;
-
-        }
-        foreach my $setterName(@{$attributeClass->{settersAsRef}}){
-          my $attribute = $attributeClass->getAttribute($setterName);
-          my $printable = $attribute->getSetterAsRefPrintable($attributeClassName, "this");
-          my $function = Function->new();
-          $function->initWithHeader($attributeClassName, $printable, "");
-          push @setterFunctions, $function;
-
-        }
-        foreach my $setterName(@{$attributeClass->{settersAsCharArray}}){
-          my $attribute = $attributeClass->getAttribute($setterName);
-          my $printable = $attribute->getSetterAsCharArrayPrintable($attributeClassName, "this");
-          my $function = Function->new();
-          $function->initWithHeader($attributeClassName, $printable, "");
-          push @setterFunctions, $function;
         }
 
         foreach my $setterFunction (@setterFunctions){

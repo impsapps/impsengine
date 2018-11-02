@@ -7,10 +7,7 @@
 #include "IAStructArrayList.h"
 #include <stdbool.h>
 
-#ifndef IAStructArrayList_IATouch_h
-#define IAStructArrayList_IATouch_h
 IA_STRUCT_ARRAY_LIST(IATouch);
-#endif
 
 typedef struct{
     void * correspondingObject;

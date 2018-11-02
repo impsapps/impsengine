@@ -12,9 +12,6 @@ typedef struct{
     IADrawableRect * touched;
     
     //@set+get
-    IARect rect;
-    
-    //@set+get
     float rectExtensionForTouchBeganLeft;
     //@set+get
     float rectExtensionForTouchBeganTop;

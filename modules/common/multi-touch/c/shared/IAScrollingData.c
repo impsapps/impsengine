@@ -11,6 +11,7 @@ static const uint64_t IAScrollingData_timeDiffWhenAnEventCountsAsOld = 200;
 
 
 void IAScrollingData_init(IAScrollingData * this, float decelerationForScrollingInPixelPerTimeUnitSquared) {
+	debugAssert(decelerationForScrollingInPixelPerTimeUnitSquared > 0);
     this->base = IAObject_make(this);
 	this->isTouchSet = false;
 	IA_STRUCT_ARRAY_LIST_MALLOC_MAKE(this->latestTouchesData, IAScrollingData_TouchEvent, IAScrollingData_numberOfLatestTouches);
@@ -18,7 +19,7 @@ void IAScrollingData_init(IAScrollingData * this, float decelerationForScrolling
 	IA_incrementInitCount();
 }
 
-void IAScrollingData_startScrolling(IAScrollingData * this, const IATouch touch) {
+void IAScrollingData_startScrolling(IAScrollingData * this, IATouch touch) {
 	this->touch = touch;
 	this->isTouchSet = true;
 }

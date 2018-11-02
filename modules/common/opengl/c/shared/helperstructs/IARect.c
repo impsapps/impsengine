@@ -132,6 +132,17 @@ bool IARect_areOverlapping(IARect rect1, IARect rect2){
     return true;
 }
 
+bool IARect_isAreaFullyCovered(IARect rect, IARect area){
+    if (area.origin.x < rect.origin.x
+        || area.origin.y < rect.origin.y
+        || IARect_getRight(area) > IARect_getRight(rect)
+        || IARect_getBottom(area) > IARect_getBottom(rect)){
+        return false;
+    }else{
+        return true;
+    }
+}
+
 bool IARect_isTouchingCircle(IARect rect, IAPoint circleOrigin, float circleRadius){
     float left = circleOrigin.x - circleRadius;
     float top = circleOrigin.y - circleRadius;
