@@ -301,10 +301,7 @@ sub parseObjectWithFunctions{
     $objectReferenceName = $yaml->{__ref__};
     $objectReference = ObjectReference->new($objectReferenceName, $className);
     if (exists $self->{objectReferences}->{$objectReferenceName}) {
-      my $objectReferenceTemp = $self->{objectReferences}->{$objectReferenceName};
-      if (not $objectReferenceTemp->hasType($className)){
-        die "Different types for same reference detected: \"" . $objectReferenceTemp->getType() . "\" and \"$className\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\".";
-      }
+      die "References must be unique: Duplicated reference name \"$objectReferenceName\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\".";
     }else{
       $self->{objectReferences}->{$objectReferenceName} = $objectReference;
     }

@@ -20,16 +20,6 @@ sub getRefName{
   return $self->{refName};
 }
 
-sub hasType{
-  my $self = shift;
-  my $type = shift;
-  if ($type eq $self->getType()) {
-    return 1;
-  }else{
-    return 0;
-  }
-}
-
 sub getType{
   my $self = shift;
   return $self->{type};
