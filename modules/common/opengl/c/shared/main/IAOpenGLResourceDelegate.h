@@ -3,7 +3,7 @@
 
 #include "IAOpenGLResourceDelegateAttributes.h"
 
-//@eventWithoutRetain
+//@event
 typedef struct{
     void * correspondingObject;
     //@exe

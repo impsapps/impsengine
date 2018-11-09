@@ -28,14 +28,7 @@ typedef struct{
     float rectExtensionForTouchMovedOutsideRight;
     //@set+get
     float rectExtensionForTouchMovedOutsideBottom;
-    
-    //@get
-    void * correspondingObject;
-    //@set+get
-    void(*onClick)(void * correspondingObject, IAButton * button);
-    //@set+get
-    void(*onIsTouchedChanged)(void * correspondingObject, IAButton * button, bool isTouched);
-    
+
     //@set+get
     int zOrder;
     
@@ -44,7 +37,7 @@ typedef struct{
 } IAButtonAttributes;
 
 
-void IAButtonAttributes_make(IAButtonAttributes *, void * correspondingObject);
+void IAButtonAttributes_make(IAButtonAttributes *);
 
 void IAButtonAttributes_setRectExtensionForTouchBegan(IAButtonAttributes *, float extension);
 void IAButtonAttributes_setRectExtensionForTouchMovedOutside(IAButtonAttributes *, float extension);

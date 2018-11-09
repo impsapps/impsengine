@@ -36,7 +36,6 @@ sub new{
 		functions => [],
 		isDelegate => 0,
 		isEvent => 0,
-		isEventWithoutRetain => 0,
 		resourceProviders => [],
 		yaml => undef,
 		filePath => $filePath
@@ -97,7 +96,7 @@ sub isDelegate{
 
 sub isEvent{
 	my $self = shift;
-	if ($self->{isEvent} == 1 || $self->{isEventWithoutRetain} == 1){
+	if ($self->{isEvent} == 1){
 		return 1;
 	}else{
 		return 0;
@@ -258,9 +257,6 @@ sub hasAnnotations{
 		return 1;
 	}
 	if($class->{isEvent}){
-		return 1;
-	}
-	if($class->{isEventWithoutRetain}){
 		return 1;
 	}
 	return 0;

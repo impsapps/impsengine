@@ -5,9 +5,8 @@
 #define CLASSNAME "IAButtonAttributes"
 
 
-void IAButtonAttributes_make(IAButtonAttributes * this, void * correspondingObject){
+void IAButtonAttributes_make(IAButtonAttributes * this){
     *this = (IAButtonAttributes){
-        .correspondingObject = correspondingObject
     };
 }
 

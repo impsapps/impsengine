@@ -153,7 +153,6 @@ sub parseHeaderFile {
 		my $annotationLock = 0;
 		my $annotationRegister = 0;
 		my $annotationEvent = 0;
-		my $annotationEventWithoutRetain = 0;
 		my $annotationExtend = 0;
 		my $annotationResourceProvider = "";
 		my $comment = "";
@@ -199,8 +198,6 @@ sub parseHeaderFile {
 							$annotationRegister = 1;
 						}elsif($a eq "event"){
 							$annotationEvent = 1;
-						}elsif($a eq "eventWithoutRetain"){
-							$annotationEventWithoutRetain = 1;
 						}elsif($a eq "extend"){
 							$annotationExtend = 1;
 						}elsif($a eq "resourceProvider"){
@@ -257,12 +254,6 @@ sub parseHeaderFile {
 				$command = $1;
 				if($annotationEvent == 1){
 					$class->{isEvent} = 1;
-				}
-				if($annotationEventWithoutRetain == 1){
-					$class->{isEventWithoutRetain} = 1;
-				}
-				if ($annotationEvent && $annotationEventWithoutRetain) {
-					die "Cannot have both annotations \"event\" and \"eventWithoutRetain\": $className in file $path.\n";
 				}
 			}
 		}

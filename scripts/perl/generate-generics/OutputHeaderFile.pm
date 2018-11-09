@@ -609,9 +609,6 @@ sub printHeaderFilesForClass{
     print HEADER "\n";
     printf HEADER $memberOfFormat, $eventClassName;
     print HEADER $functionPrefix . "void ${eventClassName}_register($eventClassName * IA_this, $className * delegate){\n";
-    if ($class->{isEvent}) {
-      print HEADER "\tIA_retain(delegate);\n";
-    }
     print HEADER "\tIA_STRUCT_ARRAY_LIST_VOID_REALLOC_MAKE_IF_NEEDED_WITH_CLASSNAME(IA_this->$listName, \"${eventClassName}\");\n";
     print HEADER "\tIAStructArrayList_add(IA_this->$listName, delegate);\n";
     print HEADER "}\n";
@@ -623,9 +620,6 @@ sub printHeaderFilesForClass{
     print HEADER "\t\t$className * delegateInList = ($className *) IAStructArrayList_get(IA_this->$listName, i);\n";
     print HEADER "\t\tif (delegateInList == delegate) {\n";
     print HEADER "\t\t\tIAStructArrayList_removeAtIndex(IA_this->$listName, i);\n";
-    if ($class->{isEvent}) {
-      print HEADER "\t\t\tIA_release(delegateInList);\n";
-    }
     print HEADER "\t\t\tdebugOnly(isFound = true);\n";
     print HEADER "\t\t\tbreak;\n";
     print HEADER "\t\t}\n";

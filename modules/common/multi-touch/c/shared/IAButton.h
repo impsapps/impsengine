@@ -6,6 +6,7 @@
 #include "IAImage.h"
 #include "IATouchDelegate.h"
 #include "IAButtonAttributes.h"
+#include "IAButtonEvent.h"
 
 typedef struct IAButton IAButton;
 
@@ -38,11 +39,9 @@ struct IAButton{
     
     //@get
     bool isClickable;
-    
-    void * correspondingObject;
-    
-    void(*onClick)(void * correspondingObject, IAButton * button);
-    void(*onIsTouchedChanged)(void * correspondingObject, IAButton * button, bool isTouched);
+
+    //@register
+    IAButtonEvent touchEvents;
     
     //@get
     int tag;

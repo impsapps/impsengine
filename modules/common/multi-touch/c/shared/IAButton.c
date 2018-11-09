@@ -60,11 +60,8 @@ void IAButton_init(IAButton * this, const IAButtonAttributes * attributes){
     this->rectExtensionForTouchMovedOutsideBottom = IAButtonAttributes_getRectExtensionForTouchMovedOutsideBottom(attributes);
     
     this->isClickable = false;
-    
-    this->correspondingObject = IAButtonAttributes_getCorrespondingObject(attributes);
-    
-    this->onClick = IAButtonAttributes_getOnClickFunction(attributes);
-    this->onIsTouchedChanged = IAButtonAttributes_getOnIsTouchedChangedFunction(attributes);
+
+	IAButtonEvent_init(&this->touchEvents);
     
     this->tag = IAButtonAttributes_getTag(attributes);
     IA_incrementInitCount();
@@ -150,16 +147,12 @@ void IAButton_onTouchCanceled(IAButton * this){
 }
 
 void IAButton_exeOnClick(IAButton * this){
-    if (this->onClick != NULL) {
-        this->onClick(this->correspondingObject, this);
-    }
+	IAButtonEvent_onClick(&this->touchEvents, this);
 }
 
 void IAButton_exeOnIsTouchedChanged(IAButton * this, bool isTouched){
     debugAssert(IAButton_isTouched(this) == isTouched);
-    if (this->onIsTouchedChanged != NULL) {
-        this->onIsTouchedChanged(this->correspondingObject, this, isTouched);
-    }
+	IAButtonEvent_onIsTouchedChanged(&this->touchEvents, this, isTouched);
 }
 
 void IAButton_setIsClickable(IAButton * this, bool isClickable){
@@ -226,6 +219,7 @@ void IAButton_deinit(IAButton * this){
     if (this->isClickable) {
         IATouchManager_unregisterTouchDelegate(&this->touchDelegate);
     }
+	IAButtonEvent_deinit(&this->touchEvents);
     IATouchDelegate_deinit(&this->touchDelegate);
     IA_STRUCT_ARRAY_LIST_FREE(this->validTouches);
     IA_decrementInitCount();
