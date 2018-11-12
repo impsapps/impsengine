@@ -1,6 +1,6 @@
 # Imps Engine
 
-The Imps Engine is a collection of software libraries for application development in the programming language "C". The build system is implemented using CMake. Following software is required:
+The Imps Engine is a collection of software libraries for cross-platform application development in the programming language "C". The build system is implemented using CMake. Following software is required:
 
 - Operation System recommended: Windows 8.1, 10 or Mac OSX 13.0 or newer
 - CMake 3.12.1 or newer
