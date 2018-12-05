@@ -12,12 +12,14 @@ IA_STRUCT_ARRAY_LIST(IARect);
 #endif
 
 static IAStructArrayList_IARect * boundsStack = NULL;
+static bool isDrawingCompletelyDisabled = false;
 
 static void updateBounds(){
 	if (IAStructArrayList_IARect_isEmpty(boundsStack)){
 		if (glIsEnabled(GL_SCISSOR_TEST)) {
 			glDisable(GL_SCISSOR_TEST);
 		}
+		isDrawingCompletelyDisabled = false;
 	}else{
 		IASize orgSize = IAViewPort_getFrameBufferSize();
 		IARect bounds = IARect_makeWithLeftTopPointAndSize(IAPoint_zero, orgSize);
@@ -30,12 +32,15 @@ static void updateBounds(){
 				glEnable(GL_SCISSOR_TEST);
 			}
 			glScissor(bounds.origin.x, orgSize.height - bounds.origin.y - bounds.size.height, bounds.size.width, bounds.size.height);
+			isDrawingCompletelyDisabled = false;
 		}else{
-			if (glIsEnabled(GL_SCISSOR_TEST)) {
-				glDisable(GL_SCISSOR_TEST);
-			}
+			isDrawingCompletelyDisabled = true;
 		}
 	}
+}
+
+bool IADrawingBounds_isDrawingCompletelyDisabled(void){
+	return isDrawingCompletelyDisabled;
 }
 
 void IADrawingBounds_pushBounds(IARect bounds){
@@ -53,6 +58,7 @@ void IADrawingBounds_pushBounds(IARect bounds){
 		IA_STRUCT_ARRAY_LIST_REALLOC_MAKE_IF_NEEDED(boundsStack, IARect);
 	}
 	IAStructArrayList_IARect_add(boundsStack, bounds);
+	updateBounds();
 }
 
 void IADrawingBounds_popBounds(){

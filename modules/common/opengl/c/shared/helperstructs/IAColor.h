@@ -23,6 +23,8 @@ static const IAColor IAColor_black = { .red = 0,.green = 0,.blue = 0,.alpha = 25
 
 IAColor IAColor_make(int red, int green, int blue, int alpha);
 IAColor IAColor_makeF(float red, float green, float blue, float alpha);
+IAColor IAColor_makeWithHex(const char * hex);
+
 IAColor IAColor_makeAsTransitionColor(IAColor startColor, IAColor goalColor, float progress);
 
 bool IAColor_isEqual(IAColor color1, IAColor color2);

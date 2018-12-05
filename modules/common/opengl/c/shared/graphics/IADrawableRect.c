@@ -5,9 +5,9 @@
 #define CLASSNAME "IADrawableRect"
 
 
-void IADrawableRect_make(IADrawableRect * this, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect){
+void IADrawableRect_make(IADrawableRect * this, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRectNullable){
     IADrawable_make((IADrawable *) this, draw);
-    this->setRect = setRect;
+    this->setRect = setRectNullable;
     this->rect = IAViewPort_defaultRectForContent;
 }
 
@@ -31,7 +31,9 @@ void IADrawableRect_setSize(IADrawableRect * this, IASize size){
 
 void IADrawableRect_setRect(IADrawableRect * this, IARect rect){
     this->rect = rect;
-    this->setRect(this, rect);
+    if (this->setRect != NULL){
+        this->setRect(this, rect);
+    }
 }
 
 void IADrawableRect_setLeftTopRightBottom(IADrawableRect * this, float left, float top, float right, float bottom){

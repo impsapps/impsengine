@@ -7,7 +7,7 @@ use Helper;
 
 require Exporter;
 our @ISA = qw(Exporter);
-our @EXPORT = qw(getParamNamesForYamlNode canCompleteYamlNames canCompleteWithAttributes typecast);
+our @EXPORT = qw(getParamNamesForYamlNode canCompleteYamlNames canCompleteWithAttributes typecast convertYamlScalarToString);
 
 sub privateIsSpecialYamlKey{
   my $key = shift;
@@ -142,6 +142,13 @@ sub typecast{
     $currentClass = $classProvider->getClass($superClassName);
   }
   die sprintf("Cannot cast from \"%s\" to \"%s\". Class \"%s\" is not a child of \"%s\" . Error parsing yaml file \"%s\".", $fromClassName, $toClassName, $fromClassName, $toClassName, $yamlFileForLogging);
+}
+
+sub convertYamlScalarToString{
+  my $scalar = shift;
+  $scalar =~ s/"/\\"/g;
+  return "\"" . $scalar . "\"";
+
 }
 
 1;

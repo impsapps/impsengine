@@ -20,7 +20,7 @@ struct IADrawableRect{
 };
 
 
-void IADrawableRect_make(IADrawableRect *, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRect);
+void IADrawableRect_make(IADrawableRect *, IADrawable_drawFunction draw, IADrawableRect_setRectFunction setRectNullable);
 void IADrawableRect_makeCopy(IADrawableRect *, const IADrawableRect * drawableRectToCopy);
 
 void IADrawableRect_setLeftTopPoint(IADrawableRect *, IAPoint point);

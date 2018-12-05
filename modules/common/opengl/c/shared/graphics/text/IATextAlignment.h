@@ -2,9 +2,9 @@
 #define IATextAlignment_h
 
 typedef enum{
-    IATextAlignment_LEFT,
-    IATextAlignment_CENTER,
-    IATextAlignment_RIGHT
+    IATextAlignment_left,
+    IATextAlignment_center,
+    IATextAlignment_right
 } IATextAlignment;
 
 #endif

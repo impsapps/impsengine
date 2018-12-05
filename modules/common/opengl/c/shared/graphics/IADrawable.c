@@ -1,5 +1,6 @@
 #include "IALibrary.h"
 #include "IADrawable.h"
+#include "IADrawingBounds.h"
 
 #define CLASSNAME "IADrawable"
 
@@ -17,7 +18,7 @@ void IADrawable_makeCopy(IADrawable * this, const IADrawable * drawableToCopy){
 }
 
 void IADrawable_draw(const IADrawable * this){
-    if (this->isVisible == true) {
+    if (this->isVisible == true && IADrawingBounds_isDrawingCompletelyDisabled() == false) {
         this->draw(this);
     }
 }

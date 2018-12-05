@@ -53,13 +53,14 @@ sub parseExpression{
 
   if (ref $yaml eq 'HASH'){
     if (defined $class) {
+      my @yamlNames = getParamNamesForYamlNode($yaml);
       my @structMakeFunctions = $class->getMakeFunctionsForStruct();
       foreach my $structMakeFunction (@structMakeFunctions){
         my $functionParams = $structMakeFunction->{params};
         $functionParams = normalizeParams($functionParams);
         my @paramNames = listAllParamNames($functionParams);
         my @params = listAllParams($functionParams);
-        if (canCompleteYamlNames($yaml, \@paramNames)) {
+        if (canCompleteYamlNames(\@yamlNames, \@paramNames)) {
           my %paramExpressions = ();
           foreach my $param (@params){
             my $paramName = getParamName($param);
@@ -104,7 +105,11 @@ sub parseExpression{
       $self->privateAddInclude($typeExpected);
       return $typeExpected . "_" . $yaml;
     }else{
-      return $yaml;
+      if ($typeExpected =~ m/char\s*\*$/) {
+        return convertYamlScalarToString($yaml);
+      }else{
+        return $yaml;
+      }
     }
   }
   die "Yaml parse error. Unknown Type in file \"" . $self->{yamlFilePath} . "\".";
@@ -128,9 +133,8 @@ sub parseString{
   my $yaml = shift;
   my $paramNameForLogging = shift;
   die "Expected string for param \"$paramNameForLogging\". Error parsing yaml file \"" . $self->{yamlFilePath} . "\"." if (not defined $yaml or ref $yaml);
-  my $string = $yaml;
-  $string =~ s/"/\\"/g;
-  return "\"" . $string . "\"";
+  my $string = convertYamlScalarToString($yaml);
+  return $string;
 }
 
 sub parseObject{
@@ -253,7 +257,11 @@ sub parseAsResource{
   my $className = $resourceProvider->getClassName();
   my $function = $resourceProvider->getFunction();
   my $functionParams = $function->{params};
-  $functionParams = normalizeParams($functionParams);
+  if ($functionParams ne "void") {
+    $functionParams = normalizeParams($functionParams);
+  }else{
+    $functionParams = "";
+  }
   my @paramsForCall = ();
 
   foreach my $param (listAllParams($functionParams)){

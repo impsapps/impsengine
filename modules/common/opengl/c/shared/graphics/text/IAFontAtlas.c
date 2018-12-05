@@ -303,11 +303,11 @@ float IAFontAtlas_getCurrentScaleForKernings(IAFontAtlas * this){
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextAtTopPoint(IAFontAtlas * this, const char * text, IAPoint topPoint, IATextAlignment alignment, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    if (alignment != IATextAlignment_LEFT) {
+    if (alignment != IATextAlignment_left) {
         float lengthOfText = IAFontAtlas_getLengthForText(this, text);
-        if (alignment == IATextAlignment_CENTER) {
+        if (alignment == IATextAlignment_center) {
             topPoint.x -= lengthOfText / 2.0f;
-        }else if(alignment == IATextAlignment_RIGHT){
+        }else if(alignment == IATextAlignment_right){
             topPoint.x -= lengthOfText;
         }
     }
@@ -342,15 +342,15 @@ void IAFontAtlas_preDrawGlyph(IAFontAtlas * this, IAGlyph * glyph){
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextAtBaselineLeft(IAFontAtlas * this, const char * text, IAPoint left, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, left, IATextAlignment_LEFT, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, left, IATextAlignment_left, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextAtBaselineCenter(IAFontAtlas * this, const char * text, IAPoint center, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, center, IATextAlignment_CENTER, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, center, IATextAlignment_center, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextAtBaselineRight(IAFontAtlas * this, const char * text, IAPoint right, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, right, IATextAlignment_RIGHT, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextAtBaseline(this, text, right, IATextAlignment_right, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextAtBaseline(IAFontAtlas * this, const char * text, IAPoint pointAtBaseline, IATextAlignment alignment, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
@@ -361,15 +361,15 @@ void IAFontAtlas_iterateOverGlyphesForTextAtBaseline(IAFontAtlas * this, const c
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddlelineLeft(IAFontAtlas * this, const char * text, IAPoint left, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, left, IATextAlignment_LEFT, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, left, IATextAlignment_left, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddlelineCenter(IAFontAtlas * this, const char * text, IAPoint center, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, center, IATextAlignment_CENTER, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, center, IATextAlignment_center, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddlelineRight(IAFontAtlas * this, const char * text, IAPoint right, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
-    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, right, IATextAlignment_RIGHT, data, onGlyph);
+    IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(this, text, right, IATextAlignment_right, data, onGlyph);
 }
 
 void IAFontAtlas_iterateOverGlyphesForTextRelativelyAtMiddleline(IAFontAtlas * this, const char * text, IAPoint pointAtMiddleline, IATextAlignment alignment, void * data, void (*onGlyph)(void * data, IAGlyph * glyph)){
@@ -387,15 +387,15 @@ void IAFontAtlas_drawGlyph(void * data, IAGlyph * glyph){
 }
 
 void IAFontAtlas_drawTextAtBaselineLeft(IAFontAtlas * this, const char * text, IAPoint left){
-    IAFontAtlas_drawTextAtBaseline(this, text, left, IATextAlignment_LEFT);
+    IAFontAtlas_drawTextAtBaseline(this, text, left, IATextAlignment_left);
 }
 
 void IAFontAtlas_drawTextAtBaselineCenter(IAFontAtlas * this, const char * text, IAPoint center){
-    IAFontAtlas_drawTextAtBaseline(this, text, center, IATextAlignment_CENTER);
+    IAFontAtlas_drawTextAtBaseline(this, text, center, IATextAlignment_center);
 }
 
 void IAFontAtlas_drawTextAtBaselineRight(IAFontAtlas * this, const char * text, IAPoint right){
-    IAFontAtlas_drawTextAtBaseline(this, text, right, IATextAlignment_RIGHT);
+    IAFontAtlas_drawTextAtBaseline(this, text, right, IATextAlignment_right);
 }
 
 void IAFontAtlas_drawTextAtBaseline(IAFontAtlas * this, const char * text, IAPoint pointAtBaseline, IATextAlignment alignment){
@@ -403,15 +403,15 @@ void IAFontAtlas_drawTextAtBaseline(IAFontAtlas * this, const char * text, IAPoi
 }
 
 void IAFontAtlas_drawTextRelativelyAtMiddlelineLeft(IAFontAtlas * this, const char * text, IAPoint left){
-    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, left, IATextAlignment_LEFT);
+    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, left, IATextAlignment_left);
 }
 
 void IAFontAtlas_drawTextRelativelyAtMiddlelineCenter(IAFontAtlas * this, const char * text, IAPoint center){
-    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, center, IATextAlignment_CENTER);
+    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, center, IATextAlignment_center);
 }
 
 void IAFontAtlas_drawTextRelativelyAtMiddlelineRight(IAFontAtlas * this, const char * text, IAPoint right){
-    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, right, IATextAlignment_RIGHT);
+    IAFontAtlas_drawTextRelativelyAtMiddleline(this, text, right, IATextAlignment_right);
 }
 
 void IAFontAtlas_drawTextRelativelyAtMiddleline(IAFontAtlas * this, const char * text, IAPoint pointAtMiddleline, IATextAlignment alignment){
