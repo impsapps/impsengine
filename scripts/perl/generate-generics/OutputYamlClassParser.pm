@@ -101,16 +101,21 @@ sub parseExpression{
     }
     die "Could not parse expression with yaml array. Expected type \"$typeExpected\" in \"" . $self->{yamlFilePath} . "\".";
   }elsif (defined $yaml and not ref $yaml){
-    if ($typeExpected =~ m/^\w[\w\d]*$/ and $isDataTyp == 0) {
-      $self->privateAddInclude($typeExpected);
-      return $typeExpected . "_" . $yaml;
+    if ($typeExpected =~ m/char\s*\*$/) {
+      return convertYamlScalarToString($yaml);
     }else{
-      if ($typeExpected =~ m/char\s*\*$/) {
-        return convertYamlScalarToString($yaml);
+      if ($yaml =~ m/^(\w[\w\d]*)_(\w[\w\d]*)$/){
+        $self->privateAddInclude($1);
+        return $yaml;
+      }elsif ($typeExpected =~ m/^\w[\w\d]*$/ and $isDataTyp == 0) {
+        $self->privateAddInclude($typeExpected);
+        return $typeExpected . "_" . $yaml;
       }else{
         return $yaml;
       }
     }
+
+
   }
   die "Yaml parse error. Unknown Type in file \"" . $self->{yamlFilePath} . "\".";
 }
