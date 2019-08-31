@@ -6,24 +6,26 @@
 
 
 static const char * vertexShaderCode =
-"attribute vec2 position;"
-"attribute vec4 leftTopWidthHeight;"
-"attribute vec4 crp_color;"
-"varying vec4 crp_tempColor;"
-"void main() {"
-"  gl_Position.x = position.x * leftTopWidthHeight[2] + leftTopWidthHeight[0];"
-"  gl_Position.y = position.y * leftTopWidthHeight[3] - leftTopWidthHeight[1];"
-"  gl_Position.z = 0.0;"
-"  gl_Position.w = 1.0;"
-"  crp_tempColor = crp_color;"
-"}";
+"#version 130\n"
+"attribute vec2 position;\n"
+"attribute vec4 leftTopWidthHeight;\n"
+"attribute vec4 crp_color;\n"
+"varying vec4 crp_tempColor;\n"
+"void main() {\n"
+"  gl_Position.x = position.x * leftTopWidthHeight[2] + leftTopWidthHeight[0];\n"
+"  gl_Position.y = position.y * leftTopWidthHeight[3] - leftTopWidthHeight[1];\n"
+"  gl_Position.z = 0.0;\n"
+"  gl_Position.w = 1.0;\n"
+"  crp_tempColor = crp_color;\n"
+"}\n";
 
 static const char * fragmentShaderCode =
-"precision mediump float;"
-"varying vec4 crp_tempColor;"
-"void main() {"
-"   gl_FragColor = crp_tempColor;"
-"}";
+"#version 130\n"
+"precision mediump float;\n"
+"varying vec4 crp_tempColor;\n"
+"void main() {\n"
+"   gl_FragColor = crp_tempColor;\n"
+"}\n";
 
 
 void IAColorRectProgram_glBindAttributeLocations(GLuint programId){

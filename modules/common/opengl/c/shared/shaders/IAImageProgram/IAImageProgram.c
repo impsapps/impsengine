@@ -6,29 +6,31 @@
 
 
 static const char * vertexShaderCode =
-"attribute vec2 position;"
-"attribute vec2 texturePosition;"
-"attribute vec4 leftTopWidthHeight;"
-"attribute vec4 ip_multiplicator;"
-"varying vec2 ip_tempTexturePosition;"
-"varying vec4 ip_tempMultiplicator;"
-"void main() {"
-"  gl_Position.x = position.x * leftTopWidthHeight[2] + leftTopWidthHeight[0];"
-"  gl_Position.y = position.y * leftTopWidthHeight[3] - leftTopWidthHeight[1];"
-"  gl_Position.z = 0.0;"
-"  gl_Position.w = 1.0;"
-"  ip_tempTexturePosition = texturePosition;"
-"  ip_tempMultiplicator = ip_multiplicator;"
-"}";
+"#version 130\n"
+"attribute vec2 position;\n"
+"attribute vec2 texturePosition;\n"
+"attribute vec4 leftTopWidthHeight;\n"
+"attribute vec4 ip_multiplicator;\n"
+"varying vec2 ip_tempTexturePosition;\n"
+"varying vec4 ip_tempMultiplicator;\n"
+"void main() {\n"
+"  gl_Position.x = position.x * leftTopWidthHeight[2] + leftTopWidthHeight[0];\n"
+"  gl_Position.y = position.y * leftTopWidthHeight[3] - leftTopWidthHeight[1];\n"
+"  gl_Position.z = 0.0;\n"
+"  gl_Position.w = 1.0;\n"
+"  ip_tempTexturePosition = texturePosition;\n"
+"  ip_tempMultiplicator = ip_multiplicator;\n"
+"}\n";
 
 static const char * fragmentShaderCode =
-"precision mediump float;"
-"varying vec2 ip_tempTexturePosition;"
-"varying vec4 ip_tempMultiplicator;"
-"uniform sampler2D ip_textureSampler;"
-"void main() {"
-"  gl_FragColor = texture2D( ip_textureSampler, ip_tempTexturePosition) * ip_tempMultiplicator;"
-"}";
+"#version 130\n"
+"precision mediump float;\n"
+"varying vec2 ip_tempTexturePosition;\n"
+"varying vec4 ip_tempMultiplicator;\n"
+"uniform sampler2D ip_textureSampler;\n"
+"void main() {\n"
+"  gl_FragColor = texture2D( ip_textureSampler, ip_tempTexturePosition) * ip_tempMultiplicator;\n"
+"}\n";
 
 
 void IAImageProgram_glBindAttributeLocations(GLuint programId){

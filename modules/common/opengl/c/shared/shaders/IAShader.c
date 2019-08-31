@@ -18,6 +18,18 @@ void IAShader_createOpenGLResources(IAShader * this){
 	this->shaderId = glCreateShader(this->type);
     glShaderSource(this->shaderId, 1, &this->sourceCode, NULL);
     glCompileShader(this->shaderId);
+#ifdef DEBUG
+    GLint status = 0;
+    glGetShaderiv(this->shaderId, GL_COMPILE_STATUS, &status);
+    if (status == 0){
+        GLint logLength;
+        glGetShaderiv(this->shaderId, GL_INFO_LOG_LENGTH, &logLength);
+        GLchar infoLog[logLength+1];
+        glGetShaderInfoLog(this->shaderId, logLength, NULL, infoLog);
+        infoLog[logLength] = '\0';
+        logError("%s", infoLog);
+    }
+#endif
     glAssert();
 }
 

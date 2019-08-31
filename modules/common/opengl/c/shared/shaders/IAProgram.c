@@ -41,14 +41,21 @@ void IAProgram_init(IAProgram * this, const char * vertexShaderCode, const char 
 }
 
 void IAProgram_createOpenGLResources(IAProgram * this){
-	IAShader_createOpenGLResources(this->vertexShader);
-	IAShader_createOpenGLResources(this->fragmentShader);
+    IAShader_createOpenGLResources(this->vertexShader);
+    IAShader_createOpenGLResources(this->fragmentShader);
+
 	this->programId = glCreateProgram();
     this->glBindAttributeLocations(this->programId);
     
 	glAttachShader(this->programId, IAShader_getShaderId(this->vertexShader));
 	glAttachShader(this->programId, IAShader_getShaderId(this->fragmentShader));
 	glLinkProgram(this->programId);
+    glAssert();
+    GLboolean result;
+    glGetBooleanv(GL_SHADER_COMPILER, &result);
+    glAssert();
+	glUseProgram(this->programId);
+    glAssert();
     IANotificationEvent_notify(&this->linkingComplete);
     glAssert();
 }
